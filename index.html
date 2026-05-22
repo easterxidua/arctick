@@ -5,10 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ETH Predict - ARC</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.min.js"></script>
 </head>
 <body>
   <div class="container" id="app"></div>
+
+  <!-- Load ethers as ESM module -->
+  <script type="importmap">
+  {
+    "imports": {
+      "ethers": "https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.min.js"
+    }
+  }
+  </script>
+
   <script type="module" src="script.js"></script>
 </body>
 </html>
