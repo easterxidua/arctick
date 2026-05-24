@@ -16,6 +16,7 @@ async function getETHPrice() {
     const data = await res.json();
     return parseFloat(data.ethereum.usd) || 3200;
   } catch (e) {
+    console.warn("Price fetch failed, using fallback");
     return 3200;
   }
 }
@@ -96,6 +97,7 @@ async function showScreen2() {
       </div>
 
       <h1>PREDICT ETH PRICES</h1>
+      <h2>ON ARC</h2>
 
       <h2>BET AMOUNT</h2>
       <div class="flex-row">
@@ -121,11 +123,19 @@ async function showScreen2() {
       <input type="text" id="livePrice1" class="readonly" value="Loading..." readonly>
       <input type="text" id="livePrice2" class="readonly" value="0.00" readonly>
 
-      <button class="btn" onclick="settleAndPay()" style="margin-top:15px">SETTLE ${currentBet.amount} USDC</button>
-      <button id="predictBtn" class="btn" onclick="startPrediction()" disabled>PREDICT</button>
+      <button class="btn" id="settleBtn" onclick="settleAndPay()">SETTLE ${currentBet.amount} USDC</button>
+      
+      <!-- PREDICT BUTTON - Default Disabled -->
+      <button id="predictBtn" class="btn" onclick="startPrediction()" 
+              style="background:#cccccc; color:#666; cursor:not-allowed;" disabled>
+        PREDICT
+      </button>
 
-      <div id="predictionArea" style="display:none; text-align:center; margin-top:15px">
-        <input type="text" id="countdown" class="readonly" value="0" style="font-size:3.2rem;">
+      <div id="predictionArea" style="display:none; text-align:center; margin-top:20px">
+        <input type="text" id="countdown" class="readonly" value="0" style="font-size:3.5rem; font-weight:bold;">
+        <p style="color:#d00; font-weight:bold; margin-top:15px; font-size:1rem;">
+          DON'T LEAVE THE SCREEN<br>YOUR BET MAY FAIL AND YOU MAY LOSE YOUR BET MONEY
+        </p>
       </div>
     </div>
   `;
@@ -133,20 +143,31 @@ async function showScreen2() {
   startLivePriceUpdates();
 }
 
-// Live price updater - refreshes every 1 second
 let livePriceInterval = null;
+let isPredictionStarted = false;
 
 function startLivePriceUpdates() {
   if (livePriceInterval) clearInterval(livePriceInterval);
-  
-  const updatePrice = async () => {
+
+  const updatePrices = async () => {
     const price = await getETHPrice();
-    const el = document.getElementById('livePrice1');
-    if (el) el.value = price.toFixed(2);
+
+    // Textbox 1: Live until PREDICT is pressed
+    if (!isPredictionStarted) {
+      const tb1 = document.getElementById('livePrice1');
+      if (tb1) tb1.value = price.toFixed(2);
+    }
+
+    // Textbox 2: Live only after PREDICT is pressed
+    if (isPredictionStarted) {
+      const tb2 = document.getElementById('livePrice2');
+      if (tb2) tb2.value = price.toFixed(2);
+    }
   };
 
-  updatePrice(); // immediate update
-  livePriceInterval = setInterval(updatePrice, 1000); // every 1 second
+  // Initial call + every 1 second
+  updatePrices();
+  livePriceInterval = setInterval(updatePrices, 1000);
 }
 
 // ==================== BET CONTROLS ====================
@@ -162,20 +183,37 @@ async function settleAndPay() {
   if (!confirmed) return;
 
   alert("✅ Payment confirmed (Demo)");
-  
-  // Enable PREDICT button after payment
+
+  // Enable PREDICT button with normal style
   const predictBtn = document.getElementById('predictBtn');
-  if (predictBtn) predictBtn.disabled = false;
+  if (predictBtn) {
+    predictBtn.disabled = false;
+    predictBtn.style.background = "#FF8800";
+    predictBtn.style.color = "black";
+    predictBtn.style.cursor = "pointer";
+  }
 }
 
 function startPrediction() {
-  // Freeze current price into textbox 1
+  isPredictionStarted = true;
+
+  // Freeze current price in Textbox 1
   const currentPrice = parseFloat(document.getElementById('livePrice1').value) || 3200;
   startPrice = currentPrice;
-  document.getElementById('livePrice1').style.background = "#ddd";
 
-  // Show countdown area
+  const tb1 = document.getElementById('livePrice1');
+  tb1.style.background = "#e0e0e0";
+  tb1.style.color = "#444";
+
+  // Enable Textbox 2 for live updates
+  const tb2 = document.getElementById('livePrice2');
+  tb2.style.background = "#fff";
+
+  // Show prediction area
   document.getElementById('predictionArea').style.display = 'block';
+
+  // Disable everything else
+  disableAllControls();
 
   let timeLeft = currentBet.time;
   const countdownEl = document.getElementById('countdown');
@@ -190,6 +228,21 @@ function startPrediction() {
       endGame();
     }
   }, 1000);
+}
+
+function disableAllControls() {
+  // Disable buttons
+  const buttons = document.querySelectorAll('.btn, .option-btn');
+  buttons.forEach(btn => {
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.5';
+    btn.style.background = '#cccccc';
+    btn.style.color = '#666';
+  });
+
+  // Disable price boxes except countdown
+  document.getElementById('livePrice1').style.opacity = '0.7';
+  document.getElementById('livePrice2').style.opacity = '1';
 }
 
 async function endGame() {
@@ -269,7 +322,23 @@ async function revokeAllConnections() {
 }
 
 function resetGame() {
+  // Reset bet to default values
   currentBet = { amount: 1, time: 10, direction: "HIGHER" };
+  
+  // Reset prediction state
+  isPredictionStarted = false;
+  
+  // Clear intervals
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  if (livePriceInterval) {
+    clearInterval(livePriceInterval);
+    livePriceInterval = null;
+  }
+
+  // Go back to Screen 2 with fresh default state
   showScreen2();
 }
 
