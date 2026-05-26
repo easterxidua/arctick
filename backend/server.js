@@ -72,6 +72,19 @@ app.post('/api/claim', async (req, res) => {
   }
 });
 
+// === NEW: Get System Balance Endpoint ===
+app.get('/api/system-balance', async (req, res) => {
+  try {
+    const balance = await provider.getBalance(systemWallet.address);
+    res.json({
+      balance: ethers.formatUnits(balance, 18)
+    });
+  } catch (e) {
+    console.error(e);
+    res.json({ balance: "0" });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on port ${PORT}`);

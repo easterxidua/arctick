@@ -7,7 +7,7 @@ let startPrice = 0;
 let endPrice = 0;
 let countdownInterval = null;
 
-const BACKEND_URL = "https://fictional-broccoli-v6v5gxr7wpp7hwq59-3001.app.github.dev";  // Change this when you deploy backend
+const BACKEND_URL = "https://eth-predict-arc-production.up.railway.app";  // Change this when you deploy backend
 
 // ==================== GET ETH PRICE ====================
 async function getETHPrice() {
@@ -91,6 +91,8 @@ function showScreen1() {
 
 async function showScreen2() {
   const shortAddress = userAddress ? `${userAddress.slice(0,6)}...${userAddress.slice(-4)}` : "";
+  const userBal = await getUserBalance();           // Your wallet balance
+  const systemBal = await getSystemBalance();       // System treasury
 
   document.getElementById('app').innerHTML = `
     <div class="container">
@@ -101,11 +103,21 @@ async function showScreen2() {
         </div>
       </div>
 
-<!-- USER BALANCE with Loading State -->
-      <div style="text-align:center; margin-bottom:12px; font-weight:bold;">
-        Your Balance: 
-        <span id="userBalance" style="color:#888;">Loading...</span>
+      <!-- USER BALANCE (Your Wallet) -->
+      <div style="text-align:center; margin:8px 0; font-weight:bold;">
+        Your Balance: <span id="userBalanceDisplay" style="color:#006600;">${userBal} USDC</span>
       </div>
+
+      <!-- SYSTEM BALANCE -->
+      <div style="text-align:center; margin:8px 0; padding:10px; background:#f8f8f8; border-radius:8px;">
+        <strong>System Balance:</strong> <span id="systemBalanceDisplay">${systemBal} USDC</span>
+      </div>
+
+      ${parseFloat(systemBal) < 30 ? `
+      <div style="color:#d00; text-align:center; font-size:0.9rem; margin:10px 0;">
+        ⚠️ System balance IS ALMOST EMPTY.<br>
+        If system balance too low, you may receive only your original bet (no profit)
+      </div>` : ''}
 
       <h1>PREDICT ETH PRICES</h1>
       <h2>ON ARC</h2>
@@ -150,12 +162,19 @@ async function showScreen2() {
     </div>
   `;
 
-  startLivePriceUpdates();
-  updateUserBalance();                    // Initial balance
-  balanceInterval = setInterval(updateUserBalance, 8000);  // Update every 8 seconds
+    startLivePriceUpdates();
+  
+  // Balance refresh every 1 second
+  if (balanceInterval) clearInterval(balanceInterval);
+  balanceInterval = setInterval(updateBalances, 1000);
+
+  // Initial call
+  updateBalances();
 }
 
+// Replace your startLivePriceUpdates() with this:
 let livePriceInterval = null;
+let balanceInterval = null;
 let isPredictionStarted = false;
 
 function startLivePriceUpdates() {
@@ -163,7 +182,6 @@ function startLivePriceUpdates() {
 
   const updatePrices = async () => {
     const price = await getETHPrice();
-    console.log("ETH Price:", price, "| Prediction Started:", isPredictionStarted);
 
     const tb1 = document.getElementById('livePrice1');
     const tb2 = document.getElementById('livePrice2');
@@ -178,7 +196,7 @@ function startLivePriceUpdates() {
   };
 
   updatePrices();
-  livePriceInterval = setInterval(updatePrices, 1000);
+  livePriceInterval = setInterval(updatePrices, 100); // Every 0.1 second (100ms)
 }
 
 // ==================== BET CONTROLS ====================
@@ -311,15 +329,36 @@ async function endGame() {
   const userWon = (currentBet.direction === "HIGHER" && isHigher) || 
                   (currentBet.direction === "LOWER" && !isHigher);
 
-  showResultScreen(userWon);
+  if (userWon) {
+    await autoClaimReward();     // Automatic payout
+  } else {
+    alert("You Lose. Better luck next time.");
+    resetGame();
+  }
 }
 
-function showResultScreen(won) {
-  const warning = won ? `
-    <p style="color:#d00; font-size:1rem; max-width:320px; text-align:center; margin:15px 0;">
-      Note: If system balance was low, you may receive only your original bet (no profit)
-    </p>
-  ` : "";
+async function getUserBalance() {
+  if (!provider || !userAddress) return "0.0000";
+  try {
+    const bal = await provider.getBalance(userAddress);
+    return parseFloat(ethers.formatUnits(bal, 18)).toFixed(4);
+  } catch(e) {
+    return "0.0000";
+  }
+}
+
+async function getSystemBalance() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/system-balance`);
+    const data = await response.json();
+    return parseFloat(data.balance).toFixed(4);
+  } catch(e) {
+    return "0.0000";
+  }
+}
+
+async function showResultScreen(won) {
+  const systemBalance = await getSystemBalance();
 
   document.getElementById('app').innerHTML = `
     <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px">
@@ -327,7 +366,17 @@ function showResultScreen(won) {
         ${won ? "YOU WON!" : "YOU LOSE"}
       </h1>
       <p style="font-size:1.3rem">Bet: ${currentBet.amount} USDC | ${currentBet.direction}</p>
-      ${warning}
+      
+      ${won ? `
+        <div style="background:#f0f0f0;padding:15px 25px;border-radius:10px;text-align:center">
+          <strong>System Balance:</strong> ${systemBalance} USDC
+        </div>
+      ` : ''}
+      
+      <p style="color:#d00; font-size:1rem; max-width:320px; text-align:center;">
+        Note: If system balance was low, you may receive only your original bet (no profit)
+      </p>
+
       <button class="btn" onclick="${won ? 'claimReward()' : 'resetGame()'}" 
               style="padding:20px 70px;font-size:1.4rem">
         ${won ? 'CLAIM REWARD' : 'PLAY AGAIN'}
@@ -427,6 +476,70 @@ async function updateUserBalance() {
     console.warn("Balance fetch failed", e);
   }
 }
+
+async function updateBalances() {
+  // Update User Balance
+  const userBal = await getUserBalance();
+  const userEl = document.getElementById('userBalanceDisplay');
+  if (userEl) userEl.textContent = `${userBal} USDC`;
+
+  // Update System Balance
+  const systemBal = await getSystemBalance();
+  const systemEl = document.getElementById('systemBalanceDisplay');
+  if (systemEl) systemEl.textContent = `${systemBal} USDC`;
+
+  // Warning if system balance is low
+  const warningContainer = document.getElementById('systemWarning');
+  if (warningContainer) {
+    warningContainer.style.display = parseFloat(systemBal) < 30 ? 'block' : 'none';
+  }
+}
+
+async function autoClaimReward() {
+  alert("Processing your reward...");
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/claim`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userAddress: userAddress,
+        amount: currentBet.amount
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert(`🎉 ${result.message}\nTx: ${result.txHash}`);
+    } else {
+      alert("Claim failed: " + result.message);
+    }
+  } catch (e) {
+    alert("Cannot connect to backend.");
+  }
+
+  resetGame();
+}
+
+async function switchWallet() {
+  if (!window.ethereum) return alert("No wallet detected");
+
+  try {
+    await window.ethereum.request({
+      method: 'wallet_requestPermissions',
+      params: [{ eth_accounts: {} }]
+    });
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    userAddress = accounts[0];
+    alert("Wallet switched successfully");
+    showScreen2();
+  } catch (e) {
+    alert("Failed to switch wallet");
+  }
+}
+
+window.switchWallet = switchWallet;
 
 console.log("System Wallet Address:", 
   new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
