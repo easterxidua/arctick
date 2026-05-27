@@ -1,0 +1,27 @@
+//      <div class="readonly" style="text-align:center;">
+//        Balance: <span id="userBalanceDisplay">${userBal} USDC</span>
+//      </div>
+                    
+//      <div class="readonly" style="text-align:center;>
+//        Treasury: <span id="systemBalanceDisplay">${systemBal} USDC</span>
+//      </div>
+
+//       <h2 style="font-size:1.4rem;margin-top:-10px;color:#555">ON ARC</h2>
+
+<h2 class="readonly2">🔵 Choose Asset: </h2>
+<h2 id="priceTitle" class="readonly2">🔵 ${currentBet.asset} Live Price</h2>
+
+      <div class="flex-row">
+        <div class="option-btn ${currentBet.asset==='BTC'?'active':''}" onclick="selectAsset('BTC')">BTC</div>
+        <div class="option-btn ${currentBet.asset==='ETH'?'active':''}" onclick="selectAsset('ETH')">ETH</div>
+        <div class="option-btn ${currentBet.asset==='SOL'?'active':''}" onclick="selectAsset('SOL')">SOL</div>
+      </div>
+
+      <div class="flex-row">
+        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 USDC</div>
+        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 USDC</div>
+        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 USDC</div>
+      </div>
+
+<div class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">Higher</div>
+        <div class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">Lower</div>

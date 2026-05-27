@@ -63,7 +63,7 @@ async function connectWallet() {
     provider = new ethers.BrowserProvider(window.ethereum);
     signer = await provider.getSigner();
 
-    alert(`✅ Connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`);
+    alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
     showScreen2();
   } catch (e) {
     console.error(e);
@@ -75,113 +75,175 @@ async function connectWallet() {
 function showScreen1() {
   document.getElementById('app').innerHTML = `
     <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;background:rgba(255,255,255,0.95)">
-      <h1 style="font-size:3.5rem">PREDICT ETH</h1>
+      <h1 class="txtxt" style="font-size:3.1rem;text-align:center">&bull; ArcDicted &bull;</h1>
       
       <button class="btn" onclick="connectWallet()" style="padding:25px 80px;font-size:1.8rem">
-        CONNECT WALLET
+        Connect
       </button>
 
-      <button class="btn" onclick="revokeAllConnections()" 
-              style="padding:25px 80px;font-size:1.8rem;background:#FF4444;color:white;">
-        REVOKE ALL CONNECTIONS
+      <button class="btn_rev" onclick="revokeAllConnections()" style="padding:25px 80px;font-size:1.8rem">
+        Revoke
       </button>
     </div>
   `;
+}
+
+// Default asset
+currentBet.asset = "BTC";   // Change default if needed
+
+window.selectAsset = (asset) => {
+  currentBet.asset = asset;
+  showScreen2();   // This will restart everything cleanly
+};
+
+// Dynamic price title
+function updatePriceTitle() {
+  const titleEl = document.getElementById('priceTitle');
+  if (titleEl) {
+    /*titleEl.textContent = `🔵 ${currentBet.asset}/USDT Live Price`;*/
+    titleEl.innerHTML  = `${currentBet.asset} &bull; USDT Live Price`;
+  }
 }
 
 async function showScreen2() {
   const shortAddress = userAddress ? `${userAddress.slice(0,6)}...${userAddress.slice(-4)}` : "";
-  const userBal = await getUserBalance();           // Your wallet balance
-  const systemBal = await getSystemBalance();       // System treasury
+  const userBal = await getUserBalance();
+  const systemBal = await getSystemBalance();
 
   document.getElementById('app').innerHTML = `
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h2 style="margin:0">ON ARC</h2>
-        <div onclick="disconnectWallet()" style="background:#FF8800;color:black;padding:6px 12px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:0.95rem">
+        <h2 style="margin:0">ArcDicted &bull; On Arc</h2>
+        <div onclick="disconnectWallet()" class="btn_smol">
           ${shortAddress}
         </div>
       </div>
 
-      <!-- USER BALANCE (Your Wallet) -->
-      <div style="text-align:center; margin:8px 0; font-weight:bold;">
-        Your Balance: <span id="userBalanceDisplay" style="color:#006600;">${userBal} USDC</span>
+      <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
+        Treasury Balance <span id="systemBalanceDisplay"> ${systemBal} &bull; USDC</span>
       </div>
 
-      <!-- SYSTEM BALANCE -->
-      <div style="text-align:center; margin:8px 0; padding:10px; background:#f8f8f8; border-radius:8px;">
-        <strong>System Balance:</strong> <span id="systemBalanceDisplay">${systemBal} USDC</span>
+      <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
+        Wallet Balance <span id="userBalanceDisplay"> ${userBal} &bull; USDC</span>
       </div>
 
-      ${parseFloat(systemBal) < 30 ? `
-      <div style="color:#d00; text-align:center; font-size:0.9rem; margin:10px 0;">
-        ⚠️ System balance IS ALMOST EMPTY.<br>
-        If system balance too low, you may receive only your original bet (no profit)
-      </div>` : ''}
+<hr>
 
-      <h1>PREDICT ETH PRICES</h1>
-      <h2>ON ARC</h2>
+      <div class="readonly2"">
+        🔵 Which coin's price you want to predict?</span>
+      </div>
 
-      <h2>BET AMOUNT</h2>
+<div class="flex-row">
+  <div class="option-btn-circle ${currentBet.asset==='BTC'?'active':''}" onclick="selectAsset('BTC')">
+    <img src="logo/btc_logo_small.png" width="32" height="32">
+    
+  </div>
+
+  <div class="option-btn-circle ${currentBet.asset==='ETH'?'active':''}" onclick="selectAsset('ETH')">
+    <img src="logo/eth_logo_small.png" width="32" height="32">
+    
+  </div>
+
+  <div class="option-btn-circle ${currentBet.asset==='SOL'?'active':''}" onclick="selectAsset('SOL')">
+    <img src="logo/sol_logo_small.png" width="32" height="32">
+    
+  </div>
+</div>
+
+      <div class="readonly2"">
+        🔵 How many • USDC you're willing to bet?</span>
+      </div>
       <div class="flex-row">
-        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 USDC</div>
-        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 USDC</div>
-        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 USDC</div>
+        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 &bull; USDC</div>
+        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 &bull; USDC</div>
+        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 &bull; USDC</div>
       </div>
 
-      <h2>TIME FRAME</h2>
+      <div class="readonly2"">
+        🔵 How many seconds ahead of your prediction you want to be?</span>
+      </div>
       <div class="flex-row">
-        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10s</div>
-        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30s</div>
-        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60s</div>
+        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 Seconds</div>
+        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30 Seconds</div>
+        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 Seconds</div>
       </div>
 
-      <h2>PREDICTION</h2>
+      <div class="readonly2"">
+        🔵 What's your prediction? HIGHER? LOWER?</span>
+      </div>
       <div class="flex-row">
-        <div class="option-btn ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">HIGHER</div>
-        <div class="option-btn ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">LOWER</div>
+
+  <div class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">
+    <img src="logo/up_logo_small.png" width="48" height="48">
+  </div>
+  <div class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">
+   <img src="logo/down_logo_small.png" width="48" height="48">
+  </div>
+
       </div>
 
-      <h2>ETH LIVE PRICE</h2>
+<hr style="
+  border:none;
+  height:8px;
+  background:transparent;
+  margin:8px 0;
+">
+<hr>
+
+      <div id="priceTitle" class="readonly3" style="text-align:center;">
+        ${currentBet.asset} Live Price</span>
+      </div>
       <input type="text" id="livePrice1" class="readonly" value="Loading..." readonly>
-      <input type="text" id="livePrice2" class="readonly" value="0.00" readonly>
 
-      <button class="btn" id="settleBtn" onclick="settleAndPay()">SETTLE ${currentBet.amount} USDC</button>
-      
-      <button id="predictBtn" class="btn" onclick="startPrediction()" 
-              style="background:#cccccc; color:#666; cursor:not-allowed;" disabled>
-        PREDICT
-      </button>
-
-      <div id="predictionArea" style="display:none; text-align:center; margin-top:20px">
-        <input type="text" id="countdown" class="readonly" value="0" style="font-size:3.5rem; font-weight:bold;">
-        <p style="color:#d00; font-weight:bold; margin-top:15px; font-size:1rem;">
-          DON'T LEAVE THE SCREEN<br>YOUR BET MAY FAIL AND YOU MAY LOSE YOUR BET MONEY
-        </p>
+      <!-- COUNTDOWN + WARNING will be inserted here by JS when PREDICT is clicked -->
+      <div id="predictionArea" style="display:none; text-align:center; margin:15px 0;">
+        <input type="text" id="countdown" class="readonly" value="0" style="font-size:3.8rem;">
       </div>
+
+      <input type="text" id="livePrice2" class="readonly" value="0.00" readonly style="display:none;">
+
+<hr>
+
+      <div class="readonly2"">
+        🔵 Settle your • USDC bet.</span>
+      </div>
+      <button class="btn" id="settleBtn" onclick="settleAndPay()">Settle ${currentBet.amount} &bull; USDC</button>
+      
+      <div class="readonly2"">
+        🔵 Start your prediction time windows.</span>
+      </div>
+      <button id="predictBtn" class="btn_rev" onclick="startPrediction()" 
+        const predictBtn = document.getElementById('predictBtn');
+              style="opacity: 0.6; cursor: not-allowed;" disabled>
+        Predict
+      </button>
     </div>
   `;
 
-    startLivePriceUpdates();
-  
-  // Balance refresh every 1 second
-  if (balanceInterval) clearInterval(balanceInterval);
-  balanceInterval = setInterval(updateBalances, 1000);
+    // Disable Predict Button
+  const predictBtn = document.getElementById('predictBtn');
+  if (predictBtn) {
+    predictBtn.disabled = true;
+    predictBtn.style.pointerEvents = 'none';
+    predictBtn.style.opacity = "0.6";
+    predictBtn.style.cursor = "not-allowed";
+  }
 
-  // Initial call
+  startLivePriceUpdates();
   updateBalances();
+  updatePriceTitle();
 }
 
-// Replace your startLivePriceUpdates() with this:
 let livePriceInterval = null;
-let balanceInterval = null;
 let isPredictionStarted = false;
 
 function startLivePriceUpdates() {
-  if (livePriceInterval) clearInterval(livePriceInterval);
+  if (livePriceInterval) {
+    clearInterval(livePriceInterval);
+  }
 
   const updatePrices = async () => {
-    const price = await getETHPrice();
+    const price = await getPrice(currentBet.asset);
 
     const tb1 = document.getElementById('livePrice1');
     const tb2 = document.getElementById('livePrice2');
@@ -195,8 +257,34 @@ function startLivePriceUpdates() {
     }
   };
 
-  updatePrices();
-  livePriceInterval = setInterval(updatePrices, 100); // Every 0.1 second (100ms)
+  updatePrices();                    // Immediate update
+  livePriceInterval = setInterval(updatePrices, 100); // 0.1 second
+}
+
+async function getPrice(asset) {
+  try {
+    let symbol;
+    if (asset === 'BTC') symbol = 'BTCUSDT';
+    else if (asset === 'ETH') symbol = 'ETHUSDT';
+    else if (asset === 'SOL') symbol = 'SOLUSDT';
+
+    const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
+    const data = await res.json();
+
+    if (data && data.price) {
+      return parseFloat(data.price);
+    } else {
+      throw new Error("Invalid response");
+    }
+  } catch (e) {
+    console.warn(`Failed to fetch ${asset} price from Binance`, e);
+    
+    // Fallback prices
+    if (asset === 'BTC') return 68000;
+    if (asset === 'ETH') return 3200;
+    if (asset === 'SOL') return 150;
+    return 0;
+  }
 }
 
 // ==================== BET CONTROLS ====================
@@ -209,70 +297,79 @@ async function settleAndPay() {
   if (!signer) return alert("Wallet not connected");
 
   const amount = currentBet.amount;
-  const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Put your real address
+  const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Make sure this is correct
 
   try {
-    // === 1. Check User Balance First ===
+    // Check balance first
     const balance = await provider.getBalance(userAddress);
-    const requiredAmount = ethers.parseUnits(amount.toString(), 18);
-    
-    console.log(`Balance: ${ethers.formatUnits(balance, 18)} | Required: ${amount}`);
+    const required = ethers.parseUnits(amount.toString(), 18);
 
-    if (balance < requiredAmount) {
-      alert(`❌ Insufficient USDC!\n\nYou have: ${ethers.formatUnits(balance, 18)} USDC\nYou need: ${amount} USDC`);
+    if (balance < required) {
+      alert(`❌ Insufficient • USDC!!!\n\nYou have: ${ethers.formatUnits(balance, 18)} • USDC.`);
       return;
     }
 
-    // === 2. Send Payment ===
+    // Send payment
     const tx = await signer.sendTransaction({
       to: SYSTEM_WALLET,
-      value: requiredAmount
+      value: required
     });
 
-    alert(`⏳ Sending ${amount} USDC...\nTx Hash: ${tx.hash}`);
+    alert(`⏳ Sending ${amount} • USDC...\n\nTx ∼ ${tx.hash}`);
 
     const receipt = await tx.wait();
-    
-    alert(`✅ Payment Successful!\n${amount} USDC sent to system wallet.\n\nTransaction Hash:\n${receipt.transactionHash}`);
+    alert(`✅ Payment Successful!\n\n${amount} • USDC sent.`);
 
-    // Enable Predict and disable other controls
+    // Disable controls and enable Predict button
     disableBetControls();
 
     const predictBtn = document.getElementById('predictBtn');
     if (predictBtn) {
       predictBtn.disabled = false;
-      predictBtn.style.background = "#FF8800";
-      predictBtn.style.color = "black";
+      predictBtn.style.pointerEvents = 'auto';
+      predictBtn.style.opacity = "1";
       predictBtn.style.cursor = "pointer";
     }
+
+    // === UPDATE BALANCES AFTER PAYMENT ===
+    await updateBalances();
 
   } catch (error) {
     console.error(error);
     if (error.code === 4001) {
-      alert("❌ Transaction rejected by user.");
+      alert("Transaction rejected by user.");
     } else {
-      alert("❌ Payment failed: " + (error.shortMessage || error.message));
+      alert("Payment failed: " + (error.shortMessage || error.message));
     }
   }
 }
 
 function startPrediction() {
   isPredictionStarted = true;
-  console.log("🚀 Prediction started - Now updating Textbox 2");
 
   // Freeze Textbox 1
   const tb1 = document.getElementById('livePrice1');
-  startPrice = parseFloat(tb1.value) || 3200;
+  startPrice = parseFloat(tb1.value) || 0;
   tb1.style.background = "#e0e0e0";
-  tb1.style.color = "#444";
 
-  // Show prediction area
+  // Disable Predict Button
+  const predictBtn = document.getElementById('predictBtn');
+  if (predictBtn) {
+    predictBtn.disabled = true;
+    predictBtn.style.pointerEvents = 'none';
+    predictBtn.style.opacity = "0.6";
+    predictBtn.style.cursor = "not-allowed";
+  }
+
+  // Show countdown between textbox 1 and 2
   document.getElementById('predictionArea').style.display = 'block';
 
-  // Disable everything else
-  disableAllControls();
+  // Show textbox 2
+  const tb2 = document.getElementById('livePrice2');
+  tb2.style.display = 'block';
 
-  // Start countdown
+  disableBetControls();
+
   let timeLeft = currentBet.time;
   const countdownEl = document.getElementById('countdown');
   countdownEl.value = timeLeft;
@@ -291,18 +388,18 @@ function startPrediction() {
 function disableBetControls() {
   const optionBtns = document.querySelectorAll('.option-btn');
   optionBtns.forEach(btn => {
+    btn.disabled = true;
     btn.style.pointerEvents = 'none';
-    btn.style.opacity = '0.5';
-    btn.style.background = '#cccccc';
-    btn.style.color = '#666';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
   });
 
   const settleBtn = document.getElementById('settleBtn');
   if (settleBtn) {
     settleBtn.disabled = true;
-    settleBtn.style.background = '#cccccc';
-    settleBtn.style.color = '#666';
-    settleBtn.style.cursor = 'not-allowed';
+    settleBtn.style.pointerEvents = 'none';
+    settleBtn.style.opacity = "0.6";
+    settleBtn.style.cursor = "not-allowed";
   }
 }
 
@@ -310,10 +407,10 @@ function disableAllControls() {
   // Disable buttons
   const buttons = document.querySelectorAll('.btn, .option-btn');
   buttons.forEach(btn => {
+    btn.disabled = true;
     btn.style.pointerEvents = 'none';
-    btn.style.opacity = '0.5';
-    btn.style.background = '#cccccc';
-    btn.style.color = '#666';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
   });
 
   // Disable price boxes except countdown
@@ -332,7 +429,7 @@ async function endGame() {
   if (userWon) {
     await autoClaimReward();     // Automatic payout
   } else {
-    alert("You Lose. Better luck next time.");
+    alert("You LOSE. 😂");
     resetGame();
   }
 }
@@ -387,7 +484,7 @@ async function showResultScreen(won) {
 
 // ==================== CLAIM REWARD (Backend Call) ====================
 async function claimReward() {
-  if (!userAddress) return alert("Wallet not connected");
+  if (!userAddress) return alert("❌ Wallet not connected.");
 
   const loadingMsg = alert("Checking system balance and processing reward...");
 
@@ -406,11 +503,11 @@ async function claimReward() {
     if (result.success) {
       alert(`🎉 ${result.message}\n\nTransaction Hash:\n${result.txHash}`);
     } else {
-      alert("❌ Claim failed: " + result.message);
+      alert("❌ Claim failed: " + result.message + ".");
     }
   } catch (error) {
     console.error(error);
-    alert("❌ Cannot connect to backend. Make sure backend is running.");
+    alert("❌ Backend not found. Make sure backend is running.");
   }
 
   resetGame();
@@ -418,34 +515,74 @@ async function claimReward() {
 
 // ==================== DISCONNECT & REVOKE ====================
 async function disconnectWallet() {
-  if (!confirm("Disconnect wallet?")) return;
+  if (!confirm("⚠️ Doing this will disconnect your wallet.\n\nContinue?")) return;
   userAddress = null;
   provider = null;
   signer = null;
   if (countdownInterval) clearInterval(countdownInterval);
-  alert("✅ Wallet disconnected");
+  alert("✅ Wallet disconnected.");
   showScreen1();
 }
 
 async function revokeAllConnections() {
-  if (!confirm("Reset all connections?")) return;
-  userAddress = null;
-  provider = null;
-  signer = null;
-  if (countdownInterval) clearInterval(countdownInterval);
-  alert("✅ All connections revoked.");
-  showScreen1();
+  if (!confirm("⚠️ Doing this will revoke your wallet connection from ArcDicted.\n\nContinue?")) {
+    return;
+  }
+
+  try {
+    // Strong revocation
+    if (window.ethereum) {
+      // Revoke permissions
+      await window.ethereum.request({
+        method: 'wallet_revokePermissions',
+        params: [{ eth_accounts: {} }]
+      }).catch(() => {});
+
+      // Disconnect
+      await window.ethereum.request({
+        method: 'eth_accounts'
+      });
+    }
+
+    // Clear app state
+    userAddress = null;
+    provider = null;
+    signer = null;
+
+    if (countdownInterval) clearInterval(countdownInterval);
+    if (livePriceInterval) clearInterval(livePriceInterval);
+    if (balanceInterval) clearInterval(balanceInterval);
+
+    alert("✅ Wallet connection from ArcDicted revoked.");
+
+    showScreen1();
+
+  } catch (error) {
+    console.error(error);
+    // Fallback: Force reload
+    location.reload();
+  }
 }
 
 function resetGame() {
-  currentBet = { amount: 1, time: 10, direction: "HIGHER" };
+  // Keep the last chosen asset (don't reset it)
+  const previousAsset = currentBet.asset || "ETH";
+
+  // Reset only bet amount, time, and direction
+  currentBet = { 
+    asset: previousAsset,        // ← Keep last choice
+    amount: 1, 
+    time: 10, 
+    direction: "HIGHER" 
+  };
+  
   isPredictionStarted = false;
 
   if (countdownInterval) clearInterval(countdownInterval);
   if (livePriceInterval) clearInterval(livePriceInterval);
   if (balanceInterval) clearInterval(balanceInterval);
 
-  showScreen2();
+  showScreen2();   // Refresh screen with preserved asset
 }
 
 // ==================== INIT ====================
@@ -481,22 +618,16 @@ async function updateBalances() {
   // Update User Balance
   const userBal = await getUserBalance();
   const userEl = document.getElementById('userBalanceDisplay');
-  if (userEl) userEl.textContent = `${userBal} USDC`;
+  if (userEl) userEl.innerHTML = `${userBal} &bull; USDC`;
 
   // Update System Balance
   const systemBal = await getSystemBalance();
   const systemEl = document.getElementById('systemBalanceDisplay');
-  if (systemEl) systemEl.textContent = `${systemBal} USDC`;
-
-  // Warning if system balance is low
-  const warningContainer = document.getElementById('systemWarning');
-  if (warningContainer) {
-    warningContainer.style.display = parseFloat(systemBal) < 30 ? 'block' : 'none';
-  }
+  if (systemEl) systemEl.innerHTML = `${systemBal} &bull; USDC`;
 }
 
 async function autoClaimReward() {
-  alert("Processing your reward...");
+  alert("⏳ Processing your reward...");
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
@@ -511,12 +642,12 @@ async function autoClaimReward() {
     const result = await response.json();
 
     if (result.success) {
-      alert(`🎉 ${result.message}\nTx: ${result.txHash}`);
+      alert(`🎉 ${result.message}.\n\nTx ∼ ${result.txHash}.`);
     } else {
-      alert("Claim failed: " + result.message);
+      alert("❌ Claim failed ∼ " + result.message + ".");
     }
   } catch (e) {
-    alert("Cannot connect to backend.");
+    alert("❌ Backend not found.");
   }
 
   resetGame();
