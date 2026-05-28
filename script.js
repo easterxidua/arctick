@@ -7,6 +7,9 @@ let startPrice = 0;
 let endPrice = 0;
 let countdownInterval = null;
 
+let hargawisfix = 0;
+let hargaisehjalan = 0;
+
 const BACKEND_URL = "https://eth-predict-arc-production.up.railway.app";  // Change this when you deploy backend
 
 // ==================== GET ETH PRICE ====================
@@ -21,7 +24,7 @@ async function getETHPrice() {
       throw new Error("Invalid response");
     }
   } catch (e) {
-    console.warn("Binance API failed:", e);
+    console.warn("❌ Binance API failed. ", e);
     return 3200; // fallback price
   }
 }
@@ -63,27 +66,33 @@ async function connectWallet() {
     provider = new ethers.BrowserProvider(window.ethereum);
     signer = await provider.getSigner();
 
-    alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
+    alert(`✅ Wallet connected ∼ ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
     showScreen2();
   } catch (e) {
     console.error(e);
-    alert("Connection failed");
+    alert("❌ Fail to connect. Do try again.");
   }
 }
 
 // ==================== SCREENS ====================
 function showScreen1() {
   document.getElementById('app').innerHTML = `
-    <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;background:rgba(255,255,255,0.95)">
-      <h1 class="txtxt" style="font-size:3.1rem;text-align:center">&bull; ArcDicted &bull;</h1>
-      
-      <button class="btn" onclick="connectWallet()" style="padding:25px 80px;font-size:1.8rem">
-        Connect
-      </button>
+    <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
 
-      <button class="btn_rev" onclick="revokeAllConnections()" style="padding:25px 80px;font-size:1.8rem">
-        Revoke
-      </button>
+      <img src="logo/arc_mascot_title.png"
+           alt="arcdicted_mascot" 
+           style="width:480px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+      
+      <div style="display:flex;flex-direction:column;gap:0px;width:100%;max-width:320px;margin-top:0px">
+        <button class="btn" onclick="connectWallet()" style="padding:22px 60px;font-size:1.8rem">
+          connect
+        </button>
+
+        <button class="btn_rev" onclick="revokeAllConnections()" 
+                style="padding:22px 60px;font-size:1.8rem;">
+          revoke
+        </button>
+      </div>
     </div>
   `;
 }
@@ -113,39 +122,46 @@ async function showScreen2() {
   document.getElementById('app').innerHTML = `
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h2 style="margin:0">ArcDicted &bull; On Arc</h2>
+        <div style="margin:0" class="readonly2">arcDicted &bull; on ARC</div>
         <div onclick="disconnectWallet()" class="btn_smol">
           ${shortAddress}
         </div>
       </div>
 
-      <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        Treasury Balance <span id="systemBalanceDisplay"> ${systemBal} &bull; USDC</span>
+      <!-- ARC Logo - Centered under disconnect button -->
+      <div style="display:flex;justify-content:center;margin:15px 0 20px 0;">
+        <img src="logo/arc_logo_small.png" 
+             alt="arc_logo" 
+             style="width:64px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        Wallet Balance <span id="userBalanceDisplay"> ${userBal} &bull; USDC</span>
+        Treasury's &bull; USDC balance ∼ <span id="systemBalanceDisplay"> ${systemBal} &bull; USDC</span>
+      </div>
+
+      <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
+        Your &bull; USDC balance ∼ <span id="userBalanceDisplay"> ${userBal} &bull; USDC</span>
       </div>
 
 <hr>
 
       <div class="readonly2"">
-        🔵 Which coin's price you want to predict?</span>
+        🔵 Which coin's you want to predict its future price?</span>
       </div>
 
 <div class="flex-row">
   <div class="option-btn-circle ${currentBet.asset==='BTC'?'active':''}" onclick="selectAsset('BTC')">
-    <img src="logo/btc_logo_small.png" width="32" height="32">
+    <img src="logo/btc_logo_small.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
     
   </div>
 
   <div class="option-btn-circle ${currentBet.asset==='ETH'?'active':''}" onclick="selectAsset('ETH')">
-    <img src="logo/eth_logo_small.png" width="32" height="32">
+    <img src="logo/eth_logo_small.png" alt="eth_logo"width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
     
   </div>
 
   <div class="option-btn-circle ${currentBet.asset==='SOL'?'active':''}" onclick="selectAsset('SOL')">
-    <img src="logo/sol_logo_small.png" width="32" height="32">
+    <img src="logo/sol_logo_small.png" alt="sol_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
     
   </div>
 </div>
@@ -160,12 +176,12 @@ async function showScreen2() {
       </div>
 
       <div class="readonly2"">
-        🔵 How many seconds ahead of your prediction you want to be?</span>
+        🔵 How many seconds ahead you want to predict?</span>
       </div>
       <div class="flex-row">
-        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 Seconds</div>
-        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30 Seconds</div>
-        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 Seconds</div>
+        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 seconds</div>
+        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30 seconds</div>
+        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 seconds</div>
       </div>
 
       <div class="readonly2"">
@@ -174,10 +190,10 @@ async function showScreen2() {
       <div class="flex-row">
 
   <div class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">
-    <img src="logo/up_logo_small.png" width="48" height="48">
+    <img src="logo/up_logo_small.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
   </div>
   <div class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">
-   <img src="logo/down_logo_small.png" width="48" height="48">
+   <img src="logo/down_logo_small.png" alt="lower_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
   </div>
 
       </div>
@@ -193,29 +209,32 @@ async function showScreen2() {
       <div id="priceTitle" class="readonly3" style="text-align:center;">
         ${currentBet.asset} Live Price</span>
       </div>
-      <input type="text" id="livePrice1" class="readonly" value="Loading..." readonly>
+      
+      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
+        <div class="readonly2" style="flex: 50%; text-align:left;" margin-left: 120px;>
+         Your prediction marked price ∼
+        </div>
+        <input type="text" id="livePrice1" class="readonly_txt2" value="Loading..." readonly style="flex:1; text-align:right;" border-radius: 0px; margin-left: margin-right: 120px;>
+      </div>
 
       <!-- COUNTDOWN + WARNING will be inserted here by JS when PREDICT is clicked -->
       <div id="predictionArea" style="display:none; text-align:center; margin:15px 0;">
-        <input type="text" id="countdown" class="readonly" value="0" style="font-size:3.8rem;">
+        <input type="text" id="countdown" class="readonly_txt2" value="0" style="font-size:3.8rem;">
       </div>
 
-      <input type="text" id="livePrice2" class="readonly" value="0.00" readonly style="display:none;">
+      <input type="text" id="livePrice2" class="readonly_txt" value="Loading..." readonly style="display:none;">
 
 <hr>
 
       <div class="readonly2"">
         🔵 Settle your • USDC bet.</span>
       </div>
-      <button class="btn" id="settleBtn" onclick="settleAndPay()">Settle ${currentBet.amount} &bull; USDC</button>
+      <button class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &bull; USDC</button>
       
-      <div class="readonly2"">
-        🔵 Start your prediction time windows.</span>
-      </div>
-      <button id="predictBtn" class="btn_rev" onclick="startPrediction()" 
+      <button id="predictBtn" class="btn_hide" onclick="startPrediction()" 
         const predictBtn = document.getElementById('predictBtn');
               style="opacity: 0.6; cursor: not-allowed;" disabled>
-        Predict
+        predict
       </button>
     </div>
   `;
@@ -244,21 +263,68 @@ function startLivePriceUpdates() {
 
   const updatePrices = async () => {
     const price = await getPrice(currentBet.asset);
+    const pricefixed = hargawisfix; //await getPrice(currentBet.asset);
+    const pricerun = await getPrice(currentBet.asset);
 
     const tb1 = document.getElementById('livePrice1');
     const tb2 = document.getElementById('livePrice2');
 
     if (tb1 && !isPredictionStarted) {
       tb1.value = price.toFixed(2);
+      pricefixed = price.toFixed(2);
     }
+
+    //hargawisfix = pricefixed;
+	  hargaisehjalan = pricerun;
+    //alert("hargaisehjalan1: " + hargaisehjalan + "hargawisfix1: " + hargawisfix);
+
+    //alert("hargaisehjalan1: " + hargaisehjalan + "hargawisfix1: " + hargawisfix);
+    //alert("pricefixed1: " + pricefixed + "pricerun1: " + pricerun);
+
+      // Dynamic Color Logic
+      if (pricerun > pricefixed) {
+        tb2.style.background = "#22C55E";        // Green
+      } else if (price2 < price1) {
+        tb2.style.background = "#EF4444";        // Red
+      } else {
+        tb2.style.background = "#000000";        // Default greyish
+      }
 
     if (tb2 && isPredictionStarted) {
       tb2.value = price.toFixed(2);
+      pricerun = price.toFixed(2);
+
+      //alert("pricefixed: " + pricefixed + "pricerun: " + pricerun);
+
+      if (tb2 && isPredictionStarted) {
+      tb2.value = price.toFixed(2);
+      pricerun = price.toFixed(2);
+
+      //const price1 = parseFloat(tb1.value) || 0;
+      //const price2 = price;
+
+      const price1 = pricefixed
+      const price2 = pricerun;
+      //alert("pricefixed1: " + pricefixed + "pricerun1: " + pricerun);
+
+      // Dynamic Color Logic
+      if (price2 > price1) {
+        tb2.style.background = "#22C55E";        // Green
+      } else if (price2 < price1) {
+        tb2.style.background = "#EF4444";        // Red
+      } else {
+        tb2.style.background = "#000000";        // Default greyish
+      }
+    }
+
+	  hargaisehjalan = pricerun;
+    //alert("hargaisehjalan2: " + hargaisehjalan + "hargawisfix2: " + hargawisfix);
+
     }
   };
 
   updatePrices();                    // Immediate update
-  livePriceInterval = setInterval(updatePrices, 100); // 0.1 second
+  livePriceInterval = setInterval(updatePrices, 1000); // 0.1 second
 }
 
 async function getPrice(asset) {
@@ -277,12 +343,12 @@ async function getPrice(asset) {
       throw new Error("Invalid response");
     }
   } catch (e) {
-    console.warn(`Failed to fetch ${asset} price from Binance`, e);
+    console.warn(`❌ Failed fetching ${asset} price from Binance.`, e);
     
     // Fallback prices
-    if (asset === 'BTC') return 68000;
-    if (asset === 'ETH') return 3200;
-    if (asset === 'SOL') return 150;
+    if (asset === 'BTC') return 99999;
+    if (asset === 'ETH') return 999;
+    if (asset === 'SOL') return 9;
     return 0;
   }
 }
@@ -294,7 +360,7 @@ window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); }
 
 // ==================== PAYMENT & GAME FLOW ====================
 async function settleAndPay() {
-  if (!signer) return alert("Wallet not connected");
+  if (!signer) return alert("❌ Wallet not connected.");
 
   const amount = currentBet.amount;
   const SYSTEM_WALLET = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";   // ← Make sure this is correct
@@ -305,7 +371,7 @@ async function settleAndPay() {
     const required = ethers.parseUnits(amount.toString(), 18);
 
     if (balance < required) {
-      alert(`❌ Insufficient • USDC!!!\n\nYou have: ${ethers.formatUnits(balance, 18)} • USDC.`);
+      alert(`❌ Insufficient • USDC!!!\n\nYou have ∼ ${ethers.formatUnits(balance, 18)} • USDC.`);
       return;
     }
 
@@ -315,13 +381,15 @@ async function settleAndPay() {
       value: required
     });
 
-    alert(`⏳ Sending ${amount} • USDC...\n\nTx ∼ ${tx.hash}`);
+    alert(`⏳ Sending ${amount} • USDC...\n\nTx ∼ ${tx.hash}.`);
 
     const receipt = await tx.wait();
     alert(`✅ Payment Successful!\n\n${amount} • USDC sent.`);
 
     // Disable controls and enable Predict button
     disableBetControls();
+
+    startPrediction()
 
     const predictBtn = document.getElementById('predictBtn');
     if (predictBtn) {
@@ -337,9 +405,9 @@ async function settleAndPay() {
   } catch (error) {
     console.error(error);
     if (error.code === 4001) {
-      alert("Transaction rejected by user.");
+      alert("❌ Transaction rejected by user.");
     } else {
-      alert("Payment failed: " + (error.shortMessage || error.message));
+      alert("❌ Payment failed ∼ " + (error.shortMessage || error.message) +".");
     }
   }
 }
@@ -349,8 +417,10 @@ function startPrediction() {
 
   // Freeze Textbox 1
   const tb1 = document.getElementById('livePrice1');
+
   startPrice = parseFloat(tb1.value) || 0;
-  tb1.style.background = "#e0e0e0";
+  hargawisfix = startPrice
+  tb1.style.background = "#ffffff00"; /*"#e0e0e0";*/
 
   // Disable Predict Button
   const predictBtn = document.getElementById('predictBtn');
@@ -394,6 +464,22 @@ function disableBetControls() {
     btn.style.cursor = "not-allowed";
   });
 
+  const optionBtns2 = document.querySelectorAll('.option-btn-circle');
+  optionBtns2.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
+  const optionBtns3 = document.querySelectorAll('.option-btn-circle2');
+  optionBtns3.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
   const settleBtn = document.getElementById('settleBtn');
   if (settleBtn) {
     settleBtn.disabled = true;
@@ -405,7 +491,7 @@ function disableBetControls() {
 
 function disableAllControls() {
   // Disable buttons
-  const buttons = document.querySelectorAll('.btn, .option-btn');
+  const buttons = document.querySelectorAll('.btn, .option-btn', option-btn-circle, option-btn-circle2);
   buttons.forEach(btn => {
     btn.disabled = true;
     btn.style.pointerEvents = 'none';
@@ -420,9 +506,10 @@ function disableAllControls() {
 
 async function endGame() {
   endPrice = await getETHPrice();
-  document.getElementById('livePrice2').value = endPrice.toFixed(2);
+  document.getElementById('livePrice2').value = hargaisehjalan; //endPrice.toFixed(2);
 
-  const isHigher = endPrice > startPrice;
+  //alert("hargaisehjalan: " + hargaisehjalan + "hargawisfix: " + hargawisfix);
+  const isHigher = hargaisehjalan > hargawisfix //endPrice > startPrice;
   const userWon = (currentBet.direction === "HIGHER" && isHigher) || 
                   (currentBet.direction === "LOWER" && !isHigher);
 
@@ -486,7 +573,7 @@ async function showResultScreen(won) {
 async function claimReward() {
   if (!userAddress) return alert("❌ Wallet not connected.");
 
-  const loadingMsg = alert("Checking system balance and processing reward...");
+  const loadingMsg = alert("⏳ Processing reward...");
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
@@ -525,7 +612,7 @@ async function disconnectWallet() {
 }
 
 async function revokeAllConnections() {
-  if (!confirm("⚠️ Doing this will revoke your wallet connection from ArcDicted.\n\nContinue?")) {
+  if (!confirm("⚠️ Doing this will revoke your wallet connection from arcDicted.\n\nContinue?")) {
     return;
   }
 
@@ -553,7 +640,7 @@ async function revokeAllConnections() {
     if (livePriceInterval) clearInterval(livePriceInterval);
     if (balanceInterval) clearInterval(balanceInterval);
 
-    alert("✅ Wallet connection from ArcDicted revoked.");
+    alert("✅ Wallet revoked from arcDicted.");
 
     showScreen1();
 
@@ -566,7 +653,7 @@ async function revokeAllConnections() {
 
 function resetGame() {
   // Keep the last chosen asset (don't reset it)
-  const previousAsset = currentBet.asset || "ETH";
+  const previousAsset = currentBet.asset || "BTC";
 
   // Reset only bet amount, time, and direction
   currentBet = { 
@@ -610,7 +697,7 @@ async function updateUserBalance() {
       balanceEl.textContent = `${formattedBalance} USDC`;
     }
   } catch (e) {
-    console.warn("Balance fetch failed", e);
+    console.warn("❌ • USDC balance fetch failed. ", e);
   }
 }
 
@@ -654,7 +741,7 @@ async function autoClaimReward() {
 }
 
 async function switchWallet() {
-  if (!window.ethereum) return alert("No wallet detected");
+  if (!window.ethereum) return alert("❌ No wallet detected.");
 
   try {
     await window.ethereum.request({

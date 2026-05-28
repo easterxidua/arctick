@@ -25,3 +25,51 @@
 
 <div class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">Higher</div>
         <div class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">Lower</div>
+
+
+
+function showScreen1() {
+  document.getElementById('app').innerHTML = `
+    <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;background:rgba(255,255,255,0.95)">
+      <h1 class="txtxt" style="font-size:3.1rem;text-align:center">&bull; ArcDicted &bull;</h1>
+      
+      <button class="btn" onclick="connectWallet()" style="padding:25px 80px;font-size:1.8rem">
+        Connect
+      </button>
+
+      <button class="btn_rev" onclick="revokeAllConnections()" style="padding:25px 80px;font-size:1.8rem">
+        Revoke
+      </button>
+    </div>
+  `;
+}
+
+    <button class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &bull; USDC</button>
+  /*arcDicted &bull; on ARC*/
+
+  <input type="text" id="livePrice1" class="readonly_txt" value="Loading..." readonly>
+
+  if (tb2 && isPredictionStarted) {
+      tb2.value = price.toFixed(2);
+
+      const price1 = parseFloat(tb1.value) || 0;
+      const price2 = price;
+
+      // Dynamic Color Logic
+      if (price2 > price1) {
+        tb2.style.color = "#22C55E";        // Green
+      } else if (price2 < price1) {
+        tb2.style.color = "#EF4444";        // Red
+      } else {
+        tb2.style.color = "#ffffff";        // Default greyish
+      }
+    }
+
+      /*
+      <div class="readonly2"">
+        🔵 Start your prediction exactly after your click.</span>
+      </div>
+      */
+
+      let hargawisfix = 0;
+      let hargaisehjalan = 0;

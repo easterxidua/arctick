@@ -60,6 +60,34 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   transform: scale(1.01);
 }
 
+.btn_hide {
+  display: none;
+  background: #FF8800;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(#FF8800, #FF8800) padding-box, /* Inner background color */
+    linear-gradient(to left, #FF8800, #ffffff) border-box; /* Border gradient */
+
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin: 8px 0;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
 .btn_rev {
   background: #FF8800;
   color: rgb(255, 255, 255);
@@ -332,7 +360,7 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   padding: 10px;
   width: 100%;
   margin: 6px 0;
-  border-radius: 9999px;
+  border-radius: 0px;
   text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
 
   color: rgb(0, 100, 200);
@@ -346,7 +374,7 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   padding: 10px;
   width: 100%;
   margin: 6px 0;
-  border-radius: 9999px;
+  border-radius: 0px;
   text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
 
   color: rgb(0, 100, 200);
@@ -360,10 +388,55 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   padding: 10px;
   width: 100%;
   margin: 6px 0;
-  border-radius: 9999px;
+  border-radius: 0px;
   text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
 
   color: rgb(0, 100, 200);
+}
+
+.readonly_txt {
+  background: rgba(0, 0, 0, 0.6); /*#f8f8f8;*/
+  border: none; /*2px solid #ddd*/
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  margin: 6px 0;
+  border-radius: 9999px;
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+
+  color: rgb(255, 255, 255);
+
+/* Make it completely non-interactive */
+  pointer-events: none;           /* Disable all mouse events */
+  user-select: none;              /* Prevent text selection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;                /* Show normal cursor */
+  outline: none;                  /* Remove focus outline */
+}
+.readonly_txt2 {
+  background: transparent; /*#f8f8f8;*/
+  border: none; /*2px solid #ddd*/
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  margin: 6px 0;
+  border-radius: 0px;
+  text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
+
+  color: rgb(0, 100, 200);
+
+/* Make it completely non-interactive */
+  pointer-events: none;           /* Disable all mouse events */
+  user-select: none;              /* Prevent text selection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;                /* Show normal cursor */
+  outline: none;                  /* Remove focus outline */
 }
 
 .flex-row {
@@ -383,4 +456,16 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
 
 input[type="text"] {
   border-radius: 9999px !important;
+}
+
+input[readonly_txt] {
+  pointer-events: none !important;
+  user-select: none !important;
+  cursor: default !important;
+  border-radius: 9999px !important;
+}
+input[readonly_txt2] {
+  pointer-events: none !important;
+  user-select: none !important;
+  cursor: default !important;
 }

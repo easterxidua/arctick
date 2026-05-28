@@ -35,7 +35,7 @@ app.post('/api/claim', async (req, res) => {
   const { userAddress, amount } = req.body;
 
   if (!userAddress || !amount) {
-    return res.status(400).json({ success: false, message: "Missing data" });
+    return res.status(400).json({ success: false, message: "❌ Missing data." });
   }
 
   // ... rest of your claim logic (same as before)
@@ -45,11 +45,11 @@ app.post('/api/claim', async (req, res) => {
 
     const systemBalance = await provider.getBalance(systemWallet.address);
     let payoutAmount = fullPayout;
-    let message = `You won 2x - 10% fee`;
+    let message = `✅ Payment complete.\n\nYou have received your • USDC winning bet, minus 10% fee.`;
 
     if (systemBalance < fullPayout) {
       payoutAmount = betAmount;
-      message = `System balance low. Only original bet returned`;
+      message = `❌ System balance low.\n\nYour • USDC is returned to your wallet.`;
     }
 
     const tx = await systemWallet.sendTransaction({
