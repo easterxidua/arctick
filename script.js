@@ -93,6 +93,18 @@ function showScreen1() {
           revoke
         </button>
       </div>
+
+<!-- GitHub Icon - Centered at the very bottom -->
+      <a href="https://github.com/kaduanganu" 
+         target="_blank"
+         style="position:absolute; bottom:35px; left:50%; transform:translateX(-50%); 
+                color:#555; text-decoration:none; font-size:0.9rem; 
+                display:flex; align-items:center; gap:8px;">
+      <img src="https://github.githubassets.com/favicons/favicon.png" 
+              width="32" height="32" 
+              style="vertical-align:middle; 
+                     filter: brightness(0.9) saturate(2) hue-rotate(200deg);">
+      </a>
     </div>
   `;
 }
@@ -130,9 +142,9 @@ async function showScreen2() {
 
       <!-- ARC Logo - Centered under disconnect button -->
       <div style="display:flex;justify-content:center;margin:15px 0 20px 0;">
-        <img src="logo/arc_logo_small.png" 
+        <img src="logo/arc_logo_small2.png" 
              alt="arc_logo" 
-             style="width:64px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
+             style="width:64px; height:auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));">
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
