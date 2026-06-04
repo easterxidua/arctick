@@ -209,6 +209,24 @@ app.get('/api/debug-wallet', async (req, res) => {
 
 });
 
+app.get('/api/test-appkit', async (req, res) => {
+
+  try {
+
+    res.json({
+      appkitLoaded: !!kit
+    });
+
+  } catch (e) {
+
+    res.status(500).json({
+      error: e.message
+    });
+
+  }
+
+});
+
 app.get('/ping', (req, res) => {
   res.json({
     success: true,
