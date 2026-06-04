@@ -305,35 +305,19 @@ app.get('/api/supported-chains', async (req, res) => {
 
 });
 
-app.get('/api/test-estimate3', async (req, res) => {
+app.get('/api/test-estimate2', async (req, res) => {
 
   try {
 
-    const adapter =
-      createEthersAdapterFromPrivateKey({
-        privateKey: process.env.SYSTEM_PRIVATE_KEY
-      });
+    const version =
+      require("@circle-fin/app-kit/package.json").version;
 
-    const result = await kit.estimateBridge({
-
-      from: {
-        adapter,
-        chain: "Base_Sepolia"
-      },
-
-      to: {
-        chain: "Ethereum_Sepolia"
-      },
-
-      amount: "1"
-
+    res.json({
+      version,
+      kitKeys: Object.keys(kit)
     });
 
-    res.json(result);
-
   } catch (e) {
-
-    console.error(e);
 
     res.status(500).json({
       error: e.message,
@@ -344,7 +328,7 @@ app.get('/api/test-estimate3', async (req, res) => {
 
 });
 
-app.get('/api/test-estimate2', async (req, res) => {
+app.get('/api/test-estimate3', async (req, res) => {
 
   try {
 
@@ -353,17 +337,11 @@ app.get('/api/test-estimate2', async (req, res) => {
         privateKey: process.env.SYSTEM_PRIVATE_KEY
       });
 
-          console.log("KIT:");
-    console.log(kit);
-
-    console.log("KIT KEYS:");
-    console.log(Object.keys(kit));
-    
-    const result = await kit.estimateBridge({
+    const params = {
 
       from: {
         adapter,
-        chain: "Base_Sepolia"
+        chain: "Arc_Testnet"
       },
 
       to: {
@@ -372,17 +350,26 @@ app.get('/api/test-estimate2', async (req, res) => {
 
       amount: "1"
 
-    });
+    };
+
+    console.log(
+      JSON.stringify(params, null, 2)
+    );
+
+    const result =
+      await kit.estimateBridge(params);
 
     res.json(result);
 
   } catch (e) {
 
-    console.error(e);
+    console.error("FULL ERROR:", e);
 
     res.status(500).json({
-      error: e.message,
-      stack: e.stack
+      message: e.message,
+      details: e.details,
+      issues: e.issues,
+      cause: e.cause
     });
 
   }
