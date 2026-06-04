@@ -12,10 +12,6 @@ const app = express();
 
 console.log("SERVER STARTING...");
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend running on port ${PORT}`);
-});
-
 const cors = require("cors");
 
 app.use(cors({
@@ -169,6 +165,7 @@ app.get('/ping', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
   console.log(`🚀 Backend running on port ${PORT}`);
 });
