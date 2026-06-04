@@ -486,14 +486,13 @@ window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); }
 
 // ==================== PAYMENT & GAME FLOW ====================
 async function settleAndPay() {
-  if (!signer) return alert("Wallet not connected");
+  if (!signer) return alert("❌ Wallet not connected.");
 
   const amount = currentBet.amount;
-  const chain = selectedChain;
+  const chainKey = selectedChain;
+  const chainConfig = CONFIG.chains[chainKey];
 
   try {
-    // User pays on their selected chain
-    const chainConfig = CONFIG.chains[chain];
     const usdc = new ethers.Contract(chainConfig.usdcAddress, USDC_ABI, signer);
 
     const balance = await usdc.balanceOf(userAddress);
@@ -507,11 +506,12 @@ async function settleAndPay() {
     const tx = await usdc.transfer(SYSTEM_WALLET_X, required);
     await tx.wait();
 
-    alert(`✅ Bet settled on ${chain}. Funds sent to Arc Treasury.`);
+    alert(`✅ Payment successful on ${chainKey}`);
 
     disableBetControls();
-    const predictBtn = document.getElementById('predictBtn');
-    if (predictBtn) predictBtn.disabled = false;
+
+    // IMPORTANT: Call startPrediction after payment
+    startPrediction();   
 
   } catch (error) {
     alert("Payment failed: " + error.message);
@@ -858,12 +858,10 @@ async function updateUserBalance() {
 }
 
 async function updateBalances() {
-  // Update User Balance
   const userBal = await getUserBalance();
   const userEl = document.getElementById('userBalanceDisplay');
   if (userEl) userEl.innerHTML = `${userBal} &#9679; USDC`;
 
-  // Update System Balance
   const systemBal = await getSystemBalance();
   const systemEl = document.getElementById('systemBalanceDisplay');
   if (systemEl) systemEl.innerHTML = `${systemBal} &#9679; USDC`;
