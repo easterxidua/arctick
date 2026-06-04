@@ -176,11 +176,7 @@ res.json({
 });
   } catch (e) {
     console.error(e);
-res.json({
-  wallet: treasuryWallet.address,
-  usdcContract: CHAINS["arc-testnet"].usdc,
-  balance: ethers.formatUnits(balance, 6)
-})
+    res.json({ balance: ethers.formatUnits(balance, 6) });
   }
 });
 
