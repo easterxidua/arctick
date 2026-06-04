@@ -161,22 +161,23 @@ app.get('/api/system-balance', async (req, res) => {
 
   try {
 
-    const provider = new ethers.JsonRpcProvider(process.env.ARC_RPC);
+    const provider =
+      new ethers.JsonRpcProvider(process.env.ARC_RPC);
 
     const treasuryAddress =
       "0x9068D4A1edCea0e553525E8Ca5edbE57DfE900b6";
 
     const usdc = new ethers.Contract(
-      "0x3600000000000000000000000000000000000000",
+      CHAINS["arc-testnet"].usdc,
       ["function balanceOf(address) view returns (uint256)"],
       provider
     );
 
-    const balance = await usdc.balanceOf(treasuryAddress);
+    const balance =
+      await usdc.balanceOf(treasuryAddress);
 
     res.json({
-      treasuryAddress,
-      balance: balance.toString()
+      balance: ethers.formatUnits(balance, 6)
     });
 
   } catch (e) {
