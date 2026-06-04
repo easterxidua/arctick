@@ -10,8 +10,6 @@ require('dotenv').config();
 
 const app = express();
 
-const cors = require('cors');
-
 console.log("SERVER STARTING...");
 
 app.listen(PORT, () => {
