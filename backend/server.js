@@ -169,9 +169,10 @@ app.get('/api/system-balance', async (req, res) => {
 
     const balance = await usdc.balanceOf(treasuryWallet.address);
 
-    res.json({
-      balance: ethers.formatUnits(balance, 6)
-    });
+res.json({
+  wallet: treasuryWallet.address,
+  balance: ethers.formatUnits(balance, 6)
+});
   } catch (e) {
     console.error(e);
     res.json({ balance: "0" });
