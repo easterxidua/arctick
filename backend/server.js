@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 
-const { AppKit } = require("@circle-fin/app-kit");
+//const { AppKit } = require("@circle-fin/app-kit");
 
-const kit = new AppKit();
+//const kit = new AppKit();
 
 const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ethers-v6");
 
@@ -46,6 +46,8 @@ app.use((req, res, next) => {
   next();
 });
 
+const DEFAULTCHAIN = "Arc_Testnet";
+
 const CHAINS = {
   "arc-testnet": { rpc: process.env.ARC_RPC, usdc: process.env.ARC_TESTNET_USDC, decimals: 6 },
   "base-sepolia": { rpc: process.env.BASE_SEPOLIA_RPC, usdc: process.env.BASE_SEPOLIA_USDC, decimals: 6 },
@@ -59,6 +61,7 @@ function getTreasuryWallet() {
   return new ethers.Wallet(process.env.SYSTEM_PRIVATE_KEY, provider);
 }
 
+/*
 // Settle Bet (User pays on their chain to Arc Treasury address)
 app.post('/api/settle', async (req, res) => {
 
@@ -154,6 +157,7 @@ app.post('/api/claim', async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+*/
 
 // System Balance (Always show Arc Testnet Treasury)
 app.get('/api/system-balance', async (req, res) => {
