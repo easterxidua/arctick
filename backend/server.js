@@ -305,7 +305,7 @@ app.get('/api/supported-chains', async (req, res) => {
 
 });
 
-app.get('/api/test-estimate2', async (req, res) => {
+app.get('/api/test-estimate3', async (req, res) => {
 
   try {
 
@@ -318,7 +318,52 @@ app.get('/api/test-estimate2', async (req, res) => {
 
       from: {
         adapter,
-        chain: "Arc_Testnet"
+        chain: "Base_Sepolia"
+      },
+
+      to: {
+        chain: "Ethereum_Sepolia"
+      },
+
+      amount: "1"
+
+    });
+
+    res.json(result);
+
+  } catch (e) {
+
+    console.error(e);
+
+    res.status(500).json({
+      error: e.message,
+      stack: e.stack
+    });
+
+  }
+
+});
+
+app.get('/api/test-estimate2', async (req, res) => {
+
+  try {
+
+    const adapter =
+      createEthersAdapterFromPrivateKey({
+        privateKey: process.env.SYSTEM_PRIVATE_KEY
+      });
+
+          console.log("KIT:");
+    console.log(kit);
+
+    console.log("KIT KEYS:");
+    console.log(Object.keys(kit));
+    
+    const result = await kit.estimateBridge({
+
+      from: {
+        adapter,
+        chain: "Base_Sepolia"
       },
 
       to: {
@@ -357,7 +402,7 @@ app.get('/api/test-estimate', async (req, res) => {
 
       from: {
         adapter,
-        chain: "Arc_Testnet"
+        chain: "Ethereum_Sepolia"
       },
 
       amount: "1"
