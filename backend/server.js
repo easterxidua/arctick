@@ -171,6 +171,7 @@ app.get('/api/system-balance', async (req, res) => {
 
 res.json({
   wallet: treasuryWallet.address,
+  usdcContract: CHAINS["arc-testnet"].usdc,
   balance: ethers.formatUnits(balance, 6)
 });
   } catch (e) {
