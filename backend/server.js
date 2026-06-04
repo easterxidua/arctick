@@ -1,3 +1,6 @@
+const express = require('express');
+const app = express();
+
 const { AppKit } = require("@circle-fin/app-kit");
 
 const kit = new AppKit();
@@ -11,6 +14,25 @@ require('dotenv').config();
 const app = express();
 
 console.log("SERVER STARTING...");
+
+app.get('/', (req, res) => {
+  res.send('SERVER WORKING');
+});
+
+app.get('/ping', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Backend alive'
+  });
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION:', err);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION:', err);
+});
 
 const cors = require("cors");
 
@@ -175,8 +197,16 @@ app.get('/', (req, res) => {
   res.send('ROOT WORKS');
 });
 
+/*
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
+  console.log(`🚀 Backend running on port ${PORT}`);
+});
+*/
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Backend running on port ${PORT}`);
 });
