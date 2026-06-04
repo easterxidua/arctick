@@ -209,6 +209,47 @@ app.get('/api/debug-wallet', async (req, res) => {
 
 });
 
+app.get('/api/test-bridge', async (req, res) => {
+
+  try {
+
+    const adapter =
+      createEthersAdapterFromPrivateKey({
+        privateKey: process.env.SYSTEM_PRIVATE_KEY
+      });
+
+    const result = await kit.bridge({
+
+      from: {
+        adapter,
+        chain: "Arc_Testnet"
+      },
+
+      to: {
+        recipientAddress:
+          "0x9068D4A1edCea0e553525E8Ca5edbE57DfE900b6",
+        chain: "Arc_Testnet"
+      },
+
+      amount: "1"
+
+    });
+
+    res.json(result);
+
+  } catch(e) {
+
+    console.error(e);
+
+    res.status(500).json({
+      error: e.message,
+      stack: e.stack
+    });
+
+  }
+
+});
+
 app.get('/api/test-appkit', async (req, res) => {
 
   try {
