@@ -33,7 +33,7 @@ const USDC_ABI = [
   "function balanceOf(address owner) view returns (uint256)"
 ];
 
-const BACKEND_URL = "https://lucid-cooperation-production-5f8d.up.railway.app";  // Change this when you deploy backend
+const BACKEND_URL = "https://lucid-cooperation-production-511a.up.railway.app";  // Change this when you deploy backend
 
 const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
 
@@ -868,29 +868,37 @@ async function updateBalances() {
 }
 
 async function autoClaimReward() {
-  alert("⏳ Processing reward from Arc Treasury...");
+  alert("⏳ Processing reward...");
 
   try {
+    console.log("Sending to backend:", {
+      userAddress: userAddress,
+      amount: currentBet.amount,
+      chain: selectedChain
+    });
+
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         userAddress: userAddress,
         amount: currentBet.amount,
-        chain: selectedChain   // ← Send user's selected chain for bridging
+        chain: selectedChain
       })
     });
 
     const result = await response.json();
 
+    console.log("Backend Response:", result);   // ← See this in console
+
     if (result.success) {
-      alert(`🎉 Reward bridged from Arc Treasury!\n\n${result.message}\n\nTx: ${result.txHash}`);
+      alert(`🎉 Success!\n\n${result.message}\n\nTx: ${result.txHash}`);
     } else {
-      alert("❌ Claim failed: " + result.message);
+      alert("❌ Claim failed: " + (result.message || "Unknown error"));
     }
   } catch (error) {
-    console.error(error);
-    alert("❌ Cannot connect to backend.");
+    console.error("Fetch Error:", error);
+    alert("❌ Cannot connect to backend. Check console (F12).");
   }
 
   resetGame();
