@@ -91,7 +91,7 @@ app.post('/api/settle', async (req, res) => {
 
       to: {
         recipientAddress: process.env.ARC_TREASURY,
-        chain: DEFAULTCHAIN
+        chain: "Arc_Testnet"
       },
 
       amount: amount.toString()
@@ -133,7 +133,7 @@ app.post('/api/claim', async (req, res) => {
   const result = await kit.bridge({
   from: {
     adapter,
-    chain: DEFAULTCHAIN
+    chain: "Arc_Testnet"
   },
   to: {
     recipientAddress: userAddress,
