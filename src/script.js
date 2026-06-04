@@ -486,100 +486,35 @@ window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); }
 
 // ==================== PAYMENT & GAME FLOW ====================
 async function settleAndPay() {
-  if (!signer) return alert("❌ Wallet not connected.");
+  if (!signer) return alert("Wallet not connected");
 
-//const chain = CONFIG.chains[CONFIG.defaultChain];
-const amount = currentBet.amount;
-
-const chain = selectedChain;
-
-const chainKey = selectedChain;                    // ← Use selected chain
-const chainConfig = CONFIG.chains[chainKey];
-
-const usdc = new ethers.Contract(
-  //chain.usdcAddress,
-  chainConfig.usdcAddress, //CONFIG.chains[selectedChain].usdcAddress,
-  USDC_ABI,
-  signer
-);
-
-    //const balance = await usdc.balanceOf(userAddress);
-    //const required = ethers.parseUnits(amount.toString(), 6);
-
-    //if (balance < required) {
-      //alert(`❌ Insufficient ● USDC on ${chainKey}!!!\n\nYou have:  ${ethers.formatUnits(balance, 18)} ● USDC.`);
-      //return;
-    //}
-
-  //const amount = currentBet.amount;
-  const SYSTEM_WALLET = SYSTEM_WALLET_X;   // ← Make sure this is correct
+  const amount = currentBet.amount;
+  const chain = selectedChain;
 
   try {
-    // Check balance first
-    const balancenative = await provider.getBalance(userAddress);
+    // User pays on their selected chain
+    const chainConfig = CONFIG.chains[chain];
+    const usdc = new ethers.Contract(chainConfig.usdcAddress, USDC_ABI, signer);
+
     const balance = await usdc.balanceOf(userAddress);
     const required = ethers.parseUnits(amount.toString(), 6);
 
-    //alert(balance + " - " + required);
     if (balance < required) {
-      alert(`❌ Insufficient ● USDC on ${jenengechain}!!!\n\nYou have:  ${ethers.formatUnits(balance, 18)} ● USDC.`);
+      alert("Insufficient USDC");
       return;
     }
 
-    // Send payment
-    //const tx = await signer.sendTransaction({
-    //  to: SYSTEM_WALLET,
-    //  value: required
-    //});
+    const tx = await usdc.transfer(SYSTEM_WALLET_X, required);
+    await tx.wait();
 
-const tx = await usdc.transfer(
-  SYSTEM_WALLET,
-  required
-);
+    alert(`✅ Bet settled on ${chain}. Funds sent to Arc Treasury.`);
 
-    alert(`⏳ Sending ${amount} ● USDC on ${jenengechain} to Treasury...\n\nTx: ${tx.hash}.`);
-
-    const receipt = await tx.wait();
-    alert(`✅ Payment Successful on ${jenengechain}!\n\n${amount} ● USDC sent.`);
-
-    // 2. Notify backend
-    await fetch(`${BACKEND_URL}/api/settle`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userAddress,
-        amount,
-        chain: chain
-      })
-    });
-    
-    // Disable controls and enable Predict button
     disableBetControls();
-
-    startPrediction()
-
     const predictBtn = document.getElementById('predictBtn');
-    if (predictBtn) {
-      predictBtn.disabled = false;
-      predictBtn.style.pointerEvents = 'auto';
-      predictBtn.style.opacity = "1";
-      predictBtn.style.cursor = "pointer";
-    }
-
-    // === UPDATE BALANCES AFTER PAYMENT ===
-    await updateBalances();
+    if (predictBtn) predictBtn.disabled = false;
 
   } catch (error) {
-    alert(error)
-    const balance = await usdc.balanceOf(userAddress);
-    const required = ethers.parseUnits(amount.toString(), 6);
-    alert(balance + " - " + required);
-    console.error(error);
-    if (error.code === 4001) {
-      alert("❌ Transaction rejected by user.");
-    } else {
-      alert("❌ Payment failed: " + (error.shortMessage || error.message) +".");
-    }
+    alert("Payment failed: " + error.message);
   }
 }
 
@@ -693,17 +628,16 @@ function disableAllControls() {
 
 async function endGame() {
   endPrice = await getETHPrice();
-  document.getElementById('livePrice2').value = hargaisehjalan; //endPrice.toFixed(2);
+  document.getElementById('livePrice2').value = hargaisehjalan;
 
-  alert("xxxxx hargaisehjalan: " + hargaisehjalan + "hargawisfix: " + hargawisfix);
-  const isHigher = hargaisehjalan > hargawisfix //endPrice > startPrice;
+  const isHigher = hargaisehjalan > hargawisfix;
   const userWon = (currentBet.direction === "HIGHER" && isHigher) || 
                   (currentBet.direction === "LOWER" && !isHigher);
 
   if (userWon) {
-    await autoClaimReward();     // Automatic payout
+    await autoClaimReward();     // Automatic payout from Arc Treasury
   } else {
-    alert("You LOSE. 😂");
+    alert("You LOSE.");
     resetGame();
   }
 }
@@ -795,40 +729,28 @@ async function showResultScreen(won) {
 
 // ==================== CLAIM REWARD (Backend Call) ====================
 async function claimReward() {
-  if (!userAddress) return alert("❌ Wallet not connected.");
-
-  const loadingMsg = alert("⏳ Processing reward...");
+  if (!userAddress) return alert("Wallet not connected");
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-
-body: JSON.stringify({
-  userAddress,
-  amount: currentBet.amount,
-  chain: selectedChain
-})
-
+      body: JSON.stringify({
+        userAddress,
+        amount: currentBet.amount,
+        chain: selectedChain
+      })
     });
 
     const result = await response.json();
 
     if (result.success) {
-      //alert(`🎉 ${result.message}\n\nTransaction Hash:\n${result.txHash}`);
-
-alert(
-  `🎉 ${result.message}\n\n` +
-  `Tx: ${result.txHash}\n\n` +
-  `Explorer:\n${result.explorerUrl}`
-);
-
+      alert(`🎉 Reward sent from Arc Treasury!\nTx: ${result.txHash}`);
     } else {
-      alert("❌ Claim failed: " + result.message + ".");
+      alert("Claim failed: " + result.message);
     }
-  } catch (error) {
-    console.error(error);
-    alert("❌ Backend not found. Make sure backend is running.");
+  } catch (e) {
+    alert("Cannot connect to backend");
   }
 
   resetGame();
@@ -948,36 +870,29 @@ async function updateBalances() {
 }
 
 async function autoClaimReward() {
-  alert("⏳ Processing your reward...");
-
-console.log("Calling claim endpoint...");
-console.log("User:", userAddress);
-console.log("Amount:", currentBet.amount);
+  alert("⏳ Processing reward from Arc Treasury...");
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-
-  body: JSON.stringify({
-  userAddress,
-  amount: currentBet.amount,
-  chain: selectedChain
-})
-
+      body: JSON.stringify({
+        userAddress: userAddress,
+        amount: currentBet.amount,
+        chain: selectedChain   // ← Send user's selected chain for bridging
+      })
     });
 
     const result = await response.json();
 
-    console.log("Claim Result:", result);
-    
     if (result.success) {
-      alert(`🎉 ${result.message}.\n\nTx: ${result.txHash}.`);
+      alert(`🎉 Reward bridged from Arc Treasury!\n\n${result.message}\n\nTx: ${result.txHash}`);
     } else {
-      alert("❌ Claim failed: " + result.message + ".");
+      alert("❌ Claim failed: " + result.message);
     }
-  } catch (e) {
-    alert("❌ Backend not found.");
+  } catch (error) {
+    console.error(error);
+    alert("❌ Cannot connect to backend.");
   }
 
   resetGame();
