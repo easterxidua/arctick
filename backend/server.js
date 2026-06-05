@@ -471,6 +471,36 @@ const result = await kit.estimateBridge({
 
 });
 
+app.get('/api/debug-estimate', async (req, res) => {
+  try {
+
+    const adapter =
+      createEthersAdapterFromPrivateKey({
+        privateKey: process.env.SYSTEM_PRIVATE_KEY
+      });
+
+    const estimateParams = {
+      from: {
+        adapter,
+        chain: "Arc_Testnet"
+      },
+      to: {
+        chain: "Arc_Testnet",
+        address: "0x1234567890123456789012345678901234567890"
+      },
+      amount: "1"
+    };
+
+    console.log("estimateParams:");
+    console.dir(estimateParams, { depth: 10 });
+
+    res.json({ ok: true });
+
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/api/appkit-version', async (req, res) => {
 
   res.json({
