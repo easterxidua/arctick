@@ -404,6 +404,42 @@ app.get('/api/test-estimate', async (req, res) => {
         privateKey: process.env.SYSTEM_PRIVATE_KEY
       });
 
+      console.log("adapter =", adapter);
+
+console.log("from =", {
+  adapter,
+  chain: "Arc_Testnet"
+});
+
+console.log("to =", {
+  chain: "Arc_Testnet",
+  address: "0x8c7265922029899ec69755c96c7c83363c197e90"
+});
+
+const estimateParams = {
+  from: {
+    adapter,
+    chain: "Arc_Testnet"
+  },
+
+  to: {
+    chain: "Arc_Testnet",
+    address: "0x8c7265922029899ec69755c96c7c83363c197e90"
+  },
+
+  amount: "1"
+};
+
+console.log(
+  "estimate params =",
+  JSON.stringify(estimateParams, null, 2)
+);
+
+console.log(
+  "estimateBridge typeof =",
+  typeof kit.estimateBridge
+);
+
 const result = await kit.estimateBridge({
 
   from: {
@@ -413,7 +449,7 @@ const result = await kit.estimateBridge({
 
   to: {
     chain: "Arc_Testnet",
-    address: "0x1234567890123456789012345678901234567890"
+    address: "0x8c7265922029899ec69755c96c7c83363c197e90"
   },
 
   amount: "1"
