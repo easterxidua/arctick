@@ -128,7 +128,7 @@ app.post('/api/settle', async (req, res) => {
       to: {
         adapter,
         chain: "Arc_Testnet",
-        recipientAddress: 0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6
+        recipientAddress: "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"
       },
 
       amount: amount.toString(),
