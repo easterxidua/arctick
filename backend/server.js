@@ -5,40 +5,6 @@ const { AppKit } = require("@circle-fin/app-kit");
 
 const kit = new AppKit();
 
-console.log("kit.estimateBridge =", typeof kit.estimateBridge);
-console.log("kit.bridge =", kit.bridge);
-console.log(require("@circle-fin/app-kit/package.json").version);
-console.log(typeof kit.estimateBridge);
-
-console.log(
-  "@circle-fin/app-kit",
-  require("@circle-fin/app-kit/package.json").version
-);
-
-try {
-  console.log(
-    "@circle-fin/bridge-kit",
-    require("@circle-fin/bridge-kit/package.json").version
-  );
-} catch (e) {
-  console.log("bridge-kit NOT INSTALLED");
-}
-
-try {
-  console.log(
-    "@circle-fin/bridge-usdc-provider",
-    require("@circle-fin/bridge-usdc-provider/package.json").version
-  );
-} catch (e) {
-  console.log("bridge-usdc-provider NOT INSTALLED");
-}
-
-console.log(JSON.stringify(kit.context, null, 2));
-
-console.log(kit.estimateBridge.toString());
-
-console.log(kit.bridge.toString());
-
 const { createEthersAdapterFromPrivateKey } = require("@circle-fin/adapter-ethers-v6");
 
 const { ethers } = require('ethers');
