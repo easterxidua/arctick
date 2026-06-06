@@ -118,6 +118,21 @@ app.post('/api/settle', async (req, res) => {
 
     const adapter = getAdapter();
 
+console.log("BRIDGE PARAMS:");
+
+console.dir({
+  from: {
+    chain: SOURCE_CHAIN
+  },
+  to: {
+    chain: DEST_CHAIN,
+    recipientAddress: userAddress
+  },
+  amount
+}, {
+  depth: null
+});
+
     const result = await kit.bridge({
 
       from: {
@@ -169,6 +184,21 @@ app.post('/api/claim', async (req, res) => {
 
     const payout =
       (Number(amount) * 1.8).toFixed(6);
+
+console.log("BRIDGE PARAMS:");
+
+console.dir({
+  from: {
+    chain: SOURCE_CHAIN
+  },
+  to: {
+    chain: DEST_CHAIN,
+    recipientAddress: userAddress
+  },
+  amount
+}, {
+  depth: null
+});
 
     const result = await kit.bridge({
 
