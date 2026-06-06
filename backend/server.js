@@ -60,6 +60,18 @@ const CHAIN_MAP = {
   "arbitrum-sepolia": "Arbitrum_Sepolia"
 };
 
+function jsonBigInt(obj) {
+  return JSON.parse(
+    JSON.stringify(
+      obj,
+      (_, value) =>
+        typeof value === "bigint"
+          ? value.toString()
+          : value
+    )
+  );
+}
+
 function getAdapter() {
   return createEthersAdapterFromPrivateKey({
     privateKey: process.env.SYSTEM_PRIVATE_KEY
@@ -117,10 +129,12 @@ console.dir({
 
     });
 
-    res.json({
-      success: true,
-      result
-    });
+res.json(
+  jsonBigInt({
+    success: true,
+    result
+  })
+);
 
   } catch (e) {
 
@@ -184,11 +198,13 @@ console.dir({
 
     });
 
-    res.json({
+res.json(
+  jsonBigInt({
       success: true,
       payout,
       result
-    });
+  })
+);
 
   } catch (e) {
 
@@ -281,10 +297,12 @@ app.get('/api/system-balance', async (req, res) => {
 });
 
 app.get('/ping', (req, res) => {
-  res.json({
+res.json(
+  jsonBigInt({
     success: true,
     message: 'Backend alive'
-  });
+  })
+);
 });
 
 app.get('/', (req, res) => {
