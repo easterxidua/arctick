@@ -56,6 +56,7 @@ const CHAINS = {
   "arc-testnet": { rpc: process.env.ARC_RPC, usdc: process.env.ARC_TESTNET_USDC, decimals: 6 },
   "base-sepolia": { rpc: process.env.BASE_SEPOLIA_RPC, usdc: process.env.BASE_SEPOLIA_USDC, decimals: 6 },
   "eth-sepolia": { rpc: process.env.ETH_SEPOLIA_RPC, usdc: process.env.ETH_SEPOLIA_USDC, decimals: 6 },
+  "ink-sepolia": { rpc: process.env.INK_SEPOLIA_RPC, usdc: process.env.INK_SEPOLIA_USDC, decimals: 6 },
   "arbitrum-sepolia": { rpc: process.env.ARBITRUM_SEPOLIA_RPC, usdc: process.env.ARBITRUM_SEPOLIA_USDC, decimals: 6 }
 };
 
@@ -63,6 +64,7 @@ const CHAIN_MAP = {
   "arc-testnet": "Arc_Testnet",
   "base-sepolia": "Base_Sepolia",
   "eth-sepolia": "Ethereum_Sepolia",
+  "ink-sepolia": "Ink_Sepolia",
   "arbitrum-sepolia": "Arbitrum_Sepolia"
 };
 
@@ -99,6 +101,14 @@ const CHAIN_CONFIG = {
       explorer: "https://sepolia.etherscan.io",
       usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
     },
+
+"ink-sepolia": {
+  chainId: "0xba5b1", // 763373 decimal
+  rpcUrl: "https://rpc-gel-sepolia.inkonchain.com",
+  name: "Ink Sepolia",
+  explorer: "https://explorer-sepolia.inkonchain.com",
+  usdcAddress: "0xFabab97dCE620294D2B0b0e46C68964e326300Ac"
+},
 
     "arbitrum-sepolia": {
       chainId: "0x66eee",

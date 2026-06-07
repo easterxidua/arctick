@@ -4,6 +4,7 @@ const CONFIG = {
     "base-sepolia": true,
     "base-mainnet": false,
     "eth-sepolia": true,
+    "ink-sepolia": false,
     "arbitrum-sepolia": true
   },
 
@@ -40,6 +41,14 @@ const CONFIG = {
       explorer: "https://sepolia.etherscan.io",
       usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
     },
+
+"ink-sepolia": {
+  chainId: "0xba5b1", // 763373 decimal
+  rpcUrl: "https://rpc-gel-sepolia.inkonchain.com",
+  name: "Ink Sepolia",
+  explorer: "https://explorer-sepolia.inkonchain.com",
+  usdcAddress: "0xFabab97dCE620294D2B0b0e46C68964e326300Ac"
+},
 
     "arbitrum-sepolia": {
       chainId: "0x66eee",
