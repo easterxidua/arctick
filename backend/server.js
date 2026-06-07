@@ -1,3 +1,9 @@
+import { ethers } from "ethers";
+
+const USDC_ABI = [
+  "function transfer(address to,uint256 amount) returns (bool)"
+];
+
 const express = require('express');
 const app = express();
 
@@ -189,6 +195,15 @@ app.post('/api/bridge-to-arc', async (req, res) => {
       amount
     } = req.body;
 
+    // Skip bridge if already on Arc
+    if (chain === "arc-testnet") {
+
+      return res.json({
+        success: true
+      });
+
+    }
+
     const adapter = getAdapter();
 
     const result = await kit.bridge({
@@ -311,6 +326,47 @@ app.post('/api/claim', async (req, res) => {
       chain,
       amount
     } = req.body;
+
+    const payout = Number(amount) * 2;
+
+//
+// ARC USER
+// DIRECT TRANSFER
+//
+
+if (chain === "arc-testnet") {
+
+  const provider = new ethers.JsonRpcProvider(
+    CONFIG.chains["arc-testnet"].rpcUrl
+  );
+
+  const treasuryWallet =
+    new ethers.Wallet(
+      process.env.PRIVATE_KEY,
+      provider
+    );
+
+  const usdc = new ethers.Contract(
+    CONFIG.chains["arc-testnet"].usdcAddress,
+    USDC_ABI,
+    treasuryWallet
+  );
+
+  const tx = await usdc.transfer(
+    userAddress,
+    ethers.parseUnits(
+      payout.toString(),
+      6
+    )
+  );
+
+  await tx.wait();
+
+  return res.json({
+    success: true,
+    txHash: tx.hash
+  });
+}
 
     const adapter = getAdapter();
 
