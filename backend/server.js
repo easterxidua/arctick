@@ -85,6 +85,7 @@ function getTreasuryWallet() {
 }
 
 // Settle Bet (User pays on their chain to Arc Treasury address)
+/*
 app.post('/api/settle', async (req, res) => {
 
   try {
@@ -148,8 +149,89 @@ res.json(
   }
 
 });
+*/
+app.post('/api/settle', async (req, res) => {
+
+  try {
+
+    const {
+      txHash,
+      chain,
+      amount
+    } = req.body;
+
+    // TODO:
+    // verify txHash really transferred
+    // amount USDC
+    // to treasury wallet
+
+    res.json({
+      success: true
+    });
+
+  } catch (e) {
+
+    res.status(500).json({
+      success: false,
+      message: e.message
+    });
+
+  }
+
+});
+
+app.post('/api/bridge-to-arc', async (req, res) => {
+
+  try {
+
+    const {
+      chain,
+      amount
+    } = req.body;
+
+    const adapter = getAdapter();
+
+    const result = await kit.bridge({
+
+      from: {
+        adapter,
+        chain: CHAIN_MAP[chain]
+      },
+
+      to: {
+        adapter,
+        chain: "Arc_Testnet",
+        recipientAddress:
+          process.env.ARC_TREASURY
+      },
+
+      amount: amount.toString(),
+      token: "USDC"
+
+    });
+
+    res.send(
+      JSON.stringify(
+        result,
+        (_, v) =>
+          typeof v === "bigint"
+            ? v.toString()
+            : v
+      )
+    );
+
+  } catch (e) {
+
+    res.status(500).json({
+      error: e.message
+    });
+
+  }
+
+});
 
 // Claim Reward (Payout from Arc Treasury to user chain)
+/*
 app.post('/api/claim', async (req, res) => {
 
   try {
@@ -218,6 +300,58 @@ res.json(
   }
 
 });
+*/
+
+app.post('/api/claim', async (req, res) => {
+
+  try {
+
+    const {
+      userAddress,
+      chain,
+      amount
+    } = req.body;
+
+    const adapter = getAdapter();
+
+    const result = await kit.bridge({
+
+      from: {
+        adapter,
+        chain: "Arc_Testnet"
+      },
+
+      to: {
+        adapter,
+        chain: CHAIN_MAP[chain],
+        recipientAddress:
+          userAddress
+      },
+
+      amount: amount.toString(),
+      token: "USDC"
+
+    });
+
+    res.send(
+      JSON.stringify(
+        result,
+        (_, v) =>
+          typeof v === "bigint"
+            ? v.toString()
+            : v
+      )
+    );
+
+  } catch (e) {
+
+    res.status(500).json({
+      error: e.message
+    });
+
+  }
+
+});
 
 app.get('/api/balance', async (req, res) => {
 
@@ -258,38 +392,34 @@ app.get('/api/balance', async (req, res) => {
 
 });
 
-app.get('/api/system-balance', async (req, res) => {
+app.get("/api/system-balance", async (req, res) => {
 
   try {
 
-    const provider =
-      new ethers.JsonRpcProvider(
-        process.env.ARC_RPC
-      );
+    const provider = new ethers.JsonRpcProvider(
+      CONFIG.chains["arc-testnet"].rpcUrl
+    );
 
-    const usdc =
-      new ethers.Contract(
-        process.env.ARC_TESTNET_USDC,
-        [
-          "function balanceOf(address) view returns (uint256)"
-        ],
-        provider
-      );
+    const usdc = new ethers.Contract(
+      CONFIG.chains["arc-testnet"].usdcAddress,
+      USDC_ABI,
+      provider
+    );
 
-    const balance =
-      await usdc.balanceOf(
-        process.env.ARC_TREASURY
-      );
+    const balance = await usdc.balanceOf(
+      process.env.ARC_TREASURY
+    );
 
     res.json({
-      balance:
-        ethers.formatUnits(balance, 6)
+      success: true,
+      balance: ethers.formatUnits(balance, 6)
     });
 
   } catch (e) {
 
     res.status(500).json({
-      error: e.message
+      success: false,
+      message: e.message
     });
 
   }

@@ -38,6 +38,7 @@ const BACKEND_URL =
 import.meta.env.VITE_BACKEND_URL;
 
 const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
+const TREASURY_ADDRESS = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";
 
 // ==================== GET ETH PRICE ====================
 async function getETHPrice() {
@@ -412,7 +413,7 @@ function startLivePriceUpdates() {
       // Dynamic Color Logic
       if (pricerun > pricefixed) {
         tb2.style.background = "#22C55E";        // Green
-      } else if (pricerun > pricefixed) {
+      } else if (pricerun < pricefixed) {
         tb2.style.background = "#EF4444";        // Red
       } else {
         tb2.style.background = "#000000";        // Default greyish
@@ -488,54 +489,101 @@ window.selectDirection = (dir) => { currentBet.direction = dir; showScreen2(); }
 
 // ==================== PAYMENT & GAME FLOW ====================
 async function settleAndPay() {
-  if (!signer) return alert("❌ Wallet not connected.");
+
+  if (!signer) {
+    return alert("❌ Wallet not connected.");
+  }
 
   const amount = currentBet.amount;
   const chainKey = selectedChain;
   const chainConfig = CONFIG.chains[chainKey];
 
   try {
-    const usdc = new ethers.Contract(chainConfig.usdcAddress, USDC_ABI, signer);
 
-    const balance = await usdc.balanceOf(userAddress);
-    const required = ethers.parseUnits(amount.toString(), 6);
+    const usdc = new ethers.Contract(
+      chainConfig.usdcAddress,
+      USDC_ABI,
+      signer
+    );
+
+    const required = ethers.parseUnits(
+      amount.toString(),
+      6
+    );
+
+    const balance = await usdc.balanceOf(
+      userAddress
+    );
 
     if (balance < required) {
-      alert("Insufficient USDC");
+      alert("❌ Insufficient USDC");
       return;
     }
 
-const response = await fetch(
-  `${BACKEND_URL}/api/settle`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      userAddress,
-      amount,
-      chain: selectedChain
-    })
-  }
-);
+    //
+    // STEP 1
+    // USER PAYS TREASURY
+    //
 
-const result = await response.json();
+    alert("Please approve the USDC transfer.");
 
-if (!result.success) {
-  throw new Error(result.message);
-}
+    const tx = await usdc.transfer(
+      TREASURY_ADDRESS,
+      required
+    );
 
+    await tx.wait();
 
-alert(`✅ Payment successful on ${chainKey}`);
+    console.log(
+      "User payment complete:",
+      tx.hash
+    );
+
+    //
+    // STEP 2
+    // TELL BACKEND TO BRIDGE
+    //
+
+    const response = await fetch(
+      `${BACKEND_URL}/api/settle`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          amount,
+          chain: chainKey,
+          userAddress
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(
+        result.message || "Bridge failed"
+      );
+    }
+
+    alert(
+      `✅ Payment received.\nBridge queued by treasury.`
+    );
 
     disableBetControls();
 
-    // IMPORTANT: Call startPrediction after payment
-    startPrediction();   
+    startPrediction();
 
   } catch (error) {
-    alert("Payment failed: " + error.message);
+
+    console.error(error);
+
+    alert(
+      "Payment failed: " +
+      error.message
+    );
+
   }
 }
 
@@ -711,10 +759,14 @@ async function getSystemBalanceFront() {
 
 async function getSystemBalance() {
   try {
-    //const response = await fetch(`${BACKEND_URL}/api/system-balance`);
-    const response = await fetch(`${BACKEND_URL}/api/system-balance?chain=${selectedChain}`);
+    const response = await fetch(
+      `${BACKEND_URL}/api/system-balance`
+    );
+
     const data = await response.json();
+
     return parseFloat(data.balance).toFixed(4);
+
   } catch(e) {
     return "0.0000";
   }
