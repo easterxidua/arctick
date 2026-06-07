@@ -538,6 +538,8 @@ async function settleAndPay() {
 
     alert("Please approve the USDC transfer.");
 
+    disableBetControls();
+
     const tx = await usdc.transfer(
       TREASURY_ADDRESS,
       required
@@ -610,13 +612,15 @@ alert(
   "✅ Payment received."
 );
 
-disableBetControls();
+//disableBetControls();
 
 startPrediction();
 
   } catch (error) {
 
-    console.error(error);
+  console.error(error);
+
+  enableBetControls();
 
     alert(
       "Payment failed: " +
@@ -717,6 +721,60 @@ function disableBetControls() {
     chainSelector.style.opacity = "0.6";
     chainSelector.style.cursor = "not-allowed";
   }
+}
+
+function enableBetControls() {
+
+  const optionBtns =
+    document.querySelectorAll('.option-btn');
+
+  optionBtns.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtns2 =
+    document.querySelectorAll('.option-btn-circle');
+
+  optionBtns2.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtns3 =
+    document.querySelectorAll('.option-btn-circle2');
+
+  optionBtns3.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtns4 =
+    document.querySelectorAll('.option-btn-circle-tenanan');
+
+  optionBtns4.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const settleBtn =
+    document.getElementById('settleBtn');
+
+  if (settleBtn) {
+    settleBtn.disabled = false;
+    settleBtn.style.pointerEvents = 'auto';
+    settleBtn.style.opacity = "1";
+    settleBtn.style.cursor = "pointer";
+  }
+
 }
 
 function disableAllControls() {
