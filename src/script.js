@@ -248,7 +248,7 @@ async function showScreen2() {
     class="option-btn-circle-tenanan ${selectedChain==='ink-sepolia' ? 'active' : ''}"
     onclick="changeChain('ink-sepolia')"
   >
-    <img src="/logo/eth_logo_small.png"
+    <img src="/logo/ink_logo_small.png"
          width="32">
   </div>
 
