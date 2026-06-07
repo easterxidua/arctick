@@ -97,7 +97,7 @@ const CHAIN_CONFIG = {
       rpcUrl: "https://sepolia.drpc.org",
       name: "Ethereum Sepolia",
       explorer: "https://sepolia.etherscan.io",
-      usdcAddress: "0xf08A50178dfcDe18524640EA6618a1f965821715"
+      usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
     },
 
     "arbitrum-sepolia": {
@@ -482,6 +482,11 @@ app.get('/api/balance', async (req, res) => {
       new ethers.JsonRpcProvider(
         CHAINS[chain].rpc
       );
+
+console.log(
+  "USDC ADDRESS:",
+  chainConfig.usdcAddress
+);
 
     const usdc =
       new ethers.Contract(
