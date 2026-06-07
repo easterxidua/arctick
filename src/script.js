@@ -245,8 +245,8 @@ async function showScreen2() {
   </div>
 
   <div
-    class="option-btn-circle-tenanan ${selectedChain==='eth-sepolia' ? 'active' : ''}"
-    onclick="changeChain('eth-sepolia')"
+    class="option-btn-circle-tenanan ${selectedChain==='ink-sepolia' ? 'active' : ''}"
+    onclick="changeChain('ink-sepolia')"
   >
     <img src="/logo/eth_logo_small.png"
          width="32">

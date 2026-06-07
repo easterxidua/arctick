@@ -43,7 +43,7 @@ const CONFIG = {
     },
 
 "ink-sepolia": {
-  chainId: "0xba5b1", // 763373 decimal
+  chainId: "763373", //"0xba5b1", // 763373 decimal
   rpcUrl: "https://rpc-gel-sepolia.inkonchain.com",
   name: "Ink Sepolia",
   explorer: "https://explorer-sepolia.inkonchain.com",
