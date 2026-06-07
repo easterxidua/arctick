@@ -114,7 +114,7 @@ function showScreen1() {
   document.getElementById('root').innerHTML = `
     <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
 
-      <img src="/logo/arc_mascot_title.png"
+      <img src="/logo/arc_mascot_title2.png"
            alt="arcdicted_mascot" 
            style="width:480px; height:auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));">
       
