@@ -1,6 +1,6 @@
 .main-container {
   max-width: 480px;
-  width: 100%;
+  width: 90%;
   margin: auto;
 }
 
@@ -12,6 +12,9 @@ body {
   height: 100vh;
   overflow: auto;
   position: relative;
+
+  margin: 0;
+  overflow-x: hidden;
 }
 
 body::before {
