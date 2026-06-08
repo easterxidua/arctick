@@ -368,7 +368,7 @@ async function showScreen2() {
         4. settle your bet. HIGHER? LOWER?</span>
       </div>
 
-<div style="width:100%; class="flex-row">
+<div style="width:100%; display:flex; gap:10px; margin-bottom:10px; class="flex-row">
   <button
     class="btn_green"
     style="flex:1;"
