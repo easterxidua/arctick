@@ -217,7 +217,6 @@ async function showScreen2() {
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <div style="margin:0" class="readonly33">arcDicted</div>
-        <div style="margin:0" class="readonly3">○ with arc app kits</div>
         <div onclick="disconnectWallet()" class="btn_smol">
           ${shortAddress}
         </div>
@@ -276,7 +275,7 @@ async function showScreen2() {
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ your wallet • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
+        ○ yours • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
       </div>
 
 <hr>
@@ -353,7 +352,7 @@ async function showScreen2() {
         <div class="readonly2" style="flex: 50%; text-align:left;" margin-left: 120px;>
          ○ marked price •
         </div>
-        <input type="text" id="livePrice1" class="readonly_txt2" value="Loading..." readonly style="flex:1; text-align:right;" border-radius: 0px; margin-left: margin-right: 120px;>
+        <input type="text" id="livePrice1" class="readonly_txt2" value="Loading..." readonly style="flex:1; text-align:right; font-size:1.3rem;" border-radius: 0px; margin-left: margin-right: 120px;>
       </div>
 
       <!-- COUNTDOWN + WARNING will be inserted here by JS when PREDICT is clicked -->
