@@ -226,7 +226,7 @@ async function showScreen2() {
         0. pick the chain you want to use.</span>
       </div>
 
-<div class="flex-row" style="justify-content:center; display:flex; gap:12px; margin-bottom:20px; width:100%; align-items:center; margin:0 auto;">
+<div class="flex-row">
 
   <div
     class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"

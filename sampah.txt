@@ -122,3 +122,6 @@ function showScreen1() {
              alt="arc_logo" 
              style="width:64px; height:auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));">
       </div>
+
+
+      <div class="flex-row" style="justify-content:center; display:flex; gap:12px; margin-bottom:20px; width:100%; align-items:center; margin:0 auto;">
