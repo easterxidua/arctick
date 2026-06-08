@@ -636,6 +636,21 @@ select.rounded-select:hover {
 
 }
 
+.flex-row2 {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+
+  .flex-row2 {
+    flex-direction: column;
+  }
+
+}
+
 .btn, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_smol, .btn_green, .btn_red {
   border-radius: 9999px;   /* Fully rounded */
 }
