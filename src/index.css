@@ -634,6 +634,28 @@ select.rounded-select:hover {
   cursor: default;                /* Show normal cursor */
   outline: none;                  /* Remove focus outline */
 }
+.readonly_txt22 {
+  background: transparent; /*#f8f8f8;*/
+  border: none; /*2px solid #ddd*/
+  font-size: 1.3rem;
+  text-align: center;
+  padding: 10px;
+  width: 100%;
+  margin: 6px 0;
+  border-radius: 0px;
+  text-shadow: 1px 1px 2px black, 0 0 1px black;
+
+  color: rgb(0, 100, 200);
+
+/* Make it completely non-interactive */
+  pointer-events: none;           /* Disable all mouse events */
+  user-select: none;              /* Prevent text selection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  cursor: default;                /* Show normal cursor */
+  outline: none;                  /* Remove focus outline */
+}
 
 .flex-row {
   display: flex;
@@ -682,25 +704,28 @@ input[readonly_txt2] {
   }
 
   .readonly {
-    font-size: 12px;
+    font-size: 14px;
   }
   .readonly2 {
-    font-size: 12px;
+    font-size: 14px;
   }  .readonly {
-    font-size: 12px;
+    font-size: 14px;
   }
   .readonly3 {
-    font-size: 12px;
+    font-size: 14px;
   }
   .readonly_txt {
-    font-size: 12px;
+    font-size: 14px;
   }
   .readonly_txt2 {
-    font-size: 12px;
+    font-size: 14px;
+  }
+  .readonly_txt22 {
+    font-size: 14px;
   }
 
   .txtxt {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .flex-row {
