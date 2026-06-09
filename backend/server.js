@@ -210,6 +210,52 @@ res.json(
 });
 */
 
+let priceCache = {};
+let lastUpdate = 0;
+
+async function refreshPrices() {
+
+  const assets = {
+    BTC: "BTC-USD",
+    ETH: "ETH-USD",
+    SOL: "SOL-USD"
+  };
+
+  for (const [key, pair] of Object.entries(assets)) {
+
+    const r = await fetch(
+      `https://api.coinbase.com/v2/prices/${pair}/spot`
+    );
+
+    const data = await r.json();
+
+    priceCache[key] = Number(data.data.amount);
+
+  }
+
+  lastUpdate = Date.now();
+
+}
+
+refreshPrices();
+
+setInterval(
+  refreshPrices,
+  10000 // every 10 seconds
+);
+
+app.get("/api/price", (req, res) => {
+
+  const asset = req.query.asset;
+
+  res.json({
+    price: priceCache[asset],
+    lastUpdate
+  });
+
+});
+
+/*
 app.get("/api/price", async (req, res) => {
   try {
   const symbol = req.query.symbol;
@@ -254,6 +300,7 @@ res.json({
   }
 
 });
+*/
 
 app.post('/api/settle', async (req, res) => {
 

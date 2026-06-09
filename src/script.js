@@ -523,6 +523,22 @@ async function getPrice(asset) {
 
     console.log("Response status:", response.status);
 
+  if (!response.ok) {
+
+  const text = await response.text();
+
+  console.error(
+    "Coinbase error:",
+    response.status,
+    text
+  );
+
+  throw new Error(
+    `Coinbase returned ${response.status}`
+  );
+
+}
+
     const data = await response.json();
 
     console.log("Price data:", data);
