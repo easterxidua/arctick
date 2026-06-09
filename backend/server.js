@@ -212,9 +212,10 @@ res.json(
 
 app.get("/api/price", async (req, res) => {
 
+  const symbol = req.query.symbol;
+
   const r = await fetch(
-    "https://api.binance.com/api/v3/ticker/price?symbol=${symbol}"
-    //"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+    `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
   );
 
   const data = await r.json();

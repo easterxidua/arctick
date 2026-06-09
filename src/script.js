@@ -511,19 +511,19 @@ async function getPrice(asset) {
     else if (asset === 'SOL') symbol = 'SOLUSDT';
 
     //const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
-    const response = await fetch(
-    `${BACKEND_URL}/api/price`
-    );
+const response = await fetch(
+  `${BACKEND_URL}/api/price?symbol=${symbol}`
+);
 
 const data = await response.json();
 
-    const data = await res.json();
+//const data = await res.json();
 
-    if (data && data.price) {
-      return parseFloat(data.price);
-    } else {
-      throw new Error("Invalid response");
-    }
+if (data && data.price) {
+  return parseFloat(data.price);
+} else {
+  throw new Error("Invalid response");
+}
   } catch (e) {
     console.warn(`❌ Fail fetching ${asset} price.. `, e);
     
