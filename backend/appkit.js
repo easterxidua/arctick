@@ -8,7 +8,7 @@ const provider = new ethers.JsonRpcProvider(
 );
 
 const wallet = new ethers.Wallet(
-  process.env.PRIVATE_KEY,
+  process.env.SYSTEM_PRIVATE_KEY,
   provider
 );
 
