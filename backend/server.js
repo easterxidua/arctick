@@ -647,7 +647,7 @@ function connectCoinbaseWS() {
 
         lastUpdate = Date.now();
 
-        console.log(priceCache);
+        //console.log(priceCache);
       }
 
     } catch (e) {
