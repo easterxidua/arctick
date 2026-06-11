@@ -971,11 +971,24 @@ console.log(
   process.env.SYSTEM_PRIVATE_KEY.startsWith("0x")
 );
 
-      const wallet =
-        new ethers.Wallet(
-          process.env.SYSTEM_PRIVATE_KEY,
-          provider
-        );
+      //const wallet =
+        //new ethers.Wallet(
+          //process.env.SYSTEM_PRIVATE_KEY,
+          //provider
+        //);
+
+const pk = process.env.SYSTEM_PRIVATE_KEY.trim();
+
+console.log("Creating wallet...");
+
+const wallet = new ethers.Wallet(pk);
+
+console.log("Wallet address:", wallet.address);
+
+const connectedWallet =
+  wallet.connect(provider);
+
+console.log("Connected wallet:", connectedWallet.address);
 
       const contract =
         new ethers.Contract(
