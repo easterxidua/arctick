@@ -1101,15 +1101,22 @@ await contract.recordBet(
 
       await tx.wait();
 
+      const nextBetId =
+  await contract.nextBetId();
+
+const betId =
+  Number(nextBetId) - 1;
+
       console.log(
         "Bet recorded:",
         tx.hash
       );
 
-      res.json({
-        success: true,
-        txHash: tx.hash
-      });
+res.json({
+  success: true,
+  txHash: tx.hash,
+  betId: betId
+});
 
     } catch (e) {
 

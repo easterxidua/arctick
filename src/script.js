@@ -533,7 +533,7 @@ async function recordBetOnChain() {
       );
 
           console.log("Player:", userAddress);
-          
+
     const result =
       await response.json();
 
@@ -541,6 +541,14 @@ async function recordBetOnChain() {
       "Backend result:",
       result
     );
+
+    currentBet.betId =
+  Number(result.betId);
+
+console.log(
+  "Saved betId:",
+  currentBet.betId
+);
 
     if (!result.success) {
 
