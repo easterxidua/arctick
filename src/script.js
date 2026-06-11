@@ -389,6 +389,7 @@ const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";
 const TREASURY_ADDRESS = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";
 
 // smart_contract
+/*
 async function recordBetOnChain() {
 
   try {
@@ -486,6 +487,87 @@ currentBet.betId = Date.now();
     );
 
   }
+}
+*/
+
+async function recordBetOnChain() {
+
+  try {
+
+    console.log(
+      "Sending bet to backend..."
+    );
+
+    const response =
+      await fetch(
+        BACKEND_URL + "/api/record-bet",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+
+  player:
+    userAddress,
+
+        asset:
+          currentBet.asset,
+
+        higher:
+          currentBet.direction === "HIGHER",
+
+        amount:
+          currentBet.amount,
+
+        startPrice:
+          Math.floor(hargawisfix * 100),
+
+        duration:
+          currentBet.time
+
+          })
+        }
+      );
+
+          console.log("Player:", userAddress);
+          
+    const result =
+      await response.json();
+
+    console.log(
+      "Backend result:",
+      result
+    );
+
+    if (!result.success) {
+
+      console.error(
+        result.message
+      );
+
+      return;
+    }
+
+    currentBet.txHash =
+      result.txHash;
+
+    console.log(
+      "Bet recorded:",
+      result.txHash
+    );
+
+  } catch (e) {
+
+    console.error(
+      "recordBetOnChain failed",
+      e
+    );
+
+  }
+
 }
 
 async function settleBetBackend(

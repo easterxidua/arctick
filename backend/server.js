@@ -1011,6 +1011,16 @@ console.log("Connected wallet:", wallet.address);
           wallet
         );
 
+        console.log("betId:", betId);
+console.log("endPrice:", endPrice);
+console.log("won:", won);
+
+console.log(
+  typeof betId,
+  typeof endPrice,
+  typeof won
+);
+
       const tx =
         await contract.settleBet(
           betId,
@@ -1073,6 +1083,11 @@ const {
           BET_RECORDER_ABI,
           wallet
         );
+
+        console.log(
+  contract.interface.fragments
+    .map(f => f.name)
+);
 
       const tx =
 await contract.recordBet(
