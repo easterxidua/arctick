@@ -943,6 +943,11 @@ app.post(
           "https://rpc.testnet.arc.network"
         );
 
+console.log(
+  "PK:",
+  process.env.SYSTEM_PRIVATE_KEY
+);
+
       const wallet =
         new ethers.Wallet(
           process.env.SYSTEM_PRIVATE_KEY,
