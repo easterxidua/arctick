@@ -2057,7 +2057,7 @@ function shortWallet(addr) {
 }
 
 async function showLeaderboard() {
-
+  showLoading();
   const response =
     await fetch(
       `${BACKEND_URL}/api/leaderboard`
@@ -2313,7 +2313,7 @@ if (actualRank === 1 || actualRank === 2 || actualRank === 3) {
     </div>
 
   `;
-
+  hideLoading();
 }
 
 window.showLeaderboard =
