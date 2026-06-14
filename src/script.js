@@ -736,9 +736,9 @@ async function connectWallet() {
 function showScreen1() {
   document.getElementById('root').innerHTML = `
     <div class="container" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
-      <img src="/logo/arc_mascot_title222_fit.png"
+      <img src="/logo/arc_mascot_title333_fit.png"
            alt="arcdicted_mascot" 
-           style="margin-top:40px; margin-bottom:30px; max-width:480px; width:90%;; height:auto;">
+           style="margin-top:40px; margin-bottom:30px; max-width:480px; width:90%; height:auto;">
       
       <div style="display:flex;flex-direction:column;gap:0px;width:100%;max-width:320px;margin-top:0px">
         <button class="btn" onclick="connectWallet()" style="padding:22px 60px;font-size:1.8rem">
@@ -846,10 +846,10 @@ async function showScreen2() {
 
   document.getElementById('root').innerHTML = `
     <div class="container">
-      <div style="display:flex;justify-content:flex-start;gap:8px;align-items:center;margin-bottom:8px">
+      <div style="display:flex;justify-content:flex-start;gap:8px;align-items:center;margin-bottom:8px;">
         <div style="margin:0" class="readonly33">
-         <img src="/logo/logo_judul.png"
-         width="160"
+         <img src="/logo/logo_judul_333_fit.png"
+         width:90%; height:auto;
          style="position: relative; top: 0px;"></div>
         <div onclick="showLeaderboard()" class="btn_smol_ns">
         🌟
