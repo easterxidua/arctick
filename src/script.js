@@ -724,7 +724,7 @@ async function connectWallet() {
 
     console.log("Arc Adapter:", arcAdapter);
 
-    alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
+    //alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
     showScreen2();
   } catch (e) {
     console.error(e);
@@ -820,7 +820,7 @@ window.changeChain = async function(chainKey) {
     signer = await provider.getSigner();
 
     jenengechain = chain.name;
-    alert(`✅ Switched to ${chain.name}.`);
+    //alert(`✅ Switched to ${chain.name}.`);
 
     showScreen2();
 
@@ -870,7 +870,7 @@ async function showScreen2() {
       </div>
 
       <div class="readonly2">
-        🔵 pick your prefered chain.</span>
+        🔵 choose your prefered chain.</span>
       </div>
 
 <div
@@ -882,16 +882,16 @@ async function showScreen2() {
     class="readonly33"
   "
 >
-      <div class="readonly2X">
-        🔵</span>
+      <div class="readonly2X" style="font-size:1.8rem;">
+        ●</span>
       </div>
   <img
     src="${chainLogo[selectedChain]}"
     width="64"
     height=auto
   >
-      <div class="readonly2">
-        🔵</span>
+      <div class="readonly2" style="font-size:1.8rem;">
+        ●</span>
       </div>
 </div>
 
@@ -908,7 +908,7 @@ async function showScreen2() {
     display:none;
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,0.5);
+    background:rgba(255, 255, 255, 0.9);
     z-index:8888;
 
     justify-content:center;
@@ -927,8 +927,8 @@ async function showScreen2() {
     "
   >
 
-      <div class="readonly2" style="text-align:center;">
-        🔵
+      <div class="readonly2" style="font-size:1.8rem; text-align:center;">
+        pick a chain.</span>
       </div>
 
     <div class="flex-row" style="flex-direction: column;">
@@ -962,8 +962,8 @@ async function showScreen2() {
       </div>
 
       <div
-        class="option-btn-circle-unsupported ${selectedChain==='avalanche-fuji"' ? 'active' : ''}"
-        onclick="event.stopPropagation(); gekunsupported();"
+        class="option-btn-circle ${selectedChain==='avalanche-fuji' ? 'active' : ''}"
+        onclick="changeChainAndClose('avalanche-fuji')"
       >
         <img src="/logo/avax_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
@@ -976,14 +976,13 @@ async function showScreen2() {
       </div>
     </div>
 
-      <div class="readonly2" style="text-align:center;">
-        🔵
-      </div>
+<div style="height:8px;"></div>
 
-<div class="flex-row" style="flex-direction: column; display:none;">
+<div class="flex-row" style="flex-direction: column;">
   <button
-    class="btn"
+    class="btn_op_rev2"
     onclick="hideChainlist()"
+    style = "font-size:1.3rem;"
   >
     back
   </button>
@@ -1018,12 +1017,9 @@ async function showScreen2() {
   </div>
 
 <button
-    class="btn_op_rev"
+    class="btn_op_rev" style="font-size:1.5rem;"
     onclick="showChainlist()">
-    <img src="/logo/all_logo_small.png"
-         height="20"
-         style="position: relative; top: 1px;">
-
+        ●</span>
   </button>
 
 
@@ -1437,7 +1433,7 @@ hargawisfix =
     // USER PAYS TREASURY
     //
 
-    alert("▶️ Do approve the ● USDC transfer on your wallet.");
+    //alert("▶️ Do approve the ● USDC transfer on your wallet.");
 
     disableBetControls();
 
@@ -1509,9 +1505,9 @@ if (chainKey !== "arc-testnet") {
   );
 }
 
-alert(
-  "✅ Bet settled. Countdown starting..."
-);
+//alert(
+  //"✅ Bet settled. Countdown starting..."
+//);
 
 //disableBetControls();
 
@@ -1527,6 +1523,17 @@ startPrediction();
   console.error(error);
 
   enableBetControls();
+
+  if (
+    error.code === 4001 ||
+    error.message?.toLowerCase().includes("user rejected") ||
+    error.message?.toLowerCase().includes("user denied")
+  ) {
+
+    //alert("❌ Bet cancelled.");
+
+    return;
+  }
 
     alert(
       "❌ Bet failed: " + error.message + "."
@@ -1594,6 +1601,30 @@ function startPrediction() {
 }
 
 function disableBetControls() {
+  const optionBtnsX5 = document.querySelectorAll('.btn_op_rev');
+  optionBtnsX5.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
+  const optionBtnsX4 = document.querySelectorAll('.option-btn-circle-unsupported');
+  optionBtnsX4.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
+  const optionBtnsX3 = document.querySelectorAll('.btn_op_rev2');
+  optionBtnsX3.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
   const optionBtnsX1 = document.querySelectorAll('.btn_smol_ns');
   optionBtnsX1.forEach(btn => {
     btn.disabled = true;
@@ -1678,6 +1709,30 @@ function disableBetControls() {
 }
 
 function enableBetControls() {
+  const optionBtnsX5 = document.querySelectorAll('.btn_op_rev');
+  optionBtnsX5.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtnsX4 = document.querySelectorAll('.option-btn-circle-unsupported');
+  optionBtnsX4.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtnsX3 = document.querySelectorAll('.btn_op_rev2');
+  optionBtnsX3.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
   const optionBtnsX1 = document.querySelectorAll('.btn_smol_ns');
   optionBtnsX1.forEach(btn => {
     btn.disabled = false;
@@ -2028,7 +2083,7 @@ async function disconnectWallet() {
   provider = null;
   signer = null;
   if (countdownInterval) clearInterval(countdownInterval);
-  alert("✅ Wallet disconnected.");
+  //alert("✅ Wallet disconnected.");
   showScreen1();
 }
 

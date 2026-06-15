@@ -202,3 +202,12 @@ function showScreen1() {
     style="position: relative; top: 1px;">
 
   </button>
+
+
+      <img src="/logo/all_logo_small.png"
+         height="20"
+         style="position: relative; top: 1px;">
+
+               <div class="readonly2" style="font-size:1.8rem; text-align:center;">
+        ●</span>
+      </div>
