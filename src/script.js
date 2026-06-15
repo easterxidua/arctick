@@ -903,7 +903,6 @@ async function showScreen2() {
 
 <div
   id="chainModal"
-  onclick="hideChainlist()"
   style="
     display:none;
     position:fixed;
