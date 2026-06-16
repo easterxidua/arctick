@@ -10,3 +10,60 @@
     <script type="module" src="/src/script.js"></script>
   </body>
 </html>
+
+<div
+  id="customAlert"
+  style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:99999;
+    justify-content:center;
+    align-items:center;
+  "
+>
+  <div
+    style="
+      width:320px;
+      max-width:90%;
+      background:white;
+      border-radius:20px;
+      padding:20px;
+      text-align:center;
+      position:relative;
+    "
+  >
+
+    <div
+      onclick="hideCustomAlert()"
+      style="
+        position:absolute;
+        top:10px;
+        right:15px;
+        cursor:pointer;
+        font-size:24px;
+        font-weight:bold;
+      "
+    >
+      ✕
+    </div>
+
+    <div
+      id="customAlertText"
+      style="
+        margin-top:10px;
+        margin-bottom:20px;
+        font-size:18px;
+      "
+    ></div>
+
+    <button
+      class="btn"
+      onclick="hideCustomAlert()"
+    >
+      Close
+    </button>
+
+  </div>
+</div>

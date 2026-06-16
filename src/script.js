@@ -496,6 +496,161 @@ currentBet.betId = Date.now();
 }
 */
 
+function repositionToasts() {
+
+  document
+    .querySelectorAll(".toast")
+    .forEach((toast, index) => {
+
+      toast.style.top =
+        `${20 + index * 70}px`;
+
+    });
+
+}
+
+function showToast(
+  message,
+  duration = 3000,
+  delay = 0
+) {
+
+  const toast = document.createElement("div");
+
+  toast.innerHTML = `
+    <div style="
+      position:fixed;
+      top:${20 + document.querySelectorAll('.toast').length * 70}px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0, 100, 200, 0.9);
+      color:white;
+      padding:12px 20px;
+      border: 3px solid rgb(255, 255, 255, 0.8);
+      border-radius:9999px;
+      z-index:99999;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
+      transition: top 1s ease;
+    ">
+      <span>${message}</span>
+
+      <span
+        style="
+          cursor:pointer;
+          font-weight:bold;
+        "
+      >
+        ✖
+      </span>
+    </div>
+  `;
+
+  const box = toast.firstElementChild;
+  box.classList.add("toast");
+
+  setTimeout(() => {
+
+document.body.appendChild(box);
+
+repositionToasts();
+
+setTimeout(close, duration);
+
+}, delay);
+
+const close = () => {
+
+  if (box.parentNode) {
+
+    box.remove();
+
+    repositionToasts();
+
+  }
+
+};
+
+  box.querySelector("span:last-child")
+    .onclick = close;
+}
+
+function customAlert(message) {
+
+  return new Promise((resolve) => {
+
+    const modal = document.createElement("div");
+
+    modal.style.cssText = `
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.6);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:99999;
+    `;
+
+    modal.innerHTML = `
+      <div
+        style="
+          background:white;
+          padding:20px;
+          border-radius:20px;
+          width:300px;
+          text-align:center;
+          position:relative;
+        "
+      >
+
+        <button
+          id="customAlertClose"
+          style="
+            position:absolute;
+            top:10px;
+            right:10px;
+            border:none;
+            background:none;
+            cursor:pointer;
+            font-size:20px;
+          "
+        >
+          ✖
+        </button>
+
+        <div style="margin-top:10px;">
+          ${message}
+        </div>
+
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.onclick = () => {
+      modal.remove();
+      resolve();
+    };
+
+    modal.firstElementChild.onclick = (e) => {
+      e.stopPropagation();
+    };
+
+    document.getElementById(
+      "customAlertClose"
+    ).onclick = () => {
+
+      modal.remove();
+      resolve();
+
+    };
+
+  });
+
+}
+
 async function recordBetOnChain() {
 
   try {
@@ -690,7 +845,12 @@ async function updateLivePrice(textboxId) {
 
 // ==================== CONNECT WALLET ====================
 async function connectWallet() {
-  if (!window.ethereum) return alert("❌ No EVM wallet detected.");
+  if (!window.ethereum) return showToast(
+    "❌ No EVM wallet detected.",
+    3000,
+    0
+    );
+    //alert("❌ No EVM wallet detected.");
 
   try {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -725,10 +885,20 @@ async function connectWallet() {
     console.log("Arc Adapter:", arcAdapter);
 
     //alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
+    showToast(
+    `✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
+    3000,
+    0
+    );
     showScreen2();
   } catch (e) {
     console.error(e);
-    alert("❌ Fail to connect. Do try again.");
+    //alert("❌ Fail to connect. Do try again.");
+    showToast(
+    "❌ Fail to connect. Do try again.",
+    3000,
+    0
+    );
   }
 }
 
@@ -826,7 +996,12 @@ window.changeChain = async function(chainKey) {
 
   } catch (err) {
     console.error(err);
-    alert("❌ Chain switch failed.");
+    //alert("❌ Chain switch failed.");
+    showToast(
+    "❌ Chain switch failed.",
+    3000,
+    0
+    );
   }
 };
 
@@ -1216,7 +1391,12 @@ function changeChainAndClose(chain) {
 }
 
 function gekunsupported() {
-      alert("❌ Chain offline.");
+      //alert("❌ Chain offline.");
+    showToast(
+    "❌ Chain offline.",
+    3000,
+    0
+    );
       return;
   }
 
@@ -1389,7 +1569,12 @@ async function settleAndPay() {
   try {
 
   if (!signer) {
-    return alert("❌ Wallet not connected.");
+    //return alert("❌ Wallet not connected.");
+    return showToast(
+    "❌ Wallet not connected.",
+    3000,
+    0
+    );
   }
 
   const tb1 =
@@ -1423,7 +1608,12 @@ hargawisfix =
     );
 
     if (balance < required) {
-      alert("❌ Insufficient ● USDC.");
+      //alert("❌ Insufficient ● USDC.");
+    showToast(
+    "❌ Insufficient ● USDC.",
+    3000,
+    0
+    );
       return;
     }
 
@@ -1534,8 +1724,13 @@ startPrediction();
     return;
   }
 
-    alert(
-      "❌ Bet failed: " + error.message + "."
+    //alert(
+      //"❌ Bet failed: " + error.message + "."
+    //);
+    showToast(
+    "❌ Bet failed: " + error.message + ".",
+    3000,
+    0
     );
 
   }
@@ -1876,7 +2071,12 @@ if (userWon) {
 
 } else {
 
-  alert("😂 You LOSE.");
+  //alert("😂 You LOSE.");
+    showToast(
+    "😂 You LOSE.",
+    3000,
+    0
+    );
   resetGame();
 
 }
@@ -2048,7 +2248,12 @@ async function showResultScreen(won) {
 
 // ==================== CLAIM REWARD (Backend Call) ====================
 async function claimReward() {
-  if (!userAddress) return alert("Wallet not connected");
+  if (!userAddress) return showToast(
+    "❌ Wallet not connected.",
+    3000,
+    0
+    );
+    //alert("Wallet not connected");
 
   try {
     const response = await fetch(`${BACKEND_URL}/api/claim`, {
@@ -2064,12 +2269,32 @@ async function claimReward() {
     const result = await response.json();
 
     if (result.success) {
-      alert(`🎉 Reward sent from Arc Treasury!\nTx: ${result.txHash}`);
+      //alert(`🎉 Reward sent from Arc Treasury!\nTx: ${result.txHash}`);
+    showToast(
+    "🎉 Reward sent from Arc Treasury!",
+    3000,
+    0
+    );
+    showToast(
+    `Tx: ${result.txHash}`,
+    3000,
+    1000
+    );
     } else {
-      alert("Claim failed: " + result.message);
+    showToast(
+    "❌ Claim failed: " + result.message,
+    3000,
+    0
+    );
+      //alert("Claim failed: " + result.message);
     }
   } catch (e) {
-    alert("Cannot connect to backend");
+    //alert("Cannot connect to backend");
+    showToast(
+    "❌ Cannot find to backend.",
+    3000,
+    0
+    );
   }
 
   resetGame();
@@ -2077,19 +2302,24 @@ async function claimReward() {
 
 // ==================== DISCONNECT & REVOKE ====================
 async function disconnectWallet() {
-  if (!confirm("⚠️ Doing this will disconnect your wallet.\n\nContinue?")) return;
+  //if (!confirm("⚠️ Doing this will disconnect your wallet.\n\nContinue?")) return;
   userAddress = null;
   provider = null;
   signer = null;
   if (countdownInterval) clearInterval(countdownInterval);
   //alert("✅ Wallet disconnected.");
+  showToast(
+    "✅ Wallet disconnected.",
+    3000,
+    0
+    );
   showScreen1();
 }
 
 async function revokeAllConnections() {
-  if (!confirm("⚠️ Doing this will revoke your wallet connection from arcDicted.\n\nContinue?")) {
-    return;
-  }
+  //if (!confirm("⚠️ Doing this will revoke your wallet connection from arcDicted.\n\nContinue?")) {
+    //return;
+  //}
 
   try {
     // Strong revocation
@@ -2115,8 +2345,12 @@ async function revokeAllConnections() {
     if (livePriceInterval) clearInterval(livePriceInterval);
     if (balanceInterval) clearInterval(balanceInterval);
 
-    alert("✅ Wallet revoked from arcDicted.");
-
+    //alert("✅ Wallet revoked from arcDicted.");
+    showToast(
+    "✅ Wallet revoked from arcDicted.",
+    3000,
+    0
+    );
     showScreen1();
 
   } catch (error) {
@@ -2187,7 +2421,22 @@ async function updateBalances() {
 }
 
 async function autoClaimReward() {
-  alert("🎉 You WON.\n\n⏳ Processing reward now...\n*This reward are charged with 5% reward fee.");
+    showToast(
+    "🎉 You WON.",
+    3000,
+    0
+    );
+    showToast(
+    "⏳ Processing reward now...",
+    3000,
+    1000
+    );
+    showToast(
+    "*This reward are charged with 5% reward fee.",
+    3000,
+    2000
+    );
+  //alert("🎉 You WON.\n\n⏳ Processing reward now...\n*This reward are charged with 5% reward fee.");
 
   try {
     console.log("Sending to backend:", {
@@ -2212,20 +2461,50 @@ async function autoClaimReward() {
 
     if (result.success) {
       //alert(`🎉 Reward sent!\n\n${result.message}\nTx: ${result.txHash}`);
-      alert(`🥂 Reward sent!`);
+      //alert(`🥂 Reward sent!`);
+    showToast(
+    "🥂 Reward sent.",
+    3000,
+    0
+    );
+    //showToast(
+    //`${result.message}`,
+    //3000,
+    //1000
+    //);
+    showToast(
+    `Tx: ${result.txHash}`,
+    3000,
+    1000
+    );
     } else {
-      alert("❌ Claim failed: " + (result.message || "Unknown error") + ".");
+    showToast(
+    "❌ Claim failed: " + (result.message || "Unknown error") + ".",
+    3000,
+    0
+    );
+      //alert("❌ Claim failed: " + (result.message || "Unknown error") + ".");
     }
   } catch (error) {
     console.error("Fetch Error:", error);
-    alert("❌ Cannot connect to backend. Check console (F12).");
+    showToast(
+    "❌ Cannot connect to backend. Check console (F12).",
+    3000,
+    0
+    );
+    //alert("❌ Cannot connect to backend. Check console (F12).");
   }
 
   resetGame();
 }
 
 async function switchWallet() {
-  if (!window.ethereum) return alert("❌ No wallet detected.");
+  if (!window.ethereum) return showToast(
+    "❌ No wallet detected.",
+    3000,
+    0
+    );
+  //alert("❌ No wallet detected.");
 
   try {
     await window.ethereum.request({
@@ -2234,10 +2513,20 @@ async function switchWallet() {
     });
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddress = accounts[0];
-    alert("✅ Wallet switched.");
+    //alert("✅ Wallet switched.");
+    showToast(
+    "✅ Wallet switched.",
+    3000,
+    0
+    );
     showScreen2();
   } catch (e) {
-    alert("❌ Fail to switch wallet.");
+    //alert("❌ Fail to switch wallet.");
+    showToast(
+    "❌ Fail to switch wallet.",
+    3000,
+    0
+    );
   }
 }
 
@@ -2272,7 +2561,7 @@ window.readBet = async function(betId) {
 function shortWallet(addr) {
 
   return (
-    addr.slice(0,4) +
+    addr.slice(0,6) +
     "..." +
     addr.slice(-4)
   );
@@ -2291,8 +2580,12 @@ async function showLeaderboard() {
 
   if (!result.success) {
 
-    alert("Failed to load leaderboard.");
-
+    //alert("Failed to load leaderboard.");
+    showToast(
+    "❌ Leaderboard fail to load.",
+    3000,
+    0
+    );
     return;
   }
 
@@ -2414,7 +2707,7 @@ if (actualRank === 1 || actualRank === 2 || actualRank === 3) {
           ${shortWallet(row.wallet)}
           ${
             isMe
-            ? " <b> • yours</b>"
+            ? " <b> • 😁</b>"
             : ""
           }
         </div>
@@ -2544,6 +2837,24 @@ window.showLeaderboard =
 
 window.showScreen2 =
   showScreen2;
+
+window.showCustomAlert = function (message) {
+
+  document.getElementById(
+    "customAlertText"
+  ).innerHTML = message;
+
+  document.getElementById(
+    "customAlert"
+  ).style.display = "flex";
+};
+
+window.hideCustomAlert = function () {
+
+  document.getElementById(
+    "customAlert"
+  ).style.display = "none";
+};
 
 //console.log("System Wallet Address:", 
   //new ethers.Wallet("0x123456789123456789123456789123456789123456789123456789").address);
