@@ -408,7 +408,9 @@ const CHAINS = {
   "eth-sepolia": { rpc: process.env.ETH_SEPOLIA_RPC, usdc: process.env.ETH_SEPOLIA_USDC, decimals: 6 },
   "ink-sepolia": { rpc: process.env.INK_SEPOLIA_RPC, usdc: process.env.INK_SEPOLIA_USDC, decimals: 6 },
   "arbitrum-sepolia": { rpc: process.env.ARBITRUM_SEPOLIA_RPC, usdc: process.env.ARBITRUM_SEPOLIA_USDC, decimals: 6 },
-  "avalanche-fuji": { rpc: process.env.AVAX_FUJI_RPC, usdc: process.env.AVAX_FUJI_USDC, decimals: 6 }
+  "avalanche-fuji": { rpc: process.env.AVAX_FUJI_RPC, usdc: process.env.AVAX_FUJI_USDC, decimals: 6 },
+  "hyperevm-testnet": { rpc: process.env.HYPE_TESTNET_RPC, usdc: process.env.HYPE_TESTNET_USDC, decimals: 6 }
+
 };
 
 const CHAIN_MAP = {
@@ -417,7 +419,8 @@ const CHAIN_MAP = {
   "eth-sepolia": "Ethereum_Sepolia",
   "ink-sepolia": "Ink_Sepolia",
   "arbitrum-sepolia": "Arbitrum_Sepolia",
-  "avalanche-fuji" : "Avalanche_Fuji"
+  "avalanche-fuji" : "Avalanche_Fuji",
+  "hyperevm-testnet" : "HyperEVM_Testnet"
 };
 
 const CHAIN_CONFIG = {
@@ -476,6 +479,13 @@ const CHAIN_CONFIG = {
   name: "Avalanche Fuji",
   explorer: "https://testnet.snowtrace.io",
   usdcAddress: "0x5425890298aed601595a70AB815c96711a31Bc65"
+},
+"hyperevm-testnet": {
+  chainId: "998",
+  rpcUrl: "https://rpc.hyperliquid-testnet.xyz/evm",
+  name: "HyperEVM Testnet",
+  explorer: "https://app.hyperliquid-testnet.xyz/explorer",
+  usdcAddress: "0x2B3370eE501B4a559b57D449569354196457D8Ab"
 }
   };
 
@@ -1327,6 +1337,14 @@ app.get("/api/user-balance", async (req, res) => {
 
     const { chain, address } = req.query;
 
+    console.log("chain =", chain);
+    console.log("address =", address);
+
+    console.log(
+      "config =",
+      CHAIN_CONFIG[chain]
+    );
+
     const provider =
       new ethers.JsonRpcProvider(
         CHAIN_CONFIG[chain].rpcUrl
@@ -1341,6 +1359,11 @@ app.get("/api/user-balance", async (req, res) => {
     const balance =
       await usdc.balanceOf(address);
 
+    console.log(
+      "raw balance =",
+      balance.toString()
+    );
+
     res.json({
       success: true,
       balance:
@@ -1348,6 +1371,8 @@ app.get("/api/user-balance", async (req, res) => {
     });
 
   } catch (e) {
+    
+    console.error(e);
 
     res.status(500).json({
       success: false,

@@ -6,7 +6,8 @@ const CONFIG = {
     "eth-sepolia": true,
     "ink-sepolia": true,
     "arbitrum-sepolia": true,
-    "avalanche-fuji": true
+    "avalanche-fuji": true,
+    "hyperevm-testnet": true
   },
 
   chains: {
@@ -65,6 +66,13 @@ const CONFIG = {
   name: "Avalanche Fuji",
   explorer: "https://testnet.snowtrace.io",
   usdcAddress: "0x5425890298aed601595a70AB815c96711a31Bc65"
+},
+"hyperevm-testnet": {
+  chainId: "998",
+  rpcUrl: "https://rpc.hyperliquid-testnet.xyz/evm",
+  name: "HyperEVM Testnet",
+  explorer: "https://app.hyperliquid-testnet.xyz/explorer",
+  usdcAddress: "0x2B3370eE501B4a559b57D449569354196457D8Ab"
 }
   },
 

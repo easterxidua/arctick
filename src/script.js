@@ -1037,7 +1037,8 @@ async function showScreen2() {
   "ink-sepolia": "/logo/ink_logo_small.png",
   "arbitrum-sepolia": "/logo/arb_logo_small.png",
   "ethereum-sepolia": "/logo/eth_logo_small.png",
-  "avalanche-fuji": "/logo/avax_logo_small.png"
+  "avalanche-fuji": "/logo/avax_logo_small.png",
+  "hyperevm-testnet": "/logo/hype_logo_small.png"
   };
 
   const logoWidth = window.innerWidth <= 768 ? '80%' : '50%';
@@ -1116,8 +1117,8 @@ async function showScreen2() {
     "
   >
 
-      <div class="readonly2" style="font-size:1.8rem; text-align:center;">
-        pick a chain.</span>
+      <div class="readonly2" style="font-size:1.3rem; text-align:center;">
+        🔵 pick a chain.</span>
       </div>
 
     <div class="flex-row" style="flex-direction: column;">
@@ -1155,6 +1156,13 @@ async function showScreen2() {
         onclick="changeChainAndClose('avalanche-fuji')"
       >
         <img src="/logo/avax_logo_small.png" width="32" style="position: relative; top: 1px;">
+      </div>
+
+      <div
+        class="option-btn-circle ${selectedChain==='hyperevm-testnet' ? 'active' : ''}"
+        onclick="changeChainAndClose('hyperevm-testnet')"
+      >
+        <img src="/logo/hype_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div
@@ -1206,9 +1214,9 @@ async function showScreen2() {
   </div>
 
 <button
-    class="btn_op_rev" style="font-size:1.5rem;"
+    class="btn_op_rev2" style="font-size:1.3rem;"
     onclick="showChainlist()">
-        ●</span>
+        all chain</span>
   </button>
 
 
@@ -2727,14 +2735,14 @@ return `
   >
   
 <div style="white-space:nowrap;">
-  🔵 
+  🙂 
   ${shortWallet(row.wallet)}
   ${
     actualRank <= 3
       ? ` • ${rankDisplay}`
       : ""
   }
-  ${isMe ? " • 😁" : ""}
+  ${isMe ? " • 👋" : ""}
 </div>
 
     <div>
@@ -2752,22 +2760,22 @@ return `
   >
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● pnl</span>
+      <span>● total pnl</span>
       <span>${row.pnl}</span>
     </div>
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● win</span>
+      <span>● total win</span>
       <span>${row.totalWins}</span>
     </div>
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● vol</span>
+      <span>● total volume</span>
       <span>${row.totalVolume}</span>
     </div>
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● bet</span>
+      <span>● total bet</span>
       <span>${row.totalBets}</span>
     </div>
 
@@ -2819,7 +2827,7 @@ ${myRow ? `
   >
 
 <div style="white-space:nowrap;">
-  🔵 
+  🙂 
   ${shortWallet(myRow.wallet)}
   ${
     myRow.rank === 1
@@ -2849,22 +2857,22 @@ ${myRow ? `
   >
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● pnl</span>
+      <span>● total pnl</span>
       <span>${myRow.pnl}</span>
     </div>
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● win</span>
+      <span>● total win</span>
       <span>${myRow.totalWins}</span>
     </div>
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● vol</span>
+      <span>● total volume</span>
       <span>${myRow.totalVolume}</span>
     </div>
 
     <div style="display:flex;justify-content:space-between;">
-      <span>● bet</span>
+      <span>● total bet</span>
       <span>${myRow.totalBets}</span>
     </div>
 
