@@ -1022,7 +1022,7 @@ function updatePriceTitle() {
   const titleEl = document.getElementById('priceTitle');
   if (titleEl) {
     /*titleEl.textContent = `🔵 ${currentBet.asset}/USDT Live Price`;*/
-    titleEl.innerHTML  = `${currentBet.asset} &#9679; USDT Live Price`;
+    titleEl.innerHTML  = `${currentBet.asset} ● USDT Live Price`;
   }
 }
 
@@ -1036,7 +1036,7 @@ async function showScreen2() {
   "base-sepolia": "/logo/base_logo_small.png",
   "ink-sepolia": "/logo/ink_logo_small.png",
   "arbitrum-sepolia": "/logo/arb_logo_small.png",
-  "ethereum-sepolia": "/logo/eth_logo_small.png",
+  "eth-sepolia": "/logo/eth_logo_small.png",
   "avalanche-fuji": "/logo/avax_logo_small.png",
   "hyperevm-testnet": "/logo/hype_logo_small.png"
   };
@@ -1139,7 +1139,7 @@ async function showScreen2() {
 
       <div
         class="option-btn-circle-unsupported ${selectedChain==='eth-sepolia' ? 'active' : ''}"
-        onclick="event.stopPropagation(); gekunsupported();"
+        onclick="changeChainAndClose('eth-sepolia')"
       >
         <img src="/logo/eth_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
@@ -1227,11 +1227,11 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ treasury • <span id="systemBalanceDisplay"> ${systemBal} &#9679; USDC</span>
+        ○ treasury • <span id="systemBalanceDisplay"> ${systemBal} ● USDC</span>
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ your wallet • <span id="userBalanceDisplay"> ${userBal} &#9679; USDC</span>
+        ○ your wallet • <span id="userBalanceDisplay"> ${userBal} ● USDC</span>
       </div>
 
 <hr>
@@ -1264,9 +1264,9 @@ async function showScreen2() {
         🔵 for how many ● USDC?</span>
       </div>
       <div class="flex-row">
-        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 &#9679; USDC</div>
-        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 &#9679; USDC</div>
-        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 &#9679; USDC</div>
+        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 ● USDC</div>
+        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 ● USDC</div>
+        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 ● USDC</div>
       </div>
 
       <div class="readonly2"">
@@ -1349,7 +1349,7 @@ async function showScreen2() {
   <div></div>
   </div>
 
-      <button style="display:none; class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} &#9679; USDC</button>
+      <button style="display:none; class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} ● USDC</button>
       
       <button id="predictBtn" class="btn_hide" onclick="startPrediction()" 
         const predictBtn = document.getElementById('predictBtn')
@@ -2137,6 +2137,8 @@ async function getUserBalance() {
 
   const data = await response.json();
 
+  console.log("Balance response:", data);
+
   return parseFloat(
     data.balance
   ).toFixed(4);
@@ -2439,11 +2441,11 @@ async function updateUserBalance() {
 async function updateBalances() {
   const userBal = await getUserBalance();
   const userEl = document.getElementById('userBalanceDisplay');
-  if (userEl) userEl.innerHTML = `${userBal} &#9679; USDC`;
+  if (userEl) userEl.innerHTML = `${userBal} ● USDC`;
 
   const systemBal = await getSystemBalance();
   const systemEl = document.getElementById('systemBalanceDisplay');
-  if (systemEl) systemEl.innerHTML = `${systemBal} &#9679; USDC`;
+  if (systemEl) systemEl.innerHTML = `${systemBal} ● USDC`;
 }
 
 async function autoClaimReward() {

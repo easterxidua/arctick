@@ -495,3 +495,6 @@ if (actualRank === 1 || actualRank === 2 || actualRank === 3) {
   `;
   hideLoading();
 }
+
+
+        onclick="event.stopPropagation(); gekunsupported();"
