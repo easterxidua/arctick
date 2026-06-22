@@ -1039,7 +1039,7 @@ async function showScreen2() {
   "eth-sepolia": "/logo/eth_logo_small.png",
   "avalanche-fuji": "/logo/avax_logo_small.png",
   "hyperevm-testnet": "/logo/hype_logo_small.png",
-  "unichain-sepolia": "/logo/uni_logo_small.png"
+  "unichain-sepolia": "/logo/uni_logo_small_testnet.png"
   };
 
   const logoWidth = window.innerWidth <= 768 ? '80%' : '50%';
@@ -1156,7 +1156,7 @@ async function showScreen2() {
         class="option-btn-circle ${selectedChain==='unichain-sepolia' ? 'active' : ''}"
         onclick="changeChainAndClose('unichain-sepolia')"
       >
-        <img src="/logo/uni_logo_small.png" width="32" style="position: relative; top: 1px;">
+        <img src="/logo/uni_logo_small_testnet.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div
