@@ -1038,7 +1038,8 @@ async function showScreen2() {
   "arbitrum-sepolia": "/logo/arb_logo_small.png",
   "eth-sepolia": "/logo/eth_logo_small.png",
   "avalanche-fuji": "/logo/avax_logo_small.png",
-  "hyperevm-testnet": "/logo/hype_logo_small.png"
+  "hyperevm-testnet": "/logo/hype_logo_small.png",
+  "unichain-sepolia": "/logo/uni_logo_small.png"
   };
 
   const logoWidth = window.innerWidth <= 768 ? '80%' : '50%';
@@ -1149,6 +1150,13 @@ async function showScreen2() {
         onclick="changeChainAndClose('arbitrum-sepolia')"
       >
         <img src="/logo/arb_logo_small.png" width="32" style="position: relative; top: 1px;">
+      </div>
+
+      <div
+        class="option-btn-circle ${selectedChain==='unichain-sepolia' ? 'active' : ''}"
+        onclick="changeChainAndClose('unichain-sepolia')"
+      >
+        <img src="/logo/uni_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div

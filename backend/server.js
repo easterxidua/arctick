@@ -409,7 +409,8 @@ const CHAINS = {
   "ink-sepolia": { rpc: process.env.INK_SEPOLIA_RPC, usdc: process.env.INK_SEPOLIA_USDC, decimals: 6 },
   "arbitrum-sepolia": { rpc: process.env.ARBITRUM_SEPOLIA_RPC, usdc: process.env.ARBITRUM_SEPOLIA_USDC, decimals: 6 },
   "avalanche-fuji": { rpc: process.env.AVAX_FUJI_RPC, usdc: process.env.AVAX_FUJI_USDC, decimals: 6 },
-  "hyperevm-testnet": { rpc: process.env.HYPE_TESTNET_RPC, usdc: process.env.HYPE_TESTNET_USDC, decimals: 6 }
+  "hyperevm-testnet": { rpc: process.env.HYPE_TESTNET_RPC, usdc: process.env.HYPE_TESTNET_USDC, decimals: 6 },
+  "unichain-sepolia": { rpc: process.env.UNI_SEPOLIA_RPC, usdc: process.env.UNI_SEPOLIA_USDC, decimals: 6 }
 
 };
 
@@ -420,7 +421,8 @@ const CHAIN_MAP = {
   "ink-sepolia": "Ink_Sepolia",
   "arbitrum-sepolia": "Arbitrum_Sepolia",
   "avalanche-fuji" : "Avalanche_Fuji",
-  "hyperevm-testnet" : "HyperEVM_Testnet"
+  "hyperevm-testnet" : "HyperEVM_Testnet",
+  "unichain-sepolia" : "Unichain_Sepolia"
 };
 
 const CHAIN_CONFIG = {
@@ -486,6 +488,13 @@ const CHAIN_CONFIG = {
   name: "HyperEVM Testnet",
   explorer: "https://app.hyperliquid-testnet.xyz/explorer",
   usdcAddress: "0x2B3370eE501B4a559b57D449569354196457D8Ab"
+},
+"unichain-sepolia": {
+  chainId: "1301",
+  rpcUrl: "https://sepolia.unichain.org",
+  name: "Unichain Sepolia",
+  explorer: "https://sepolia.uniscan.xyz",
+  usdcAddress: "0x31d0220469e10c4E71834a79b1f276d740d3768F"
 }
   };
 

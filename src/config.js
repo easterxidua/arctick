@@ -7,7 +7,8 @@ const CONFIG = {
     "ink-sepolia": true,
     "arbitrum-sepolia": true,
     "avalanche-fuji": true,
-    "hyperevm-testnet": true
+    "hyperevm-testnet": true,
+    "unichain-sepolia": true
   },
 
   chains: {
@@ -73,6 +74,13 @@ const CONFIG = {
   name: "HyperEVM Testnet",
   explorer: "https://app.hyperliquid-testnet.xyz/explorer",
   usdcAddress: "0x2B3370eE501B4a559b57D449569354196457D8Ab"
+},
+"unichain-sepolia": {
+  chainId: "1301",
+  rpcUrl: "https://sepolia.unichain.org",
+  name: "Unichain Sepolia",
+  explorer: "https://sepolia.uniscan.xyz",
+  usdcAddress: "0x31d0220469e10c4E71834a79b1f276d740d3768F"
 }
   },
 
