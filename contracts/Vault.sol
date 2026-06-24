@@ -24,9 +24,12 @@ contract Vault {
 
     address public owner;
 
-    mapping(address =>
-        mapping(bytes32 => uint256)
-    ) private balances;
+mapping(address =>
+    mapping(bytes32 => uint256)
+) private balances;
+
+mapping(address => uint256)
+    private totalBalances;
 
     event Deposit(
         address indexed user,
@@ -84,8 +87,11 @@ contract Vault {
             "transfer failed"
         );
 
-        balances[msg.sender][keyHash]
-            += amount;
+balances[msg.sender][keyHash]
+    += amount;
+
+totalBalances[msg.sender]
+    += amount;
 
         emit Deposit(
             msg.sender,
@@ -114,8 +120,11 @@ contract Vault {
             "insufficient balance"
         );
 
-        balances[msg.sender][keyHash]
-            -= amount;
+balances[msg.sender][keyHash]
+    -= amount;
+
+totalBalances[msg.sender]
+    -= amount;
 
         require(
             usdc.transfer(
@@ -153,8 +162,11 @@ contract Vault {
             "invalid amount"
         );
 
-        balances[user][keyHash]
-            += amount;
+balances[user][keyHash]
+    += amount;
+
+totalBalances[user]
+    += amount;
 
         emit BridgeCredit(
             user,
@@ -167,26 +179,36 @@ contract Vault {
     // VIEWS
     // --------------------------------------------------
 
-    function getBalance(
-        address user,
-        bytes32 keyHash
-    )
-        external
-        view
-        returns (uint256)
-    {
-        return balances[user][keyHash];
-    }
+function getBalance(
+    address user,
+    bytes32 keyHash
+)
+    external
+    view
+    returns (uint256)
+{
+    return balances[user][keyHash];
+}
 
-    function vaultUSDCBalance()
-        external
-        view
-        returns (uint256)
-    {
-        return usdc.balanceOf(
-            address(this)
-        );
-    }
+function getTotalBalance(
+    address user
+)
+    external
+    view
+    returns (uint256)
+{
+    return totalBalances[user];
+}
+
+function vaultUSDCBalance()
+    external
+    view
+    returns (uint256)
+{
+    return usdc.balanceOf(
+        address(this)
+    );
+}
 
     // --------------------------------------------------
     // ADMIN

@@ -388,9 +388,10 @@ const vault =
   new ethers.Contract(
     process.env.VAULT_ADDRESS,
     [
-      "function deposit(address user, bytes32 keyHash, uint256 amount)",
-      "function withdraw(address user, bytes32 keyHash, uint256 amount, address recipient)",
-      "function getBalance(address user, bytes32 keyHash) view returns(uint256)"
+      "function deposit(bytes32 keyHash,uint256 amount)",
+      "function withdraw(bytes32 keyHash,uint256 amount)",
+      "function getBalance(address user,bytes32 keyHash) view returns(uint256)",
+      "function getTotalBalance(address user) view returns(uint256)"
     ],
     wallet
   );
@@ -1033,6 +1034,41 @@ res.json(
 
 });
 */
+
+app.get(
+  "/api/vault-balance",
+  async (req,res) => {
+
+    try {
+
+      const { address } = req.query;
+
+      const balance =
+        await vault.getTotalBalance(
+          address
+        );
+
+      res.json({
+        success:true,
+        balance:
+          ethers.formatUnits(
+            balance,
+            6
+          )
+      });
+
+    } catch(err) {
+
+      console.error(err);
+
+      res.status(500).json({
+        success:false,
+        message:err.message
+      });
+
+    }
+
+});
 
 // smart_contract
 app.post(

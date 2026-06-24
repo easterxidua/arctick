@@ -1415,6 +1415,23 @@ async function withdrawUSDC() {
 
 window.withdrawUSDC = withdrawUSDC;
 
+async function refreshVaultBalance() {
+
+  const response =
+    await fetch(
+      `${API_URL}/api/vault-balance?address=${userAddress}`
+    );
+
+  const data =
+    await response.json();
+
+  document.getElementById(
+    "systemBalanceDisplay"
+  ).innerHTML =
+    `${data.balance} ● USDC`;
+
+}
+
 async function showScreen2() {
   const shortAddress = userAddress ? `${userAddress.slice(0,6)}...${userAddress.slice(-4)}` : "";
   const userBal = await getUserBalance();
@@ -1637,7 +1654,7 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ on treasury • <span id="systemBalanceDisplay"> ${systemBal} ● USDC</span>
+        ○ on vault • <span id="systemBalanceDisplay"> ${systemBal} ● USDC</span>
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
@@ -1803,6 +1820,7 @@ withdrawKeyInput.addEventListener(
 
   //startLivePriceUpdates();
   updateBalances();
+  refreshVaultBalance()
 
 if (balanceInterval) {
   clearInterval(balanceInterval);
