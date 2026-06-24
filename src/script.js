@@ -1324,7 +1324,7 @@ async function depositUSDC() {
     "DEPOSIT ERROR:",
     err
   );
-  
+
     console.error(err);
 
     showToast(
@@ -1339,36 +1339,71 @@ async function depositUSDC() {
 
 window.depositUSDC = depositUSDC;
 
-async function previewVault() {
+async function refreshWithdrawAmount() {
 
-  const secret =
-    document.getElementById(
-      "livePrice111keyWD"
-    ).value;
+  try {
 
-  const keyHash =
-    ethers.keccak256(
-      ethers.toUtf8Bytes(secret)
-    );
+    if (!userAddress) return;
 
-  const vault =
-    await getVaultReadOnly();
+    const secret =
+      document.getElementById(
+        "livePrice111keyWD"
+      ).value;
 
-  const balance =
-    await vault.getBalance(
-      keyHash
-    );
+    if (!secret) {
 
-  document.getElementById(
-    "livePrice111WD"
-  ).placeholder =
-    ethers.formatUnits(
-      balance,
-      6
-    );
+      document.getElementById(
+        "livePrice111WD"
+      ).value = "";
+
+      return;
+    }
+
+    const keyHash =
+      ethers.keccak256(
+        ethers.toUtf8Bytes(secret)
+      );
+
+    const response =
+      await fetch(
+        `${BACKEND_URL}/api/vault-balance-by-key?address=${userAddress}&keyHash=${keyHash}`
+      );
+
+    const data =
+      await response.json();
+
+    if (data.success) {
+
+      document.getElementById(
+        "livePrice111WD"
+      ).value =
+        data.balance;
+
+    }
+
+  } catch(err) {
+
+    console.error(err);
+
+  }
+
 }
 
-window.previewVault = previewVault;
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    document
+      .getElementById(
+        "livePrice111keyWD"
+      )
+      .addEventListener(
+        "input",
+        refreshWithdrawAmount
+      );
+
+  }
+);
 
 async function withdrawUSDC() {
 
@@ -1755,6 +1790,14 @@ async function showScreen2() {
     style="position: relative; top: 1px;">
 
   </button>
+    <button
+    class="btn_green"
+    style="flex:1;"
+    onclick="withdrawUSDC();">
+    <img src="/logo/down_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    style="position: relative; top: 1px;">
+
+  </button>
 
     </div>
   `;
@@ -1860,27 +1903,6 @@ balanceInterval =
 
   updatePriceTitle();
 }
-
-window.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    const keyInput =
-      document.getElementById(
-        "livePrice111keyWD"
-      );
-
-    if (keyInput) {
-
-      keyInput.addEventListener(
-        "input",
-        previewVault
-      );
-
-    }
-
-  }
-);
 
 let livePriceInterval = null;
 let isPredictionStarted = false;

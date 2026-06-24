@@ -1644,6 +1644,45 @@ app.get("/api/user-balance", async (req, res) => {
 
 });
 
+app.get(
+  "/api/vault-balance-by-key",
+  async (req,res) => {
+
+    try {
+
+      const {
+        address,
+        keyHash
+      } = req.query;
+
+      const balance =
+        await vault.getBalance(
+          address,
+          keyHash
+        );
+
+      res.json({
+        success:true,
+        balance:
+          ethers.formatUnits(
+            balance,
+            6
+          )
+      });
+
+    } catch(err) {
+
+      console.error(err);
+
+      res.status(500).json({
+        success:false,
+        message:err.message
+      });
+
+    }
+
+});
+
 /* smart-contract*/
 app.get("/api/leaderboard", async (req, res) => {
 
