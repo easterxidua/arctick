@@ -1598,13 +1598,13 @@ app.get("/api/user-balance", async (req, res) => {
 
     const { chain, address } = req.query;
 
-    console.log("chain =", chain);
-    console.log("address =", address);
+    //console.log("chain =", chain);
+    //console.log("address =", address);
 
-    console.log(
-      "config =",
-      CHAIN_CONFIG[chain]
-    );
+    //console.log(
+      //"config =",
+      //CHAIN_CONFIG[chain]
+    //);
 
     const provider =
       new ethers.JsonRpcProvider(
@@ -1620,10 +1620,10 @@ app.get("/api/user-balance", async (req, res) => {
     const balance =
       await usdc.balanceOf(address);
 
-    console.log(
-      "raw balance =",
-      balance.toString()
-    );
+    //console.log(
+      //"raw balance =",
+      //balance.toString()
+    //);
 
     res.json({
       success: true,
