@@ -1,5 +1,3 @@
-import vaultRoutes from "./routes/vault.js";
-
 /*
 console.log("SERVER STARTED");
 console.log("PK length:", process.env.SYSTEM_PRIVATE_KEY?.length);
@@ -1200,6 +1198,110 @@ res.json({
 );
 // smart_contract
 
+/*
+TEST
+https://your-backend/api/vault/test
+*/
+app.get("/vault/test", (req, res) => {
+
+  res.json({
+    success: true,
+    message: "Vault route working"
+  });
+
+});
+
+/*
+DEPOSIT
+*/
+app.post("/vault/deposit", async (req, res) => {
+
+  try {
+
+    const {
+      amount,
+      chain,
+      keyHash,
+      userAddress
+    } = req.body;
+
+    console.log("Deposit request:", {
+      amount,
+      chain,
+      keyHash,
+      userAddress
+    });
+
+    /*
+      TODO:
+      bridge to ARC
+      call vault contract
+    */
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+});
+
+/*
+WITHDRAW
+*/
+app.post("/vault/withdraw", async (req, res) => {
+
+  try {
+
+    const {
+      secret,
+      amount,
+      userAddress
+    } = req.body;
+
+    const keyHash =
+      ethers.keccak256(
+        ethers.toUtf8Bytes(secret)
+      );
+
+    console.log("Withdraw request:", {
+      keyHash,
+      amount,
+      userAddress
+    });
+
+    /*
+      TODO:
+      check vault balance
+      call withdraw contract
+    */
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+});
+
 app.post('/api/claim', async (req, res) => {
 
   try {
@@ -1602,8 +1704,6 @@ app.get("/api/leaderboard", async (req, res) => {
 
 });
 /* smart-contract*/
-
-app.use("/api", vaultRoutes);
 
 app.get('/ping', (req, res) => {
 res.json(
