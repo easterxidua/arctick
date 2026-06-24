@@ -2,202 +2,168 @@
 pragma solidity ^0.8.20;
 
 interface IERC20 {
-    function transfer(
-        address to,
-        uint256 amount
-    ) external returns (bool);
+function transfer(
+address to,
+uint256 amount
+) external returns (bool);
 
-    function transferFrom(
-        address from,
-        address to,
-        uint256 amount
-    ) external returns (bool);
+function transferFrom(
+    address from,
+    address to,
+    uint256 amount
+) external returns (bool);
 
-    function balanceOf(
-        address account
-    ) external view returns (uint256);
+function balanceOf(
+    address account
+) external view returns (uint256);
+
 }
 
 contract Vault {
 
-    IERC20 public immutable usdc;
+IERC20 public immutable usdc;
 
-    address public owner;
+address public owner;
 
-mapping(address =>
-    mapping(bytes32 => uint256)
-) private balances;
+// keyHash => balance
+mapping(bytes32 => uint256)
+    private balances;
 
-mapping(address => uint256)
-    private totalBalances;
+event Deposit(
+    bytes32 indexed keyHash,
+    uint256 amount
+);
 
-    event Deposit(
-        address indexed user,
-        bytes32 indexed keyHash,
-        uint256 amount
+event Withdraw(
+    bytes32 indexed keyHash,
+    address indexed recipient,
+    uint256 amount
+);
+
+event BridgeCredit(
+    bytes32 indexed keyHash,
+    uint256 amount
+);
+
+modifier onlyOwner() {
+    require(
+        msg.sender == owner,
+        "not owner"
+    );
+    _;
+}
+
+constructor(
+    address usdcAddress
+) {
+    usdc = IERC20(usdcAddress);
+    owner = msg.sender;
+}
+
+// ----------------------------------
+// DEPOSIT
+// ----------------------------------
+
+function deposit(
+    bytes32 keyHash,
+    uint256 amount
+) external {
+
+    require(
+        amount > 0,
+        "invalid amount"
     );
 
-    event Withdraw(
-        address indexed user,
-        bytes32 indexed keyHash,
-        uint256 amount
-    );
-
-    event BridgeCredit(
-        address indexed user,
-        bytes32 indexed keyHash,
-        uint256 amount
-    );
-
-    modifier onlyOwner() {
-        require(
-            msg.sender == owner,
-            "not owner"
-        );
-        _;
-    }
-
-    constructor(
-        address usdcAddress
-    ) {
-        usdc = IERC20(usdcAddress);
-        owner = msg.sender;
-    }
-
-    // --------------------------------------------------
-    // DIRECT ARC DEPOSIT
-    // --------------------------------------------------
-
-    function deposit(
-        bytes32 keyHash,
-        uint256 amount
-    ) external {
-
-        require(
-            amount > 0,
-            "invalid amount"
-        );
-
-        require(
-            usdc.transferFrom(
-                msg.sender,
-                address(this),
-                amount
-            ),
-            "transfer failed"
-        );
-
-balances[msg.sender][keyHash]
-    += amount;
-
-totalBalances[msg.sender]
-    += amount;
-
-        emit Deposit(
+    require(
+        usdc.transferFrom(
             msg.sender,
-            keyHash,
+            address(this),
             amount
-        );
-    }
+        ),
+        "transfer failed"
+    );
 
-    // --------------------------------------------------
-    // WITHDRAW
-    // --------------------------------------------------
+    balances[keyHash] += amount;
 
-    function withdraw(
-        bytes32 keyHash,
-        uint256 amount
-    ) external {
+    emit Deposit(
+        keyHash,
+        amount
+    );
+}
 
-        require(
-            amount > 0,
-            "invalid amount"
-        );
+// ----------------------------------
+// WITHDRAW
+// ----------------------------------
 
-        require(
-            balances[msg.sender][keyHash]
-                >= amount,
-            "insufficient balance"
-        );
+function withdraw(
+    bytes32 keyHash,
+    uint256 amount,
+    address recipient
+) external {
 
-balances[msg.sender][keyHash]
-    -= amount;
+    require(
+        amount > 0,
+        "invalid amount"
+    );
 
-totalBalances[msg.sender]
-    -= amount;
+    require(
+        balances[keyHash] >= amount,
+        "insufficient balance"
+    );
 
-        require(
-            usdc.transfer(
-                msg.sender,
-                amount
-            ),
-            "withdraw failed"
-        );
+    balances[keyHash] -= amount;
 
-        emit Withdraw(
-            msg.sender,
-            keyHash,
+    require(
+        usdc.transfer(
+            recipient,
             amount
-        );
-    }
+        ),
+        "withdraw failed"
+    );
 
-    // --------------------------------------------------
-    // BRIDGE CREDIT
-    // --------------------------------------------------
-    // Called by backend AFTER bridge completes.
-    // Assumes bridge already delivered USDC
-    // to this contract address.
-    // --------------------------------------------------
+    emit Withdraw(
+        keyHash,
+        recipient,
+        amount
+    );
+}
 
-    function creditBridgeDeposit(
-        address user,
-        bytes32 keyHash,
-        uint256 amount
-    )
-        external
-        onlyOwner
-    {
-        require(
-            amount > 0,
-            "invalid amount"
-        );
+// ----------------------------------
+// BRIDGE CREDIT
+// ----------------------------------
 
-balances[user][keyHash]
-    += amount;
+function creditBridgeDeposit(
+    bytes32 keyHash,
+    uint256 amount
+)
+    external
+    onlyOwner
+{
+    require(
+        amount > 0,
+        "invalid amount"
+    );
 
-totalBalances[user]
-    += amount;
+    balances[keyHash] += amount;
 
-        emit BridgeCredit(
-            user,
-            keyHash,
-            amount
-        );
-    }
+    emit BridgeCredit(
+        keyHash,
+        amount
+    );
+}
 
-    // --------------------------------------------------
-    // VIEWS
-    // --------------------------------------------------
+// ----------------------------------
+// VIEWS
+// ----------------------------------
 
 function getBalance(
-    address user,
     bytes32 keyHash
 )
     external
     view
     returns (uint256)
 {
-    return balances[user][keyHash];
-}
-
-function getTotalBalance(
-    address user
-)
-    external
-    view
-    returns (uint256)
-{
-    return totalBalances[user];
+    return balances[keyHash];
 }
 
 function vaultUSDCBalance()
@@ -210,16 +176,17 @@ function vaultUSDCBalance()
     );
 }
 
-    // --------------------------------------------------
-    // ADMIN
-    // --------------------------------------------------
+// ----------------------------------
+// ADMIN
+// ----------------------------------
 
-    function transferOwnership(
-        address newOwner
-    )
-        external
-        onlyOwner
-    {
-        owner = newOwner;
-    }
+function transferOwnership(
+    address newOwner
+)
+    external
+    onlyOwner
+{
+    owner = newOwner;
+}
+
 }

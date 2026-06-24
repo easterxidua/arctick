@@ -402,7 +402,8 @@ const VAULT_ADDRESS_USDC =
 const VAULT_ABI = [
       "function deposit(bytes32 keyHash,uint256 amount)",
       "function withdraw(bytes32 keyHash,uint256 amount)",
-      "function getBalance(address user,bytes32 keyHash) view returns(uint256)",
+      //"function getBalance(address user,bytes32 keyHash) view returns(uint256)",
+      "function getBalance(bytes32 keyHash) view returns(uint256)",
       "function getTotalBalance(address user) view returns(uint256)",
       "function creditBridgeDeposit(address user, bytes32 keyHash, uint256 amount)",
       "function owner() view returns (address)"
