@@ -21,19 +21,6 @@ let priceCache = {
 
 let lastUpdate = 0;
 
-const wallet =
-  new ethers.Wallet(
-    process.env.PRIVATE_KEY,
-    provider
-  );
-
-const vault =
-  new ethers.Contract(
-    process.env.VAULT_ADDRESS,
-    VAULT_ABI,
-    wallet
-  );
-
 const usdc =
   new ethers.Contract(
     process.env.ARC_USDC,
