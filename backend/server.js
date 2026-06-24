@@ -375,12 +375,12 @@ console.log("SERVER STARTING...");
 
 const provider =
   new ethers.JsonRpcProvider(
-    process.env.ARC_RPC_URL
+    process.env.ARC_RPC
   );
 
 const wallet =
   new ethers.Wallet(
-    process.env.PRIVATE_KEY,
+    process.env.SYSTEM_PRIVATE_KEY,
     provider
   );
 
@@ -397,12 +397,12 @@ const vault =
   
 const usdc =
   new ethers.Contract(
-    process.env.ARC_USDC,
+    process.env.ARC_TESTNET_USDC,
     USDC_ABI,
     wallet
   );
   
-  
+
 //app.get('/', (req, res) => {
   //res.send('SERVER WORKING');
 //});
