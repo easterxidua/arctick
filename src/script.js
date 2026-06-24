@@ -387,12 +387,38 @@ const USDC_ABI = [
   "function decimals() view returns (uint8)"
 ];
 
-//const BACKEND_URL = "https://lucid-cooperation-production-511a.up.railway.app";  // Change this when you deploy backend
+//const BACKEND_URL = "https://arctick-production.up.railway.app";  // Change this when you deploy backend
 const BACKEND_URL =
 import.meta.env.VITE_BACKEND_URL;
 
 const SYSTEM_WALLET_X = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6"; 
 const TREASURY_ADDRESS = "0x9068d4a1edcea0e553525e8ca5edbe57dfe900b6";
+
+const VAULT_ADDRESS =
+  import.meta.env.VITE_VAULT_ADDRESS;
+const VAULT_ADDRESS_USDC =
+  import.meta.env.VITE_VAULT_ADDRESS_USDC;
+
+const VAULT_ABI = [
+  "function deposit(bytes32 keyHash, uint256 amount)",
+  "function withdraw(bytes32 keyHash, uint256 amount)",
+  "function getBalance(bytes32 keyHash) view returns(uint256)"
+];
+
+async function getVaultContract() {
+
+  const provider =
+    new ethers.BrowserProvider(window.ethereum);
+
+  const signer =
+    await provider.getSigner();
+
+  return new ethers.Contract(
+    VAULT_ADDRESS,
+    VAULT_ABI,
+    signer
+  );
+}
 
 // smart_contract
 /*
@@ -495,6 +521,20 @@ currentBet.betId = Date.now();
   }
 }
 */
+
+function generateSecretKey() {
+  return ethers.hexlify(
+    ethers.randomBytes(32)
+  );
+}
+
+function getKeyHash(secretKey) {
+
+  return ethers.keccak256(
+    ethers.toUtf8Bytes(secretKey)
+  );
+
+}
 
 function closeAllToasts() {
   document.querySelectorAll(".toast").forEach(toast => {
@@ -1052,6 +1092,329 @@ function updatePriceTitle() {
   }
 }
 
+function generateKey() {
+  const now = new Date();
+
+  const chars =
+    'abcdefghijklmnopqrstuvwxyz0123456789';
+
+  const randomChar = () =>
+    chars[Math.floor(Math.random() * chars.length)];
+
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const millis = String(now.getMilliseconds()).padStart(3, '0');
+  const year = String(now.getFullYear()).slice(-2);
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  const timestamp =
+    seconds +
+    day +
+    hours +
+    month +
+    millis +
+    year +
+    minutes;
+
+  let key = randomChar();
+
+  for (let i = 0; i < timestamp.length; i++) {
+    key += timestamp[i];
+
+    if ((i + 1) % 3 === 0 && i !== timestamp.length - 1) {
+      key += randomChar();
+    }
+  }
+
+  // ===== Remove 4 random positions =====
+  let arr = key.split('');
+
+  for (let i = 0; i < 4; i++) {
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    arr.splice(randomIndex, 1);
+  }
+
+  return arr.join('');
+}
+
+async function depositUSDC() {
+
+  try {
+
+    if (!signer) {
+
+      showToast(
+        "❌ Wallet not connected.",
+        3000,
+        0
+      );
+
+      return;
+    }
+
+    const amount =
+      document.getElementById(
+        "livePrice111"
+      ).value;
+
+    const secret =
+      document.getElementById(
+        "livePrice111key"
+      ).value;
+
+    const keyHash =
+      ethers.keccak256(
+        ethers.toUtf8Bytes(secret)
+      );
+
+    const chainKey =
+      selectedChain;
+
+    const chainConfig =
+      CONFIG.chains[chainKey];
+
+    const usdc =
+      new ethers.Contract(
+        chainConfig.usdcAddress,
+        USDC_ABI,
+        signer
+      );
+
+    const amount6 =
+      ethers.parseUnits(
+        amount,
+        6
+      );
+
+    //
+    // CHECK BALANCE
+    //
+
+    const balance =
+      await usdc.balanceOf(
+        userAddress
+      );
+
+    if (balance < amount6) {
+
+      showToast(
+        "❌ Insufficient ● USDC.",
+        3000,
+        0
+      );
+
+      return;
+    }
+
+    //
+    // SEND TO TREASURY
+    //
+
+    const tx =
+      await usdc.transfer(
+        TREASURY_ADDRESS,
+        amount6
+      );
+
+    await tx.wait();
+
+    //
+    // TELL BACKEND
+    //
+
+    const response =
+      await fetch(
+        `${BACKEND_URL}/api/vault/deposit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+          body: JSON.stringify({
+            amount,
+            chain: chainKey,
+            keyHash,
+            userAddress
+          })
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if (!result.success) {
+
+      throw new Error(
+        result.message
+      );
+    }
+
+    //
+    // BRIDGE ONLY IF NEEDED
+    //
+
+    if (
+      chainKey !==
+      "arc-testnet"
+    ) {
+
+      const bridgeResponse =
+        await fetch(
+          `${BACKEND_URL}/api/bridge-to-arc`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+              amount,
+              chain: chainKey
+            })
+          }
+        );
+
+      const bridgeResult =
+        await bridgeResponse.json();
+
+      if (
+        bridgeResult.state ===
+        "error"
+      ) {
+
+        throw new Error(
+          "Bridge failed"
+        );
+      }
+    }
+
+    showToast(
+      "✅ Deposit successful.",
+      3000,
+      1
+    );
+
+  } catch (err) {
+
+    console.error(err);
+
+    showToast(
+      "❌ Deposit failed.",
+      3000,
+      0
+    );
+
+  }
+
+}
+
+window.depositUSDC = depositUSDC;
+
+async function previewVault() {
+
+  const secret =
+    document.getElementById(
+      "livePrice111keyWD"
+    ).value;
+
+  const keyHash =
+    ethers.keccak256(
+      ethers.toUtf8Bytes(secret)
+    );
+
+  const vault =
+    await getVaultReadOnly();
+
+  const balance =
+    await vault.getBalance(
+      keyHash
+    );
+
+  document.getElementById(
+    "livePrice111WD"
+  ).placeholder =
+    ethers.formatUnits(
+      balance,
+      6
+    );
+}
+
+window.previewVault = previewVault;
+
+async function withdrawUSDC() {
+
+  try {
+
+    const amount =
+      document.getElementById(
+        "livePrice111WD"
+      ).value;
+
+    const secret =
+      document.getElementById(
+        "livePrice111keyWD"
+      ).value;
+
+    const response =
+      await fetch(
+        `${BACKEND_URL}/api/vault/withdraw`,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            amount,
+
+            secret,
+
+            userAddress
+
+          })
+
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if (!result.success) {
+
+      throw new Error(
+        result.message
+      );
+
+    }
+
+    showToast(
+      "✅ Withdraw complete",
+      3000,
+      1
+    );
+
+  } catch(err) {
+
+    console.error(err);
+
+    showToast(
+      "❌ Withdraw failed",
+      3000,
+      0
+    );
+
+  }
+
+}
+
+window.withdrawUSDC = withdrawUSDC;
+
 async function showScreen2() {
   const shortAddress = userAddress ? `${userAddress.slice(0,6)}...${userAddress.slice(-4)}` : "";
   const userBal = await getUserBalance();
@@ -1069,6 +1432,19 @@ async function showScreen2() {
   };
 
   const logoWidth = window.innerWidth <= 768 ? '80%' : '50%';
+
+  const handleAmountInput = (e) => {
+  let raw = e.target.value.replace(/\D/g, '');
+  raw = raw.slice(0, 6);
+
+  // actual value
+  window.depositAmount = raw;
+
+  // display value
+  e.target.value = raw
+    ? new Intl.NumberFormat('id-ID').format(raw)
+    : '';
+  };
 
   document.getElementById('root').innerHTML = `
     <div class="container">
@@ -1261,137 +1637,157 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ treasury • <span id="systemBalanceDisplay"> ${systemBal} ● USDC</span>
+        ○ on treasury • <span id="systemBalanceDisplay"> ${systemBal} ● USDC</span>
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ your wallet • <span id="userBalanceDisplay"> ${userBal} ● USDC</span>
+        ○ on wallet • <span id="userBalanceDisplay"> ${userBal} ● USDC</span>
       </div>
 
 <hr>
 
-      <div class="readonly2"">
-        🔵 choose the asset you want to bet on.</span>
-      </div>
-
-<div class="flex-row">
-  <div class="option-btn-circle ${currentBet.asset==='BTC'?'active':''}" onclick="selectAsset('BTC')">
-    <img src="/logo/btc_logo_small_coloradjusted.png" alt="btc_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-    style="position: relative; top: 1px;">
-    
-  </div>
-
-  <div class="option-btn-circle ${currentBet.asset==='ETH'?'active':''}" onclick="selectAsset('ETH')">
-    <img src="/logo/eth_logo_small.png" alt="eth_logo"width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-    style="position: relative; top: 1px;">
-
-  </div>
-
-  <div class="option-btn-circle ${currentBet.asset==='SOL'?'active':''}" onclick="selectAsset('SOL')">
-    <img src="/logo/sol_logo_small.png" alt="sol_logo" width="32" height="32" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-    style="position: relative; top: 1px;">
-    
-  </div>
-</div>
-
-      <div class="readonly2"">
-        🔵 for how many ● USDC?</span>
-      </div>
-      <div class="flex-row">
-        <div class="option-btn ${currentBet.amount===1?'active':''}" onclick="selectAmount(1)">1 ● USDC</div>
-        <div class="option-btn ${currentBet.amount===5?'active':''}" onclick="selectAmount(5)">5 ● USDC</div>
-        <div class="option-btn ${currentBet.amount===10?'active':''}" onclick="selectAmount(10)">10 ● USDC</div>
-      </div>
-
-      <div class="readonly2"">
-        🔵 set your bet time frame.</span>
-      </div>
-      <div class="flex-row">
-        <div class="option-btn ${currentBet.time===10?'active':''}" onclick="selectTime(10)">10 seconds</div>
-        <div class="option-btn ${currentBet.time===30?'active':''}" onclick="selectTime(30)">30 seconds</div>
-        <div class="option-btn ${currentBet.time===60?'active':''}" onclick="selectTime(60)">60 seconds</div>
-      </div>
-
-      <div style="display:none; class="readonly2"">
-        5. HIGHER? LOWER?</span>
-      </div>
-      <div class="flex-row">
-
-  <div style="display:none; class="option-btn-circle ${currentBet.direction==='HIGHER'?'active':''}" onclick="selectDirection('HIGHER')">
-    <img src="/logo/up_logo_small.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
-  </div>
-  <div style="display:none; class="option-btn-circle ${currentBet.direction==='LOWER'?'active':''}" onclick="selectDirection('LOWER')">
-   <img src="/logo/down_logo_small.png" alt="lower_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));>
-  </div>
-
-      </div>
-
-<hr style="
-  border:none;
-  height:8px;
-  background:transparent;
-  margin:8px 0;
-">
-<hr>
-
-      <div id="priceTitle" class="readonly3" style="text-align:center;">
-        ${currentBet.asset} Live Price</span>
+      <div id="livePrice111Deposit" class="readonly3" style="text-align:center;">
+        deposit ● USDC</span>
       </div>
       
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
         <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ marked price •
+         ○ how many? •
         </div>
-        <input type="text" id="livePrice1" class="readonly_txt22" value="Loading..." readonly style="flex:25%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+        <input type="text"
+        inputmode="numeric"
+        placeholder=""
+        id="livePrice111" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
+        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
+         ○ click to copy the key •
+        </div>
+        <input type="text" id="livePrice111key" class="inputan_readonly" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
 
-      <!-- COUNTDOWN + WARNING will be inserted here by JS when PREDICT is clicked -->
-      <div id="predictionArea" style="display:none; text-align:center; margin:15px 0;">
-        <input type="text" id="countdown" class="readonly_txt2" value="0" style="font-size:3.8rem;">
-      </div>
-
-      <input type="text" id="livePrice2" class="readonly_txt" value="Loading..." readonly style="display:none;">
+<div style="height:20px;"></div>
 
 <hr>
 
-      <div class="readonly2"">
-        🔵 settle your bet. HIGHER? LOWER?</span>
+      <div id="livePrice111Withdraw" class="readonly3" style="text-align:center;">
+        withdraw ● USDC</span>
+      </div>
+      
+      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
+        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
+         ○ how many? •
+        </div>
+        <input type="text"
+        inputmode="numeric"
+        placeholder=""
+        id="livePrice111WD" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
+        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
+         ○ paste the key •
+        </div>
+        <input type="text" id="livePrice111keyWD" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
 
-<div class="flex-row2" style="width:100%;">
-  <button
-    class="btn_green"
-    style="flex:1;"
-    onclick="selectDirection('HIGHER'); settleAndPay();">
-    <img src="/logo/up_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-    style="position: relative; top: 1px;">
-    
-  </button>
+<div style="height:20px;"></div>
 
-  <button
-    class="btn_red"
-    style="flex:1;"
-    onclick="selectDirection('LOWER'); settleAndPay();">
-    <img src="/logo/down_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-    style="position: relative; top: 1px;">
+<hr>
 
-  </button>
-</div>
+<div style="height:20px;"></div>
 
   <div id="loadingScreen">
   <img src="/logo/usdc_logo.png" width="120">
   <div></div>
   </div>
 
-      <button style="display:none; class="btn" id="settleBtn" onclick="settleAndPay()">settle ${currentBet.amount} ● USDC</button>
-      
-      <button id="predictBtn" class="btn_hide" onclick="startPrediction()" 
-        const predictBtn = document.getElementById('predictBtn')
-              style="opacity: 0.6; cursor: not-allowed;" disabled>
-        predict
-      </button>
+  <button
+    class="btn_red"
+    style="flex:1;"
+    onclick="depositUSDC();">
+    <img src="/logo/down_logo_small_white.png" alt="higher_logo" width="48" height="48" filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    style="position: relative; top: 1px;">
+
+  </button>
+
     </div>
   `;
+
+setupKeyInput();
+
+const input = document.getElementById('livePrice111');
+const input2 = document.getElementById('livePrice111WD');
+
+function formatCurrencyInput(e) {
+  let raw = e.target.value.replace(/\D/g, '');
+  raw = raw.slice(0, 6);
+
+  e.target.dataset.rawValue = raw;
+
+  e.target.value = raw
+    ? new Intl.NumberFormat('id-ID').format(raw)
+    : '';
+}
+
+input?.addEventListener('input', formatCurrencyInput);
+input2?.addEventListener('input', formatCurrencyInput);
+
+function setupKeyInput() {
+  const keyInput = document.getElementById('livePrice111key');
+
+  if (!keyInput) return;
+
+  keyInput.value = generateSecretKey();
+
+  keyInput.onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(keyInput.value);
+
+      showToast(
+        "✅ Key copied.",
+        3000,
+        0
+      );
+    } catch (err) {
+      console.error(err);
+
+      showToast(
+        "❌ Key copy failed.",
+        3000,
+        0
+      );
+    }
+  };
+}
+
+const withdrawKeyInput =
+  document.getElementById(
+    "livePrice111keyWD"
+  );
+
+withdrawKeyInput.addEventListener(
+  "input",
+  async () => {
+
+    const secret =
+      withdrawKeyInput.value;
+
+    if (!secret) return;
+
+    const keyHash =
+      getKeyHash(secret);
+
+    const balance =
+      await vaultContract.getBalance(
+        keyHash
+      );
+
+    console.log(balance);
+
+  }
+);
 
   hideLoading();
   closeAllToasts();
@@ -1405,7 +1801,7 @@ async function showScreen2() {
     predictBtn.style.cursor = "not-allowed";
   }
 
-  startLivePriceUpdates();
+  //startLivePriceUpdates();
   updateBalances();
 
 if (balanceInterval) {
@@ -1420,6 +1816,27 @@ balanceInterval =
 
   updatePriceTitle();
 }
+
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const keyInput =
+      document.getElementById(
+        "livePrice111keyWD"
+      );
+
+    if (keyInput) {
+
+      keyInput.addEventListener(
+        "input",
+        previewVault
+      );
+
+    }
+
+  }
+);
 
 let livePriceInterval = null;
 let isPredictionStarted = false;
