@@ -1,3 +1,5 @@
+import vaultRoutes from "./routes/vault.js";
+
 /*
 console.log("SERVER STARTED");
 console.log("PK length:", process.env.SYSTEM_PRIVATE_KEY?.length);
@@ -1600,6 +1602,8 @@ app.get("/api/leaderboard", async (req, res) => {
 
 });
 /* smart-contract*/
+
+app.use("/api", vaultRoutes);
 
 app.get('/ping', (req, res) => {
 res.json(

@@ -1,3 +1,24 @@
+import express from "express";
+import { ethers } from "ethers";
+
+const router = express.Router();
+
+/*
+TEST
+https://your-backend/api/vault/test
+*/
+router.get("/vault/test", (req, res) => {
+
+  res.json({
+    success: true,
+    message: "Vault route working"
+  });
+
+});
+
+/*
+DEPOSIT
+*/
 router.post("/vault/deposit", async (req, res) => {
 
   try {
@@ -9,11 +30,18 @@ router.post("/vault/deposit", async (req, res) => {
       userAddress
     } = req.body;
 
-    // save deposit metadata
+    console.log("Deposit request:", {
+      amount,
+      chain,
+      keyHash,
+      userAddress
+    });
 
-    // bridge if needed
-
-    // call ARC vault contract
+    /*
+      TODO:
+      bridge to ARC
+      call vault contract
+    */
 
     res.json({
       success: true
@@ -21,7 +49,9 @@ router.post("/vault/deposit", async (req, res) => {
 
   } catch (err) {
 
-    res.json({
+    console.error(err);
+
+    res.status(500).json({
       success: false,
       message: err.message
     });
@@ -30,86 +60,51 @@ router.post("/vault/deposit", async (req, res) => {
 
 });
 
-router.post(
-  "/vault/withdraw",
-  async(req,res)=>{
+/*
+WITHDRAW
+*/
+router.post("/vault/withdraw", async (req, res) => {
 
-    try {
+  try {
 
-      const {
+    const {
+      secret,
+      amount,
+      userAddress
+    } = req.body;
 
-        secret,
+    const keyHash =
+      ethers.keccak256(
+        ethers.toUtf8Bytes(secret)
+      );
 
-        amount,
+    console.log("Withdraw request:", {
+      keyHash,
+      amount,
+      userAddress
+    });
 
-        userAddress
+    /*
+      TODO:
+      check vault balance
+      call withdraw contract
+    */
 
-      } = req.body;
+    res.json({
+      success: true
+    });
 
-      const keyHash =
-        ethers.keccak256(
-          ethers.toUtf8Bytes(
-            secret
-          )
-        );
+  } catch (err) {
 
-      const balance =
-        await vault
-          .getBalance(
-            keyHash
-          );
+    console.error(err);
 
-      if (
-        balance <
-        ethers.parseUnits(
-          amount,
-          6
-        )
-      ) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
 
-        return res.json({
-
-          success:false,
-
-          message:
-            "insufficient balance"
-
-        });
-
-      }
-
-      const tx =
-        await vault.withdraw(
-
-          keyHash,
-
-          ethers.parseUnits(
-            amount,
-            6
-          ),
-
-          userAddress
-
-        );
-
-      await tx.wait();
-
-      res.json({
-
-        success:true
-
-      });
-
-    } catch(err) {
-
-      res.json({
-
-        success:false,
-
-        message:err.message
-
-      });
-
-    }
+  }
 
 });
+
+export default router;
