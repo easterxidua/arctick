@@ -1416,26 +1416,27 @@ async function withdrawUSDC() {
 window.withdrawUSDC = withdrawUSDC;
 
 async function refreshVaultBalance() {
-
+  try {
   const response =
     await fetch(
-      `${API_URL}/api/vault-balance?address=${userAddress}`
+      `${BACKEND_URL}/api/vault-balance?address=${userAddress}`
     );
 
   const data =
     await response.json();
 
-  document.getElementById(
-    "systemBalanceDisplay"
-  ).innerHTML =
-    `${data.balance} ● USDC`;
+    return parseFloat(data.balance).toFixed(4);
 
+  } catch(e) {
+    return "0.0000";
+  }
 }
 
 async function showScreen2() {
   const shortAddress = userAddress ? `${userAddress.slice(0,6)}...${userAddress.slice(-4)}` : "";
   const userBal = await getUserBalance();
-  const systemBal = await getSystemBalance();
+  //const systemBal = await getSystemBalance();
+  const systemBalX = await refreshVaultBalance();
 
   const chainLogo = {
   "arc-testnet": "/logo/arc_logo_small2_opaq2.png",
@@ -1654,7 +1655,7 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ on vault • <span id="systemBalanceDisplay"> ${systemBal} ● USDC</span>
+        ○ on vault • <span id="systemBalanceDisplay"> ${systemBalX} ● USDC</span>
       </div>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
@@ -1820,7 +1821,6 @@ withdrawKeyInput.addEventListener(
 
   //startLivePriceUpdates();
   updateBalances();
-  refreshVaultBalance()
 
 if (balanceInterval) {
   clearInterval(balanceInterval);
@@ -2925,9 +2925,13 @@ async function updateBalances() {
   const userEl = document.getElementById('userBalanceDisplay');
   if (userEl) userEl.innerHTML = `${userBal} ● USDC`;
 
-  const systemBal = await getSystemBalance();
-  const systemEl = document.getElementById('systemBalanceDisplay');
-  if (systemEl) systemEl.innerHTML = `${systemBal} ● USDC`;
+  //const systemBal = await getSystemBalance();
+  //const systemEl = document.getElementById('systemBalanceDisplay');
+  //if (systemEl) systemEl.innerHTML = `${systemBal} ● USDC`;
+
+  const systemBalX = await refreshVaultBalance();
+  const systemElX = document.getElementById('systemBalanceDisplay');
+  if (systemElX) systemElX.innerHTML = `${systemBalX} ● USDC`;
 }
 
 async function autoClaimReward() {
