@@ -1759,23 +1759,102 @@ console.log(
 
 });
 
-/* WITHDRAW */ 
-app.post( "/api/vault/withdraw", async (req,res) => { 
-  try { const { secret, amount, userAddress } = req.body; 
-  const keyHash = ethers.keccak256( ethers.toUtf8Bytes( secret ) ); 
-  const amount6 = ethers.parseUnits( amount, 6 ); 
-  /* const tx = await vault.withdraw( userAddress, keyHash, amount6, userAddress ); */ 
-  const tx = await vault.withdraw( keyHash, amount6, userAddress ); 
+/* WITHDRAW */
+app.post("/api/vault/withdraw", async (req, res) => {
+  try {
+    const { secret, amount, userAddress } = req.body;
 
-  console.log("keyHash =", keyHash);
+    if (!secret || !amount || !userAddress) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields"
+      });
+    }
 
-const bal = await vault.balances(keyHash);
-console.log("ticket balance =", bal.toString());
+    const keyHash = ethers.keccak256(
+      ethers.toUtf8Bytes(secret)
+    );
 
-console.log("withdraw amount =", amount6.toString());
+    const amount6 = ethers.parseUnits(
+      amount.toString(),
+      6
+    );
 
-  await tx.wait(); res.json({ success:true }); } 
-  catch(err) { res.status(500).json({ success:false, message:err.message }); } });
+    console.log("=== WITHDRAW REQUEST ===");
+    console.log("user =", userAddress);
+    console.log("keyHash =", keyHash);
+    console.log("amount =", amount6.toString());
+
+    const ticketBalance = await vault.balances(keyHash);
+
+    console.log(
+      "ticket balance =",
+      ticketBalance.toString()
+    );
+
+    if (ticketBalance < amount6) {
+      return res.status(400).json({
+        success: false,
+        message: "Insufficient ticket balance"
+      });
+    }
+
+    // Optional: check actual vault liquidity
+    const vaultBalance = await usdc.balanceOf(
+      await vault.getAddress()
+    );
+
+    console.log(
+      "vault balance =",
+      vaultBalance.toString()
+    );
+
+    if (vaultBalance < amount6) {
+      return res.status(400).json({
+        success: false,
+        message: "Insufficient vault liquidity"
+      });
+    }
+
+    const tx = await vault.withdraw(
+      keyHash,
+      amount6,
+      userAddress
+    );
+
+    console.log("tx hash =", tx.hash);
+
+    const receipt = await tx.wait();
+
+    console.log(
+      "withdraw confirmed",
+      receipt.hash
+    );
+
+    res.json({
+      success: true,
+      txHash: receipt.hash
+    });
+
+  } catch (err) {
+    console.error("WITHDRAW ERROR:", err);
+
+    let message = err.message;
+
+    if (message.includes("insufficient liquidity")) {
+      message = "Insufficient vault liquidity";
+    } else if (
+      message.includes("insufficient balance")
+    ) {
+      message = "Insufficient ticket balance";
+    }
+
+    res.status(500).json({
+      success: false,
+      message
+    });
+  }
+});
 
 app.post('/api/claim', async (req, res) => {
 
