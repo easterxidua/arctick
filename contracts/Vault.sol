@@ -202,7 +202,7 @@ contract Vault {
 
         balances[keyHash] += amount;
 
-        totalAllocated += amount;
+        totalAllocated += amount; totalAllocated -= amount;
 
         emit BridgeCredit(
             keyHash,

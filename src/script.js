@@ -413,7 +413,7 @@ const VAULT_ABI = [
       //"function creditBridgeDeposit(bytes32 keyHash, uint256 amount)",
       //"function vaultUSDCBalance() view returns (uint256)",
       //"function owner() view returns(address)"
-   {
+  {
     "type": "constructor",
     "inputs": [
       {
@@ -681,6 +681,7 @@ const VAULT_ABI = [
     "anonymous": false
   }
 ]
+
 ;
 
 async function getVaultContract() {

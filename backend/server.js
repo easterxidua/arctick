@@ -669,6 +669,7 @@ const vault =
     "anonymous": false
   }
 ]
+
 ,
     wallet
   );
