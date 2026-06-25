@@ -619,55 +619,6 @@ const VAULT_ABI = [
   }
 ];
 
-async function createTicket() {
-
-    const amount =
-        document.getElementById(
-            "livePriceXXX"
-        ).value;
-
-    let secret =
-        document.getElementById(
-            "livePriceXXXkey"
-        ).value;
-
-    if (!secret) {
-
-        secret =
-            crypto.randomUUID()
-                .replace(/-/g,'');
-
-        document.getElementById(
-            "livePriceXXXkey"
-        ).value = secret;
-    }
-
-    const res =
-        await fetch(
-            API_BASE + "/api/vault/create-ticket",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type":
-                    "application/json"
-                },
-                body: JSON.stringify({
-                    secret,
-                    amount
-                })
-            }
-        );
-
-    const data =
-        await res.json();
-
-    alert(
-        data.success
-            ? "Ticket created"
-            : data.message
-    );
-}
-
 async function getVaultContract() {
 
   const provider =
@@ -695,8 +646,7 @@ async function loadTicketBalance() {
 
     const res =
         await fetch(
-            API_BASE +
-            "/api/vault/ticket-balance",
+            `${BACKEND_URL}/api/vault/ticket-balance`,
             {
                 method:"POST",
                 headers:{
@@ -1640,6 +1590,57 @@ async function depositUSDC() {
 
 window.depositUSDC = depositUSDC;
 
+async function createTicket() {
+
+    const amount =
+        document.getElementById(
+            "livePriceXXX"
+        ).value;
+
+    let secret =
+        document.getElementById(
+            "livePriceXXXkey"
+        ).value;
+
+    if (!secret) {
+
+        secret =
+            crypto.randomUUID()
+                .replace(/-/g,'');
+
+        document.getElementById(
+            "livePriceXXXkey"
+        ).value = secret;
+    }
+
+    const res =
+        await fetch(
+            `${BACKEND_URL}/api/vault/create-ticket`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+                body: JSON.stringify({
+                    secret,
+                    amount
+                })
+            }
+        );
+
+    const data =
+        await res.json();
+
+    alert(
+        data.success
+            ? "Ticket created"
+            : data.message
+    );
+}
+
+window.createTicket = createTicket;
+
 async function refreshWithdrawAmount() {
 
   try {
@@ -2043,6 +2044,8 @@ async function showScreen2() {
   </button>
 
 <div style="height:20px;"></div>
+
+<hr>
 
       <div id="livePriceXXXTicket" class="readonly3" style="text-align:center;">
         create ticket</span>
