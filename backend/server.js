@@ -1820,10 +1820,6 @@ app.post("/api/vault/withdraw", async (req, res) => {
       });
     }
 
-const keyHash = ethers.keccak256(
-  ethers.toUtf8Bytes(secret)
-);
-
 const ticketBalance =
   await vault.ticketBalance(keyHash);
 
