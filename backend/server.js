@@ -849,6 +849,27 @@ async (req,res) => {
             amount
         } = req.body;
 
+        const balance =
+    await vault.vaultUSDCBalance();
+
+const allocated =
+    await vault.totalAllocated();
+
+console.log(
+    "vault balance =",
+    balance.toString()
+);
+
+console.log(
+    "total allocated =",
+    allocated.toString()
+);
+
+console.log(
+    "available =",
+    (balance - allocated).toString()
+);
+
         const keyHash =
             ethers.keccak256(
                 ethers.toUtf8Bytes(secret)
