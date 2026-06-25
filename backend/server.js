@@ -673,7 +673,7 @@ const vault =
     wallet
   );
   
-console.log("Vault address:", VAULT_ADDRESS);
+console.log("Vault address:", process.env.VAULT_ADDRESS);
 
 console.log(
     vault.interface.fragments
