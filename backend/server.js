@@ -1803,6 +1803,9 @@ app.post("/api/vault/withdraw", async (req, res) => {
     console.log("keyHash =", keyHash);
     console.log("amount =", amount6.toString());
 
+    const ticketBalance =
+    await vault.ticketBalance(keyHash);
+
     if (ticketBalance < amount6) {
       return res.status(400).json({
         success: false,
