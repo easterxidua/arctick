@@ -401,7 +401,7 @@ const vault =
       //"function creditBridgeDeposit(bytes32 keyHash, uint256 amount)",
       //"function vaultUSDCBalance() view returns (uint256)",
       //"function owner() view returns(address)"
-      {
+  {
     "type": "constructor",
     "inputs": [
       {
@@ -410,6 +410,37 @@ const vault =
         "internalType": "address"
       }
     ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "availableLiquidity",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "createTicket",
+    "inputs": [
+      {
+        "name": "keyHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
@@ -482,6 +513,19 @@ const vault =
   },
   {
     "type": "function",
+    "name": "totalAllocated",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "transferOwnership",
     "inputs": [
       {
@@ -524,9 +568,9 @@ const vault =
     "name": "withdraw",
     "inputs": [
       {
-        "name": "keyHash",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        "name": "secret",
+        "type": "string",
+        "internalType": "string"
       },
       {
         "name": "amount",
@@ -582,6 +626,25 @@ const vault =
   },
   {
     "type": "event",
+    "name": "TicketCreated",
+    "inputs": [
+      {
+        "name": "keyHash",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "Withdraw",
     "inputs": [
       {
@@ -605,7 +668,8 @@ const vault =
     ],
     "anonymous": false
   }
-],
+]
+,
     wallet
   );
   
