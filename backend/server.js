@@ -1766,6 +1766,14 @@ app.post( "/api/vault/withdraw", async (req,res) => {
   const amount6 = ethers.parseUnits( amount, 6 ); 
   /* const tx = await vault.withdraw( userAddress, keyHash, amount6, userAddress ); */ 
   const tx = await vault.withdraw( keyHash, amount6, userAddress ); 
+
+  console.log("keyHash =", keyHash);
+
+const bal = await vault.balances(keyHash);
+console.log("ticket balance =", bal.toString());
+
+console.log("withdraw amount =", amount6.toString());
+
   await tx.wait(); res.json({ success:true }); } 
   catch(err) { res.status(500).json({ success:false, message:err.message }); } });
 
