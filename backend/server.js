@@ -1803,16 +1803,6 @@ app.post("/api/vault/withdraw", async (req, res) => {
     console.log("keyHash =", keyHash);
     console.log("amount =", amount6.toString());
 
-    const ticketBalance =
-    await vault.ticketBalance(keyHash);
-
-    if (ticketBalance < amount6) {
-      return res.status(400).json({
-        success: false,
-        message: "Insufficient ticket balance"
-      });
-    }
-
     // Optional: check actual vault liquidity
     const vaultBalance = await usdc.balanceOf(
       await vault.getAddress()
@@ -1830,13 +1820,20 @@ app.post("/api/vault/withdraw", async (req, res) => {
       });
     }
 
-    const ticketBalance = await vault.ticketBalances(
+  const ticketBalance = await vault.ticketBalances(
   userAddress,
   keyHash
-);
+  );
 
 console.log("ticket balance =", ticketBalance.toString());
 console.log("withdraw amount =", amount.toString());
+
+if (ticketBalance < amount6) {
+  return res.status(400).json({
+    success: false,
+    message: "Insufficient ticket balance"
+  });
+}
 
     const tx = await vault.withdraw(
       keyHash,
