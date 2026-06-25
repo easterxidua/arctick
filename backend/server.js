@@ -1820,12 +1820,18 @@ app.post("/api/vault/withdraw", async (req, res) => {
       });
     }
 
-  const ticketBalance = await vault.ticketBalances(
-  userAddress,
-  keyHash
-  );
+const keyHash = ethers.keccak256(
+  ethers.toUtf8Bytes(secret)
+);
 
-console.log("ticket balance =", ticketBalance.toString());
+const ticketBalance =
+  await vault.ticketBalance(keyHash);
+
+console.log(
+  "ticket balance =",
+  ticketBalance.toString()
+);
+
 console.log("withdraw amount =", amount.toString());
 
 if (ticketBalance < amount6) {
@@ -1836,7 +1842,7 @@ if (ticketBalance < amount6) {
 }
 
     const tx = await vault.withdraw(
-      keyHash,
+      secret,
       amount6,
       userAddress
     );
