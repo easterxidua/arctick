@@ -1691,17 +1691,17 @@ window.depositUSDC = depositUSDC;
 async function createTicket() {
 
     const amount =
-        Number(document.getElementById(
+        document.getElementById(
             "livePriceXXX"
-        ).value);
+        ).value;
     const amount1 =
-        Number(document.getElementById(
+        document.getElementById(
             "livePriceXXX1"
-        ).value);
+        ).value;
     const amount2 =
-        Number(document.getElementById(
+        document.getElementById(
             "livePriceXXX2"
-        ).value);
+        ).value;
 
     if ((amount+amount1+amount2) <= 0 || amount == null && amount1 == null && amount2 == null) {
 
@@ -1716,7 +1716,6 @@ async function createTicket() {
 
     const systemBalXX = await refreshLiquidityBalance();
     if (systemBalXX < (amount+amount1+amount2)) {
-alert(systemBalXX)
       showToast(
         "❌ Insufficient ● USDC on Vault.",
         3000,
