@@ -1702,8 +1702,16 @@ async function createTicket() {
         document.getElementById(
             "livePriceXXX2"
         ).value;
+    const amount3 =
+        document.getElementById(
+            "livePriceXXX3"
+        ).value;
+    const amount4 =
+        document.getElementById(
+            "livePriceXXX4"
+        ).value;
 
-    if ((amount+amount1+amount2) <= 0 || amount == null && amount1 == null && amount2 == null) {
+    if ((amount+amount1+amount2+amount3+amount4) <= 0 || amount == null && amount1 == null && amount2 == null && amount3 == null && amount4 == null) {
 
       showToast(
         "❌ Empty ticket not allowed.",
@@ -1715,7 +1723,7 @@ async function createTicket() {
     }
 
     const systemBalXX = await refreshLiquidityBalance();
-    if (systemBalXX < (amount+amount1+amount2)) {
+    if (systemBalXX < (amount+amount1+amount2+amount3+amount4)) {
       showToast(
         "❌ Insufficient ● USDC on Vault.",
         3000,
@@ -1771,6 +1779,38 @@ async function createTicket() {
         document.getElementById(
             "livePriceXXXkey2"
         ).value = secret2;
+    }
+
+    let secret3 =
+        document.getElementById(
+            "livePriceXXXkey3"
+        ).value;
+
+    if (!secret3) {
+
+        secret3 =
+            crypto.randomUUID()
+                .replace(/-/g,'');
+
+        document.getElementById(
+            "livePriceXXXkey3"
+        ).value = secret3;
+    }
+
+    let secret4 =
+        document.getElementById(
+            "livePriceXXXkey4"
+        ).value;
+
+    if (!secret4) {
+
+        secret4 =
+            crypto.randomUUID()
+                .replace(/-/g,'');
+
+        document.getElementById(
+            "livePriceXXXkey4"
+        ).value = secret4;
     }
 
     showLoading();
@@ -1833,6 +1873,46 @@ if (amount2 <= 0 || amount2 == null) {} else {
         );
     const data2 =
         await res2.json();
+      }
+
+if (amount3 <= 0 || amount3 == null) {} else {
+    const res3 =
+        await fetch(
+            `${BACKEND_URL}/api/vault/create-ticket`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+                body: JSON.stringify({
+                    secret: secret3,
+                    amount: amount3
+                })
+            }
+        );
+    const data3 =
+        await res3.json();
+      }
+
+if (amount4 <= 0 || amount4 == null) {} else {
+    const res4 =
+        await fetch(
+            `${BACKEND_URL}/api/vault/create-ticket`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+                body: JSON.stringify({
+                    secret: secret4,
+                    amount: amount4
+                })
+            }
+        );
+    const data4 =
+        await res4.json();
       }
 
     hideLoading();
@@ -2333,13 +2413,13 @@ async function showScreen2() {
 <hr>
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ vault treasury • <span id="systemBalanceDisplay"> ${systemBalX} ● USDC</span>
+        ○ on vault • <span id="systemBalanceDisplay"> ${systemBalX} ● USDC</span>
       </div>
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ vault availibility • <span id="systemBalanceDisplayLiq"> ${systemBalXX} ● USDC</span>
+        ○ available on vault • <span id="systemBalanceDisplayLiq"> ${systemBalXX} ● USDC</span>
       </div>
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
-        ○ your wallet • <span id="userBalanceDisplay"> ${userBal} ● USDC</span>
+        ○ on wallet • <span id="userBalanceDisplay"> ${userBal} ● USDC</span>
       </div>
 
 <hr>
@@ -2355,7 +2435,7 @@ async function showScreen2() {
         <input type="text"
         inputmode="numeric"
         placeholder=""
-        id="livePrice111" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+        id="livePrice111" class="inputan" value="1" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
 
       </div>
       <div style="display:none; align-items:center; gap:10px; margin:10px 0 6px 0;">
@@ -2389,81 +2469,61 @@ async function showScreen2() {
       </div>
 
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ fund ticket • 1 •
+        <div class="readonly3" style="flex: 50%; text-align:center;">
+         ○ ticket id •
         </div>
-        <input type="text"
-        inputmode="numeric"
-        placeholder=""
-        id="livePriceXXX" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
-
+        <div class="readonly3" style="flex: 50%; text-align:center;">
+         ○ fund ticket •
+        </div>
       </div>
+
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ copy key • 1 •
-        </div>
         <input type="text" id="livePriceXXXkey" class="inputan_readonly" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
-      </div>
-
-      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:center;" margin-left: 120px;>
-        </div>
-      <div class="readonly3smaller" style="flex: 50%; text-align:center;">
-        *click the key to copy
-      </div>
-      </div>
-
-      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ fund ticket • 2 •
-        </div>
         <input type="text"
         inputmode="numeric"
         placeholder=""
-        id="livePriceXXX1" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
-
+        id="livePriceXXX" class="inputan" value="1" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
+
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ copy key • 2 •
-        </div>
         <input type="text" id="livePriceXXXkey1" class="inputan_readonly" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
-      </div>
-
-      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:center;" margin-left: 120px;>
-        </div>
-      <div class="readonly3smaller" style="flex: 50%; text-align:center;">
-        *click the key to copy
-      </div>
-      </div>
-
-      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ fund ticket • 3 •
-        </div>
         <input type="text"
         inputmode="numeric"
         placeholder=""
-        id="livePriceXXX2" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
-
+        id="livePriceXXX1" class="inputan" value="1" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
+
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ copy key • 3 •
-        </div>
         <input type="text" id="livePriceXXXkey2" class="inputan_readonly" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+        <input type="text"
+        inputmode="numeric"
+        placeholder=""
+        id="livePriceXXX2" class="inputan" value="1" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
 
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:center;" margin-left: 120px;>
-        </div>
+        <input type="text" id="livePriceXXXkey3" class="inputan_readonly" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+        <input type="text"
+        inputmode="numeric"
+        placeholder=""
+        id="livePriceXXX3" class="inputan" value="1" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
+        <input type="text" id="livePriceXXXkey4" class="inputan_readonly" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+        <input type="text"
+        inputmode="numeric"
+        placeholder=""
+        id="livePriceXXX4" class="inputan" value="1" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
       <div class="readonly3smaller" style="flex: 50%; text-align:center;">
         *click the key to copy
       </div>
+      <div class="readonly3smaller" style="flex: 50%; text-align:center;">
       </div>
-
-      <div style="height:20px;"></div>
+      </div>
 
   <button
     class="btn_red"
@@ -2484,19 +2544,18 @@ async function showScreen2() {
       
       <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
         <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
+         ○ paste the key •
+        </div>
+        <input type="text" id="livePrice111keyWD" oninput="loadTicketBalance()" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
+        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
          ○ how much? •
         </div>
         <input type="text"
         inputmode="numeric"
         placeholder=""
-        id="livePrice111WD" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
-
-      </div>
-      <div style="display:flex; align-items:center; gap:10px; margin:10px 0 6px 0;">
-        <div class="readonly3" style="flex: 50%; text-align:left;" margin-left: 120px;>
-         ○ paste the key •
-        </div>
-        <input type="text" id="livePrice111keyWD" oninput="loadTicketBalance()" class="inputan" value="" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
+        id="livePrice111WD" class="inputan" value="1" style="flex:50%; text-align:center; border-radius: 0px; margin-left: margin-right: 120px;">
       </div>
 
 <div style="height:20px;"></div>
@@ -2523,6 +2582,10 @@ setupKeyInput();
 const input = document.getElementById('livePrice111');
 const input2 = document.getElementById('livePrice111WD');
 const input3 = document.getElementById('livePriceXXX');
+const input4 = document.getElementById('livePriceXXX1');
+const input5 = document.getElementById('livePriceXXX2');
+const input6 = document.getElementById('livePriceXXX3');
+const input7 = document.getElementById('livePriceXXX4');
 
 function formatCurrencyInput(e) {
   let raw = e.target.value.replace(/\D/g, '');
@@ -2538,13 +2601,19 @@ function formatCurrencyInput(e) {
 input?.addEventListener('input', formatCurrencyInput);
 input2?.addEventListener('input', formatCurrencyInput);
 input3?.addEventListener('input', formatCurrencyInput);
+input4?.addEventListener('input', formatCurrencyInput);
+input5?.addEventListener('input', formatCurrencyInput);
+input6?.addEventListener('input', formatCurrencyInput);
+input7?.addEventListener('input', formatCurrencyInput);
 
 function setupKeyInput() {
   const keyInputs = [
     document.getElementById('livePrice111key'),
     document.getElementById('livePriceXXXkey'),
     document.getElementById('livePriceXXXkey1'),
-    document.getElementById('livePriceXXXkey2')
+    document.getElementById('livePriceXXXkey2'),
+    document.getElementById('livePriceXXXkey3'),
+    document.getElementById('livePriceXXXkey4')
   ];
 
   keyInputs.forEach(keyInput => {
