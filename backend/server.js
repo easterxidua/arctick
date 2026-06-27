@@ -1188,6 +1188,14 @@ app.get("/api/history/:address", (req, res) => {
 
     console.log("HISTORY ROWS:", rows);
 
+        const tickets =
+        rows
+            .filter(x => x.type === "ticket")
+            .map(x => ({
+                ...x,
+                secret: decrypt(x.encryptedSecret)
+            }));
+
     res.json({
         success: true,
 
@@ -1196,10 +1204,7 @@ app.get("/api/history/:address", (req, res) => {
                 x => x.type === "deposit"
             ),
 
-        tickets:
-            rows.filter(
-                x => x.type === "ticket"
-            ),
+tickets,
 
         withdrawals:
             rows.filter(

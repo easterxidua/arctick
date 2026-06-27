@@ -823,7 +823,7 @@ function renderTickets(items) {
         </div>
 
         <div>
-          ${item.keyHash}
+          ${item.secret}
         </div>
 
         <div>
