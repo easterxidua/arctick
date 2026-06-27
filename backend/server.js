@@ -1104,7 +1104,11 @@ app.get(
 
     try {
 
-      const DEPLOY_BLOCK = 48923618; // replace with actual deployment block
+const currentBlock =
+  await provider.getBlockNumber();
+
+const DEPLOY_BLOCK =
+  currentBlock - 1000000;
 
       const address =
         req.params.address
