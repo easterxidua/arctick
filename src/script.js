@@ -450,6 +450,11 @@ const VAULT_ABI = [
         "name": "amount",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "creator",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [],
@@ -538,6 +543,25 @@ const VAULT_ABI = [
         "name": "",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "ticketCreator",
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "view"
@@ -641,6 +665,12 @@ const VAULT_ABI = [
     "name": "Deposit",
     "inputs": [
       {
+        "name": "depositor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
         "name": "keyHash",
         "type": "bytes32",
         "indexed": true,
@@ -660,6 +690,12 @@ const VAULT_ABI = [
     "name": "TicketCreated",
     "inputs": [
       {
+        "name": "creator",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
         "name": "keyHash",
         "type": "bytes32",
         "indexed": true,
@@ -678,6 +714,12 @@ const VAULT_ABI = [
     "type": "event",
     "name": "Withdraw",
     "inputs": [
+      {
+        "name": "caller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
       {
         "name": "keyHash",
         "type": "bytes32",
@@ -700,7 +742,6 @@ const VAULT_ABI = [
     "anonymous": false
   }
 ]
-
 ;
 
 async function getVaultContract() {

@@ -28,29 +28,35 @@ contract Vault {
     mapping(bytes32 => uint256)
         private balances;
 
+mapping(bytes32 => address)
+    public ticketCreator;
+
     // total outstanding ticket balances
     uint256 public totalAllocated;
 
-    event Deposit(
-        bytes32 indexed keyHash,
-        uint256 amount
-    );
+event Deposit(
+    address indexed depositor,
+    bytes32 indexed keyHash,
+    uint256 amount
+);
 
-    event Withdraw(
-        bytes32 indexed keyHash,
-        address indexed recipient,
-        uint256 amount
-    );
+event Withdraw(
+    address indexed caller,
+    bytes32 indexed keyHash,
+    address indexed recipient,
+    uint256 amount
+);
 
     event BridgeCredit(
         bytes32 indexed keyHash,
         uint256 amount
     );
 
-    event TicketCreated(
-        bytes32 indexed keyHash,
-        uint256 amount
-    );
+event TicketCreated(
+    address indexed creator,
+    bytes32 indexed keyHash,
+    uint256 amount
+);
 
     modifier onlyOwner() {
         require(
@@ -90,10 +96,11 @@ contract Vault {
             "transfer failed"
         );
 
-        emit Deposit(
-            keyHash,
-            amount
-        );
+emit Deposit(
+    msg.sender,
+    keyHash,
+    amount
+);
     }
 
     // ----------------------------------
@@ -102,7 +109,8 @@ contract Vault {
 
     function createTicket(
         bytes32 keyHash,
-        uint256 amount
+        uint256 amount,
+        address creator
     )
         external
         onlyOwner
@@ -120,15 +128,27 @@ contract Vault {
             availableLiquidity >= amount,
             "insufficient liquidity"
         );
+        
+if (
+    ticketCreator[keyHash]
+    == address(0)
+) {
+    ticketCreator[keyHash]
+        = msg.sender;
+}
 
+ticketCreator[keyHash]
+    = creator;
+    
         balances[keyHash] += amount;
 
         totalAllocated += amount;
 
-        emit TicketCreated(
-            keyHash,
-            amount
-        );
+emit TicketCreated(
+    creator,
+    keyHash,
+    amount
+);
     }
 
 function ticketBalance(
@@ -178,11 +198,12 @@ function ticketBalance(
             "withdraw failed"
         );
 
-        emit Withdraw(
-            keyHash,
-            recipient,
-            amount
-        );
+emit Withdraw(
+    msg.sender,
+    keyHash,
+    recipient,
+    amount
+);
     }
 
     // ----------------------------------

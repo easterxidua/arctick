@@ -438,6 +438,11 @@ const vault =
         "name": "amount",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "creator",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [],
@@ -526,6 +531,25 @@ const vault =
         "name": "",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "ticketCreator",
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "view"
@@ -629,6 +653,12 @@ const vault =
     "name": "Deposit",
     "inputs": [
       {
+        "name": "depositor",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
         "name": "keyHash",
         "type": "bytes32",
         "indexed": true,
@@ -648,6 +678,12 @@ const vault =
     "name": "TicketCreated",
     "inputs": [
       {
+        "name": "creator",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
         "name": "keyHash",
         "type": "bytes32",
         "indexed": true,
@@ -666,6 +702,12 @@ const vault =
     "type": "event",
     "name": "Withdraw",
     "inputs": [
+      {
+        "name": "caller",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
       {
         "name": "keyHash",
         "type": "bytes32",
@@ -688,7 +730,6 @@ const vault =
     "anonymous": false
   }
 ]
-
 ,
     wallet
   );
