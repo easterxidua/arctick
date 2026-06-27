@@ -1098,6 +1098,166 @@ setInterval(
 );
 */
 
+app.get(
+  "/api/history/:address",
+  async (req,res) => {
+
+    try {
+
+      const address =
+        req.params.address
+          .toLowerCase();
+
+      //
+      // DEPOSITS
+      //
+
+      const depositFilter =
+        vault.filters.Deposit(
+          address
+        );
+
+      const depositEvents =
+        await vault.queryFilter(
+          depositFilter,
+          0,
+          "latest"
+        );
+
+      //
+      // TICKETS
+      //
+
+      const ticketFilter =
+        vault.filters.TicketCreated(
+          address
+        );
+
+      const ticketEvents =
+        await vault.queryFilter(
+          ticketFilter,
+          0,
+          "latest"
+        );
+
+      //
+      // WITHDRAWS
+      //
+
+      const withdrawFilter =
+        vault.filters.Withdraw(
+          address
+        );
+
+      const withdrawEvents =
+        await vault.queryFilter(
+          withdrawFilter,
+          0,
+          "latest"
+        );
+
+      //
+      // format
+      //
+
+      const deposits =
+        await Promise.all(
+          depositEvents.map(
+            async e => {
+
+              const block =
+                await e.getBlock();
+
+              return {
+                txHash:e.transactionHash,
+                date:
+                  block.timestamp,
+                keyHash:
+                  e.args.keyHash,
+                amount:
+                  ethers.formatUnits(
+                    e.args.amount,
+                    6
+                  )
+              };
+
+            }
+          )
+        );
+
+      const tickets =
+        await Promise.all(
+          ticketEvents.map(
+            async e => {
+
+              const block =
+                await e.getBlock();
+
+              return {
+                txHash:e.transactionHash,
+                date:
+                  block.timestamp,
+                keyHash:
+                  e.args.keyHash,
+                amount:
+                  ethers.formatUnits(
+                    e.args.amount,
+                    6
+                  )
+              };
+
+            }
+          )
+        );
+
+      const withdrawals =
+        await Promise.all(
+          withdrawEvents.map(
+            async e => {
+
+              const block =
+                await e.getBlock();
+
+              return {
+                txHash:e.transactionHash,
+                date:
+                  block.timestamp,
+                keyHash:
+                  e.args.keyHash,
+                recipient:
+                  e.args.recipient,
+                amount:
+                  ethers.formatUnits(
+                    e.args.amount,
+                    6
+                  )
+              };
+
+            }
+          )
+        );
+
+      res.json({
+        success:true,
+        deposits,
+        tickets,
+        withdrawals
+      });
+
+    } catch(err) {
+
+      console.error(err);
+
+      res.status(500).json({
+        success:false,
+        message:err.message
+      });
+
+    }
+
+  }
+);
+
 function connectCoinbaseWS() {
 
   const ws = new WebSocket(

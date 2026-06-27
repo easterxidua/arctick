@@ -744,6 +744,142 @@ const VAULT_ABI = [
 ]
 ;
 
+async function loadHistory() {
+
+  if (!userAddress) return;
+
+  const response =
+    await fetch(
+      `${BACKEND_URL}/api/history/${userAddress}`
+    );
+
+  const data =
+    await response.json();
+
+  if (!data.success) return;
+
+  renderDeposits(
+    data.deposits
+  );
+
+  renderTickets(
+    data.tickets
+  );
+
+  renderWithdrawals(
+    data.withdrawals
+  );
+
+}
+function renderDeposits(
+  items
+) {
+
+  const container =
+    document.getElementById(
+      "depositHistory"
+    );
+
+  container.innerHTML = "";
+
+  items.forEach(
+    item => {
+
+      container.innerHTML += `
+        <div class="historyRow">
+          <div>
+            ${new Date(
+              item.date * 1000
+            ).toLocaleString()}
+          </div>
+
+          <div>
+            ${item.amount} USDC
+          </div>
+        </div>
+      `;
+
+    }
+  );
+
+}
+function renderTickets(
+  items
+) {
+
+  const container =
+    document.getElementById(
+      "ticketHistory"
+    );
+
+  container.innerHTML = "";
+
+  items.forEach(
+    item => {
+
+      container.innerHTML += `
+        <div class="historyRow">
+
+          <div>
+            ${new Date(
+              item.date * 1000
+            ).toLocaleString()}
+          </div>
+
+          <div>
+            ${item.keyHash}
+          </div>
+
+          <div>
+            ${item.amount} USDC
+          </div>
+
+        </div>
+      `;
+
+    }
+  );
+
+}
+function renderWithdrawals(
+  items
+) {
+
+  const container =
+    document.getElementById(
+      "withdrawHistory"
+    );
+
+  container.innerHTML = "";
+
+  items.forEach(
+    item => {
+
+      container.innerHTML += `
+        <div class="historyRow">
+
+          <div>
+            ${new Date(
+              item.date * 1000
+            ).toLocaleString()}
+          </div>
+
+          <div>
+            ${item.keyHash}
+          </div>
+
+          <div>
+            ${item.amount} USDC
+          </div>
+
+        </div>
+      `;
+
+    }
+  );
+
+}
+
 async function getVaultContract() {
 
   const provider =
@@ -2294,7 +2430,7 @@ function formatUSDC(value) {
         <div style="margin:0" class="readonly33">
          <img src="/logo/logo_judul_333X1.png"
          style="width:${logoWidth}; height:auto; position: relative; top: 0px;"></div>
-        <div onclick="showLeaderboard()" class="btn_smol_ns" style="display:none">
+        <div onclick="showHistory()" class="btn_smol_ns">
         🌟
         </div>
 
@@ -4066,6 +4202,277 @@ function shortWallet(addr) {
   );
 
 }
+
+async function showHistory() {
+
+  showLoading();
+
+  try {
+
+    const response =
+      await fetch(
+        `${BACKEND_URL}/api/history/${userAddress}`
+      );
+
+    const result =
+      await response.json();
+
+    if (!result.success) {
+
+      showToast(
+        "❌ Failed to load history.",
+        3000,
+        0
+      );
+
+      hideLoading();
+      return;
+    }
+
+    const deposits =
+      [...result.deposits].reverse();
+
+    const tickets =
+      [...result.tickets].reverse();
+
+    const withdrawals =
+      [...result.withdrawals].reverse();
+
+    const depositRows =
+      deposits.map(d => `
+
+<div
+  class="readonly2"
+  style="
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:20px;
+    color:rgb(0,100,200);
+  "
+>
+
+  <div
+    style="
+      display:flex;
+      justify-content:space-between;
+      font-weight:bold;
+    "
+  >
+    <span>deposit</span>
+    <span>${d.amount} USDC</span>
+  </div>
+
+  <div
+    style="
+      margin-top:8px;
+      font-size:0.9rem;
+      opacity:0.8;
+    "
+  >
+    ${new Date(d.date * 1000).toLocaleString()}
+  </div>
+
+</div>
+
+`).join("");
+
+    const ticketRows =
+      tickets.map(t => `
+
+<div
+  class="readonly2"
+  style="
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:20px;
+    color:rgb(0,100,200);
+  "
+>
+
+  <div
+    style="
+      display:flex;
+      justify-content:space-between;
+      font-weight:bold;
+    "
+  >
+    <span>ticket</span>
+    <span>${t.amount} USDC</span>
+  </div>
+
+  <div
+    style="
+      margin-top:8px;
+      font-size:0.85rem;
+      word-break:break-all;
+    "
+  >
+    🔑 ${t.keyHash}
+  </div>
+
+  <div
+    style="
+      margin-top:8px;
+      font-size:0.9rem;
+      opacity:0.8;
+    "
+  >
+    ${new Date(t.date * 1000).toLocaleString()}
+  </div>
+
+</div>
+
+`).join("");
+
+    const withdrawRows =
+      withdrawals.map(w => `
+
+<div
+  class="readonly2"
+  style="
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:20px;
+    color:rgb(0,100,200);
+  "
+>
+
+  <div
+    style="
+      display:flex;
+      justify-content:space-between;
+      font-weight:bold;
+    "
+  >
+    <span>withdraw</span>
+    <span>${w.amount} USDC</span>
+  </div>
+
+  <div
+    style="
+      margin-top:8px;
+      font-size:0.85rem;
+      word-break:break-all;
+    "
+  >
+    🔑 ${w.keyHash}
+  </div>
+
+  <div
+    style="
+      margin-top:8px;
+      font-size:0.9rem;
+      opacity:0.8;
+    "
+  >
+    ${new Date(w.date * 1000).toLocaleString()}
+  </div>
+
+</div>
+
+`).join("");
+
+    document.getElementById(
+      "root"
+    ).innerHTML = `
+
+<div class="container">
+
+  <div
+    class="readonly33"
+    style="
+      text-align:center;
+      margin-bottom:15px;
+    "
+  >
+    history
+  </div>
+
+  <div class="readonly33">
+    deposits
+  </div>
+
+  ${
+    depositRows ||
+    `
+<div class="readonly2">
+  no deposits found
+</div>
+`
+  }
+
+  <hr>
+
+  <div class="readonly33">
+    tickets
+  </div>
+
+  ${
+    ticketRows ||
+    `
+<div class="readonly2">
+  no tickets found
+</div>
+`
+  }
+
+  <hr>
+
+  <div class="readonly33">
+    withdrawals
+  </div>
+
+  ${
+    withdrawRows ||
+    `
+<div class="readonly2">
+  no withdrawals found
+</div>
+`
+  }
+
+  <div style="height:20px;"></div>
+
+  <div style="text-align:center;">
+
+    <button
+      class="btn"
+      onclick="showScreen2()"
+      style="
+        width:228px !important;
+        display:inline-block;
+      "
+    >
+      back
+    </button>
+
+  </div>
+
+  <div style="height:10px;"></div>
+
+</div>
+
+`;
+
+  } catch(err) {
+
+    console.error(err);
+
+    showToast(
+      "❌ Failed to load history.",
+      3000,
+      0
+    );
+
+  }
+
+  hideLoading();
+  closeAllToasts();
+
+}
+
+window.showHistory =
+  showHistory;
 
 async function showLeaderboard() {
   showLoading();
