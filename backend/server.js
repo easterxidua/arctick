@@ -947,10 +947,11 @@ console.log(
             );
 
         const tx =
-            await vault.createTicket(
-                keyHash,
-                amount6
-            );
+await vault.createTicket(
+    keyHash,
+    amount6,
+    address
+);
 
         await tx.wait();
 
