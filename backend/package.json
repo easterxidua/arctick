@@ -12,6 +12,7 @@
     "@circle-fin/app-kit": "^1.7.0",
     "@circle-fin/bridge-kit": "^1.10.2",
     "@solana/web3.js": "^1.98.4",
+    "better-sqlite3": "^12.11.1",
     "cors": "^2.8.6",
     "dotenv": "^16.4.5",
     "ethers": "^6.16.0",
