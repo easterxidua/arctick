@@ -23,6 +23,9 @@ CREATE TABLE IF NOT EXISTS history (
     timestamp INTEGER
 );
 
+ALTER TABLE history
+ADD COLUMN key TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_history_address
 ON history(address);
 
