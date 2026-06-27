@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS history (
 );
 
 ALTER TABLE history
-ADD COLUMN key TEXT;
+ADD COLUMN encryptedSecret TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_history_address
 ON history(address);

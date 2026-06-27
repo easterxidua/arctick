@@ -1019,7 +1019,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?)
   address,
   "ticket",
   amount,
-  key,
+  encryptedSecret,
   keyHash,
   tx.hash,
   Math.floor(Date.now() / 1000)
