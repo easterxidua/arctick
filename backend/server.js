@@ -1100,19 +1100,60 @@ setInterval(
 
 app.get(
   "/api/history/:address",
-  async (req,res) => {
-
+  async (req, res) => {
     try {
 
-const currentBlock =
-  await provider.getBlockNumber();
-
-const DEPLOY_BLOCK =
-  currentBlock - 1000000;
-
       const address =
-        req.params.address
-          .toLowerCase();
+        req.params.address.toLowerCase();
+
+      const latestBlock =
+        await provider.getBlockNumber();
+
+      async function getEvents(filter) {
+
+        const STEP = 10000;
+        const events = [];
+
+        for (
+          let from = latestBlock - 10000;
+          from >= 0;
+          from -= STEP
+        ) {
+
+          const to =
+            Math.min(
+              from + STEP - 1,
+              latestBlock
+            );
+
+          console.log(
+            `Scanning ${from} -> ${to}`
+          );
+
+          try {
+
+            const chunk =
+              await vault.queryFilter(
+                filter,
+                from,
+                to
+              );
+
+            events.push(...chunk);
+
+          } catch (err) {
+
+            console.error(
+              `Failed ${from}-${to}`,
+              err.message
+            );
+
+          }
+
+        }
+
+        return events;
+      }
 
       //
       // DEPOSITS
@@ -1124,10 +1165,8 @@ const DEPLOY_BLOCK =
         );
 
       const depositEvents =
-        await vault.queryFilter(
-          depositFilter,
-          DEPLOY_BLOCK,
-          "latest"
+        await getEvents(
+          depositFilter
         );
 
       //
@@ -1140,10 +1179,8 @@ const DEPLOY_BLOCK =
         );
 
       const ticketEvents =
-        await vault.queryFilter(
-          ticketFilter,
-          DEPLOY_BLOCK,
-          "latest"
+        await getEvents(
+          ticketFilter
         );
 
       //
@@ -1156,15 +1193,24 @@ const DEPLOY_BLOCK =
         );
 
       const withdrawEvents =
-        await vault.queryFilter(
-          withdrawFilter,
-          DEPLOY_BLOCK,
-          "latest"
+        await getEvents(
+          withdrawFilter
         );
 
-      //
-      // format
-      //
+      console.log(
+        "depositEvents",
+        depositEvents.length
+      );
+
+      console.log(
+        "ticketEvents",
+        ticketEvents.length
+      );
+
+      console.log(
+        "withdrawEvents",
+        withdrawEvents.length
+      );
 
       const deposits =
         await Promise.all(
@@ -1175,7 +1221,8 @@ const DEPLOY_BLOCK =
                 await e.getBlock();
 
               return {
-                txHash:e.transactionHash,
+                txHash:
+                  e.transactionHash,
                 date:
                   block.timestamp,
                 keyHash:
@@ -1200,7 +1247,8 @@ const DEPLOY_BLOCK =
                 await e.getBlock();
 
               return {
-                txHash:e.transactionHash,
+                txHash:
+                  e.transactionHash,
                 date:
                   block.timestamp,
                 keyHash:
@@ -1225,7 +1273,8 @@ const DEPLOY_BLOCK =
                 await e.getBlock();
 
               return {
-                txHash:e.transactionHash,
+                txHash:
+                  e.transactionHash,
                 date:
                   block.timestamp,
                 keyHash:
@@ -1244,23 +1293,22 @@ const DEPLOY_BLOCK =
         );
 
       res.json({
-        success:true,
+        success: true,
         deposits,
         tickets,
         withdrawals
       });
 
-    } catch(err) {
+    } catch (err) {
 
       console.error(err);
 
       res.status(500).json({
-        success:false,
-        message:err.message
+        success: false,
+        message: err.message
       });
 
     }
-
   }
 );
 
