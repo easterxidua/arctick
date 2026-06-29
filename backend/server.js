@@ -1399,7 +1399,7 @@ app.get(
                 date:
                   block.timestamp,
                 keyHash:
-                  e.args.keyHash,
+                  decrypt(e.args.encryptedSecret),
                 recipient:
                   e.args.recipient,
                 amount:
@@ -2425,7 +2425,7 @@ INSERT INTO history (
     timestamp
 )
 VALUES (
-    ?, ?, ?, ?, ?, ?, ?
+    ?, ?, ?, ?, ?, ?, ?, ?
 )
 `).run(
     userAddress.toLowerCase(),
