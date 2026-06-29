@@ -947,6 +947,16 @@ function decrypt(data) {
   return decrypted;
 }
 
+function safeDecrypt(value) {
+    try {
+        if (!value) return "";
+        return decrypt(value);
+    } catch (err) {
+        console.error("DECRYPT ERROR:", err);
+        return "";
+    }
+}
+
 app.post(
 "/api/vault/create-ticket",
 async (req,res) => {
@@ -1193,16 +1203,16 @@ app.get("/api/history/:address", (req, res) => {
             .filter(x => x.type === "ticket")
             .map(x => ({
                 ...x,
-                secret: decrypt(x.encryptedSecret)
+                secret: safeDecrypt(x.encryptedSecret)
             }));
 
-        const withdraws =
-        rows
-            .filter(x => x.type === "withdraw")
-            .map(x => ({
-                ...x,
-                secret: decrypt(x.encryptedSecret)
-            }));
+    const withdrawals =
+    rows
+        .filter(x => x.type === "withdraw")
+        .map(x => ({
+            ...x,
+            secret: safeDecrypt(x.encryptedSecret)
+        }));
 
     res.json({
         success: true,
@@ -1212,9 +1222,9 @@ app.get("/api/history/:address", (req, res) => {
                 x => x.type === "deposit"
             ),
 
-tickets,
+    tickets,
 
-withdraws
+    withdrawals
     });
 
 });
@@ -1399,7 +1409,7 @@ app.get(
                 date:
                   block.timestamp,
                 keyHash:
-                  decrypt(e.args.encryptedSecret),
+                  e.args.keyHash,
                 recipient:
                   e.args.recipient,
                 amount:
@@ -2410,8 +2420,7 @@ if (ticketBalance < amount6) {
       receipt.hash
     );
 
-const encryptedSecret =
-  encrypt(secret);
+const encryptedSecret = encrypt(secret);
 
 db.prepare(`
 INSERT INTO history (
@@ -2425,7 +2434,7 @@ INSERT INTO history (
     timestamp
 )
 VALUES (
-    ?, ?, ?, ?, ?, ?, ?, ?
+    ?, ?, ?, ?, ?, ?, ?
 )
 `).run(
     userAddress.toLowerCase(),
