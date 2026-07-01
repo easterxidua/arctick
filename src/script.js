@@ -1570,7 +1570,7 @@ function showScreen1() {
 
 <!-- GitHub Icon - Centered at the very bottom -->
 <div style="text-align:center; margin-top:20px;">
-  <a href="https://github.com/kaduanganu/eth-predict-arc-lama"
+  <a href="https://github.com/kaduanganu/arcvault"
      target="_blank"
      style="
        color:#555;
