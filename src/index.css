@@ -1132,6 +1132,12 @@ input[readonly_txt2] {
   .flex-row2 {
     flex-direction: column;
   }
+
+  input,
+  textarea {
+    box-shadow: none !important;
+    filter: none !important;
+}
 }
 
 
