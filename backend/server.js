@@ -1023,26 +1023,35 @@ async (req,res) => {
             address
         } = req.body;
 
-        const balance =
-    await vault.vaultUSDCBalance();
+        const userVaultBalance =
+            await vault.vaultBalance(
+                address
+            );
 
-const allocated =
-    await vault.totalAllocated();
+        const userAllocatedBalance =
+            await vault.allocatedBalance(
+                address
+            );
 
-console.log(
-    "vault balance =",
-    balance.toString()
-);
+        const allocated =
+            await vault.availableUserLiquidity(
+                address
+            );
 
-console.log(
-    "total allocated =",
-    allocated.toString()
-);
+        console.log(
+            "user vault balance =",
+            userVaultBalance.toString()
+        );
 
-console.log(
-    "available =",
-    (balance - allocated).toString()
-);
+        console.log(
+            "user allocated balance =",
+            userAllocatedBalance.toString()
+        );
+
+        console.log(
+            "user available liquidity =",
+            availableLiquidity.toString()
+        );
 
         const keyHash =
             ethers.keccak256(
