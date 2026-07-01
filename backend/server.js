@@ -1946,8 +1946,8 @@ app.get(
 
       const { address } = req.query;
 
-      console.log("address =", req.query.address);
-      console.log("address2 =", address);
+      console.log("XXXaddress =", req.query.address);
+      console.log("XXXaddress2 =", address);
 
       const balance =
         await vault.availableLiquidity();
