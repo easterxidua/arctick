@@ -5,11 +5,10 @@
 }
 
 button {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
+    -webkit-user-drag: none;
     user-select: none;
-    outline: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
 }
 
 .main-container {
