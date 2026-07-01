@@ -1115,6 +1115,10 @@ input[readonly_txt2] {
     font-size: 13px;
   }
 
+    .toast {
+        font-size: 16px;
+    }
+
   .txtxt {
     font-size: 16px;
   }
