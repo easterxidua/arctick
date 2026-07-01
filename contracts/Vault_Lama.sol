@@ -24,30 +24,39 @@ contract Vault {
 
     address public owner;
 
-mapping(address =>
+    // keyHash => remaining ticket balance
     mapping(bytes32 => uint256)
-) private balances;
+        private balances;
 
-mapping(address => uint256)
-    private totalBalances;
+mapping(bytes32 => address)
+    public ticketCreator;
 
-    event Deposit(
-        address indexed user,
-        bytes32 indexed keyHash,
-        uint256 amount
-    );
+    // total outstanding ticket balances
+    uint256 public totalAllocated;
 
-    event Withdraw(
-        address indexed user,
-        bytes32 indexed keyHash,
-        uint256 amount
-    );
+event Deposit(
+    address indexed depositor,
+    bytes32 indexed keyHash,
+    uint256 amount
+);
+
+event Withdraw(
+    address indexed caller,
+    bytes32 indexed keyHash,
+    address indexed recipient,
+    uint256 amount
+);
 
     event BridgeCredit(
-        address indexed user,
         bytes32 indexed keyHash,
         uint256 amount
     );
+
+event TicketCreated(
+    address indexed creator,
+    bytes32 indexed keyHash,
+    uint256 amount
+);
 
     modifier onlyOwner() {
         require(
@@ -64,9 +73,9 @@ mapping(address => uint256)
         owner = msg.sender;
     }
 
-    // --------------------------------------------------
-    // DIRECT ARC DEPOSIT
-    // --------------------------------------------------
+    // ----------------------------------
+    // DEPOSIT LIQUIDITY
+    // ----------------------------------
 
     function deposit(
         bytes32 keyHash,
@@ -87,26 +96,79 @@ mapping(address => uint256)
             "transfer failed"
         );
 
-balances[msg.sender][keyHash]
-    += amount;
-
-totalBalances[msg.sender]
-    += amount;
-
-        emit Deposit(
-            msg.sender,
-            keyHash,
-            amount
-        );
+emit Deposit(
+    msg.sender,
+    keyHash,
+    amount
+);
     }
 
-    // --------------------------------------------------
+    // ----------------------------------
+    // CREATE TICKET
+    // ----------------------------------
+
+    function createTicket(
+        bytes32 keyHash,
+        uint256 amount,
+        address creator
+    )
+        external
+        onlyOwner
+    {
+        require(
+            amount > 0,
+            "invalid amount"
+        );
+
+        uint256 availableLiquidity =
+            usdc.balanceOf(address(this))
+            - totalAllocated;
+
+        require(
+            availableLiquidity >= amount,
+            "insufficient liquidity"
+        );
+        
+if (
+    ticketCreator[keyHash]
+    == address(0)
+) {
+    ticketCreator[keyHash]
+        = msg.sender;
+}
+
+ticketCreator[keyHash]
+    = creator;
+    
+        balances[keyHash] += amount;
+
+        totalAllocated += amount;
+
+emit TicketCreated(
+    creator,
+    keyHash,
+    amount
+);
+    }
+
+function ticketBalance(
+    bytes32 keyHash
+)
+    external
+    view
+    returns (uint256)
+{
+    return balances[keyHash];
+}
+
+    // ----------------------------------
     // WITHDRAW
-    // --------------------------------------------------
+    // ----------------------------------
 
     function withdraw(
-        bytes32 keyHash,
-        uint256 amount
+        string calldata secret,
+        uint256 amount,
+        address recipient
     ) external {
 
         require(
@@ -114,43 +176,41 @@ totalBalances[msg.sender]
             "invalid amount"
         );
 
+        bytes32 keyHash =
+            keccak256(
+                abi.encodePacked(secret)
+            );
+
         require(
-            balances[msg.sender][keyHash]
-                >= amount,
-            "insufficient balance"
+            balances[keyHash] >= amount,
+            "insufficient ticket balance"
         );
 
-balances[msg.sender][keyHash]
-    -= amount;
+        balances[keyHash] -= amount;
 
-totalBalances[msg.sender]
-    -= amount;
+        totalAllocated -= amount;
 
         require(
             usdc.transfer(
-                msg.sender,
+                recipient,
                 amount
             ),
             "withdraw failed"
         );
 
-        emit Withdraw(
-            msg.sender,
-            keyHash,
-            amount
-        );
+emit Withdraw(
+    msg.sender,
+    keyHash,
+    recipient,
+    amount
+);
     }
 
-    // --------------------------------------------------
+    // ----------------------------------
     // BRIDGE CREDIT
-    // --------------------------------------------------
-    // Called by backend AFTER bridge completes.
-    // Assumes bridge already delivered USDC
-    // to this contract address.
-    // --------------------------------------------------
+    // ----------------------------------
 
     function creditBridgeDeposit(
-        address user,
         bytes32 keyHash,
         uint256 amount
     )
@@ -162,57 +222,62 @@ totalBalances[msg.sender]
             "invalid amount"
         );
 
-balances[user][keyHash]
-    += amount;
+        uint256 availableLiquidity =
+            usdc.balanceOf(address(this))
+            - totalAllocated;
 
-totalBalances[user]
-    += amount;
+        require(
+            availableLiquidity >= amount,
+            "insufficient liquidity"
+        );
+
+        //balances[keyHash] += amount;
+
+        // totalAllocated += amount;
 
         emit BridgeCredit(
-            user,
             keyHash,
             amount
         );
     }
 
-    // --------------------------------------------------
+    // ----------------------------------
     // VIEWS
-    // --------------------------------------------------
+    // ----------------------------------
 
-function getBalance(
-    address user,
-    bytes32 keyHash
-)
-    external
-    view
-    returns (uint256)
-{
-    return balances[user][keyHash];
-}
+    function getBalance(
+        bytes32 keyHash
+    )
+        external
+        view
+        returns (uint256)
+    {
+        return balances[keyHash];
+    }
 
-function getTotalBalance(
-    address user
-)
-    external
-    view
-    returns (uint256)
-{
-    return totalBalances[user];
-}
+    function vaultUSDCBalance()
+        external
+        view
+        returns (uint256)
+    {
+        return usdc.balanceOf(
+            address(this)
+        );
+    }
 
-function vaultUSDCBalance()
-    external
-    view
-    returns (uint256)
-{
-    return usdc.balanceOf(
-        address(this)
-    );
-}
+    function availableLiquidity()
+        external
+        view
+        returns (uint256)
+    {
+        return
+            usdc.balanceOf(address(this))
+            - totalAllocated;
+    }
 
-    // --------------------------------------------------
+    // ----------------------------------
     // ADMIN
-    // --------------------------------------------------
+    // ----------------------------------
 
     function transferOwnership(
         address newOwner
@@ -220,6 +285,11 @@ function vaultUSDCBalance()
         external
         onlyOwner
     {
+        require(
+            newOwner != address(0),
+            "zero address"
+        );
+
         owner = newOwner;
     }
 }

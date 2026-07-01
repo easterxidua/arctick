@@ -31,8 +31,11 @@ contract Vault {
 mapping(bytes32 => address)
     public ticketCreator;
 
-    // total outstanding ticket balances
-    uint256 public totalAllocated;
+mapping(address => uint256)
+    public vaultBalance;
+
+mapping(address => uint256)
+    public allocatedBalance;
 
 event Deposit(
     address indexed depositor,
@@ -47,10 +50,11 @@ event Withdraw(
     uint256 amount
 );
 
-    event BridgeCredit(
-        bytes32 indexed keyHash,
-        uint256 amount
-    );
+event BridgeCredit(
+    address indexed user,
+    bytes32 indexed keyHash,
+    uint256 amount
+);
 
 event TicketCreated(
     address indexed creator,
@@ -120,14 +124,14 @@ emit Deposit(
             "invalid amount"
         );
 
-        uint256 availableLiquidity =
-            usdc.balanceOf(address(this))
-            - totalAllocated;
+uint256 availableLiquidity =
+    vaultBalance[creator]
+    - allocatedBalance[creator];
 
-        require(
-            availableLiquidity >= amount,
-            "insufficient liquidity"
-        );
+require(
+    availableLiquidity >= amount,
+    "insufficient user liquidity"
+);
         
 if (
     ticketCreator[keyHash]
@@ -140,9 +144,11 @@ if (
 ticketCreator[keyHash]
     = creator;
     
-        balances[keyHash] += amount;
+balances[keyHash] += amount;
 
-        totalAllocated += amount;
+allocatedBalance[creator] += amount;
+
+ticketCreator[keyHash] = creator;
 
 emit TicketCreated(
     creator,
@@ -186,9 +192,19 @@ function ticketBalance(
             "insufficient ticket balance"
         );
 
-        balances[keyHash] -= amount;
+address creator =
+    ticketCreator[keyHash];
 
-        totalAllocated -= amount;
+require(
+    creator != address(0),
+    "ticket not found"
+);
+
+balances[keyHash] -= amount;
+
+allocatedBalance[creator] -= amount;
+
+vaultBalance[creator] -= amount;
 
         require(
             usdc.transfer(
@@ -206,40 +222,48 @@ emit Withdraw(
 );
     }
 
+function availableUserLiquidity(
+    address user
+)
+    external
+    view
+    returns (uint256)
+{
+    return
+        vaultBalance[user]
+        - allocatedBalance[user];
+}
+
     // ----------------------------------
     // BRIDGE CREDIT
     // ----------------------------------
 
-    function creditBridgeDeposit(
-        bytes32 keyHash,
-        uint256 amount
-    )
-        external
-        onlyOwner
-    {
-        require(
-            amount > 0,
-            "invalid amount"
-        );
+function creditBridgeDeposit(
+    address user,
+    bytes32 keyHash,
+    uint256 amount
+)
+    external
+    onlyOwner
+{
+    require(
+        user != address(0),
+        "invalid user"
+    );
 
-        uint256 availableLiquidity =
-            usdc.balanceOf(address(this))
-            - totalAllocated;
+    require(
+        amount > 0,
+        "invalid amount"
+    );
 
-        require(
-            availableLiquidity >= amount,
-            "insufficient liquidity"
-        );
+    vaultBalance[user] += amount;
 
-        //balances[keyHash] += amount;
-
-        // totalAllocated += amount;
-
-        emit BridgeCredit(
-            keyHash,
-            amount
-        );
-    }
+    emit BridgeCredit(
+        user,
+        keyHash,
+        amount
+    );
+}
 
     // ----------------------------------
     // VIEWS
