@@ -1,10 +1,10 @@
 :root {
   --warna_tombol: #58a3e9;
   --warna_text: rgb(0, 100, 200);
-  --warna_bayangan_sorot: transparent; /* rgba(0, 255, 255, 0.6); */
-  --warna_bayangan_kotakan: none; /* 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
-  --warna_bayangan_text: none; /* 1px 1px 2px rgba(0,0,0,0.3); */
-  --warna_bayangan_drop: none; /* drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black); */
+  --warna_bayangan_sorot: red; /* rgba(0, 255, 255, 0.6); */
+  --warna_bayangan_kotakan: red; /* 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
+  --warna_bayangan_text: red; /* 1px 1px 2px rgba(0,0,0,0.3); */
+  --warna_bayangan_drop: red; /* drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black); */
   --mbunder: 0px; /* 9999px; */
   --mbunder_tenan: 0px; /* 50%; */
 }

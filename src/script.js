@@ -1130,7 +1130,7 @@ function showToast(
       color:white;
       padding:12px 20px;
       border: 3px solid rgb(255, 255, 255, 0.8);
-      border-radius:9999px;
+      border-radius:0px;
       z-index:99999;
       display:flex;
       align-items:center;
