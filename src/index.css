@@ -1,7 +1,3 @@
-* {
-    -webkit-tap-highlight-color: transparent;
-}
-
 :root {
   --warna_tombol: #58a3e9;
   --warna_text: rgb(0, 100, 200);
@@ -114,9 +110,6 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   opacity: 0.6;
   cursor: not-allowed;
 }
-.btn:active {
-  transform: scale(1.01);
-}
 
 .btn_hide {
   display: none;
@@ -182,9 +175,6 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   opacity: 0.6;
   cursor: not-allowed;
 }
-.btn_green:active {
-  transform: scale(1.01);
-}
 
 .btn_red {
   background: #ff0000;
@@ -220,9 +210,6 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   opacity: 0.6;
   cursor: not-allowed;
 }
-.btn_red:active {
-  transform: scale(1.01);
-}
 
 .btn_rev {
   background: var(--warna_tombol);
@@ -257,9 +244,6 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
 .btn_rev.disabledbtn {
   opacity: 0.6;
   cursor: not-allowed;
-}
-.btn_rev:active {
-  transform: scale(1.01);
 }
 
 .btn_op_rev {
@@ -297,9 +281,6 @@ background: var(--warna_tombol);
   opacity: 0.6;
   cursor: not-allowed;
 }
-.btn_op_rev:active {
-  transform: scale(1.01);
-}
 
 .btn_op_rev2 {
 background: var(--warna_tombol);
@@ -335,9 +316,6 @@ background: var(--warna_tombol);
 .btn_op_rev2.disabledbtn {
   opacity: 0.6;
   cursor: not-allowed;
-}
-.btn_op_rev2:active {
-  transform: scale(1.01);
 }
 
 .txtxt {
@@ -380,9 +358,6 @@ background: var(--warna_tombol);
   opacity: 0.6;
   cursor: not-allowed;
 }
-.btn_smol_ns:active {
-  transform: scale(1.01);
-}
 
 .btn_smol {
   background: var(--warna_tombol);
@@ -418,9 +393,6 @@ background: var(--warna_tombol);
 .btn_smol.disabledbtn {
   opacity: 0.6;
   cursor: not-allowed;
-}
-.btn_smol:active {
-  transform: scale(1.01);
 }
 
 .btn_smol_M {
