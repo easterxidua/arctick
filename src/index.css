@@ -1,3 +1,7 @@
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 :root {
   --warna_tombol: #58a3e9;
   --warna_text: rgb(0, 100, 200);
