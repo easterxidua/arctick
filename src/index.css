@@ -1,12 +1,12 @@
 :root {
   --warna_tombol: #58a3e9;
   --warna_text: rgb(0, 100, 200);
-  --warna_bayangan_sorot: transparent !important; /* rgba(0, 255, 255, 0.6); */
-  --warna_bayangan_kotakan: none !important; /* 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
-  --warna_bayangan_text: none !important; /* 1px 1px 2px rgba(0,0,0,0.3); */
-  --warna_bayangan_drop: none !important; /* drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black); */
-  --mbunder: 0px !important; /* 9999px; */
-  --mbunder_tenan: 0px !important; /* 50%; */
+  --warna_bayangan_sorot: rgba(0, 255, 255, 0.6);
+  --warna_bayangan_kotakan: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  --warna_bayangan_text: 1px 1px 2px rgba(0,0,0,0.3);
+  --warna_bayangan_drop: drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black);
+  --mbunder: 9999px;
+  --mbunder_tenan: 50%;
 }
 
 .main-container {
@@ -1183,4 +1183,20 @@ input[readonly_txt2] {
   100% {
     transform: translateY(-30px) scale(1, 1); /* Apex of the jump */
   }
+}
+
+.btn,
+.btn_green,
+.btn_red,
+.btn_rev,
+.btn_smol,
+.btn_smol_M,
+.option-btn,
+.option-btn-circle,
+.option-btn-circle2,
+.btn_op_rev,
+.btn_op_rev2 {
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
 }
