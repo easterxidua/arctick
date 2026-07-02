@@ -1140,7 +1140,7 @@ function showToast(
   max-width:90vw;
   white-space:nowrap;
   box-sizing:border-box;
-      
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
       transition: top 1s ease;
       font-size:${window.innerWidth <= 768 ? "13px" : "16px"};
     ">
