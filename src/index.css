@@ -1222,4 +1222,9 @@ input[readonly_txt2] {
     box-shadow: none !important;
     filter: none !important;
     text-shadow: none !important;
+        transform: translateZ(0);
+    will-change: auto;
+        -webkit-user-drag: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
