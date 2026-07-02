@@ -1,12 +1,12 @@
 :root {
   --warna_tombol: #58a3e9;
   --warna_text: rgb(0, 100, 200);
-  --warna_bayangan_sorot: red; /* rgba(0, 255, 255, 0.6); */
-  --warna_bayangan_kotakan: red; /* 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
-  --warna_bayangan_text: red; /* 1px 1px 2px rgba(0,0,0,0.3); */
-  --warna_bayangan_drop: red; /* drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black); */
-  --mbunder: 0px; /* 9999px; */
-  --mbunder_tenan: 0px; /* 50%; */
+  --warna_bayangan_sorot: rgba(0, 255, 255, 0.6);
+  --warna_bayangan_kotakan: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  --warna_bayangan_text: 1px 1px 2px rgba(0,0,0,0.3);
+  --warna_bayangan_drop: drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black);
+  --mbunder: 9999px;
+  --mbunder_tenan: 50%;
 }
 
 .main-container {
@@ -110,6 +110,9 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   opacity: 0.6;
   cursor: not-allowed;
 }
+.btn:active {
+  transform: scale(1.01);
+}
 
 .btn_hide {
   display: none;
@@ -175,6 +178,9 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   opacity: 0.6;
   cursor: not-allowed;
 }
+.btn_green:active {
+  transform: scale(1.01);
+}
 
 .btn_red {
   background: #ff0000;
@@ -210,6 +216,9 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   opacity: 0.6;
   cursor: not-allowed;
 }
+.btn_red:active {
+  transform: scale(1.01);
+}
 
 .btn_rev {
   background: var(--warna_tombol);
@@ -244,6 +253,9 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
 .btn_rev.disabledbtn {
   opacity: 0.6;
   cursor: not-allowed;
+}
+.btn_rev:active {
+  transform: scale(1.01);
 }
 
 .btn_op_rev {
@@ -281,6 +293,9 @@ background: var(--warna_tombol);
   opacity: 0.6;
   cursor: not-allowed;
 }
+.btn_op_rev:active {
+  transform: scale(1.01);
+}
 
 .btn_op_rev2 {
 background: var(--warna_tombol);
@@ -316,6 +331,9 @@ background: var(--warna_tombol);
 .btn_op_rev2.disabledbtn {
   opacity: 0.6;
   cursor: not-allowed;
+}
+.btn_op_rev2:active {
+  transform: scale(1.01);
 }
 
 .txtxt {
@@ -358,6 +376,9 @@ background: var(--warna_tombol);
   opacity: 0.6;
   cursor: not-allowed;
 }
+.btn_smol_ns:active {
+  transform: scale(1.01);
+}
 
 .btn_smol {
   background: var(--warna_tombol);
@@ -393,6 +414,9 @@ background: var(--warna_tombol);
 .btn_smol.disabledbtn {
   opacity: 0.6;
   cursor: not-allowed;
+}
+.btn_smol:active {
+  transform: scale(1.01);
 }
 
 .btn_smol_M {
@@ -431,6 +455,7 @@ background: var(--warna_tombol);
               
   position: absolute;
   left: 50%;
+  transform: translateX(-50%);
 }
 
 .btn_smol_M:hover {text-shadow: 1px 1px 2px var(--warna_bayangan_sorot); box-shadow: 0 8px 16px 0 var(--warna_bayangan_sorot);}
@@ -438,11 +463,15 @@ background: var(--warna_tombol);
   opacity: 0.6;
   cursor: not-allowed;
 }
+.btn_smol_M:active {
+  transform: translateX(-50%) scale(1.01);
+}
 
 .leaderboard-center-btn {
   position: absolute;
   top: 12px;
   left: 50%;
+  transform: translateX(-50%);
   z-index: 1000;
 }
 
@@ -1139,6 +1168,8 @@ input[readonly_txt2] {
 }
 
 @keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 #loadingScreen img {
@@ -1147,7 +1178,9 @@ input[readonly_txt2] {
 
 @keyframes bounce {
   0% {
+    transform: translateY(0) scale(1.1, 0.95); /* Squish at the bottom */
   }
   100% {
+    transform: translateY(-30px) scale(1, 1); /* Apex of the jump */
   }
 }
