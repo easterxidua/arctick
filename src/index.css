@@ -431,7 +431,6 @@ background: var(--warna_tombol);
               
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
 }
 
 .btn_smol_M:hover {text-shadow: 1px 1px 2px var(--warna_bayangan_sorot); box-shadow: 0 8px 16px 0 var(--warna_bayangan_sorot);}
@@ -439,15 +438,11 @@ background: var(--warna_tombol);
   opacity: 0.6;
   cursor: not-allowed;
 }
-.btn_smol_M:active {
-  transform: translateX(-50%) scale(1.01);
-}
 
 .leaderboard-center-btn {
   position: absolute;
   top: 12px;
   left: 50%;
-  transform: translateX(-50%);
   z-index: 1000;
 }
 
