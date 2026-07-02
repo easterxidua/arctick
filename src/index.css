@@ -1185,6 +1185,23 @@ input[readonly_txt2] {
   }
 }
 
+.btn_op_rev,
+.btn_op_rev2,
+.option-btn-circle,
+.option-btn-circle2,
+.option-btn-circle-unsupported {
+  filter: none !important;
+}
+
+.btn:active,
+.btn_green:active,
+.btn_red:active,
+.btn_rev:active,
+.btn_smol:active,
+.btn_smol_M:active {
+  transform: none !important;
+}
+
 .btn,
 .btn_green,
 .btn_red,
