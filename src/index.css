@@ -5,6 +5,7 @@
   --warna_bayangan_kotakan: none; /* 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); */
   --warna_bayangan_text: none; /* 1px 1px 2px rgba(0,0,0,0.3); */
   --warna_bayangan_drop: none; /* drop-shadow(1px 1px 2px black, 0 0 1px black, 0 0 1px black); */
+  --mbunder: 0px; /* 9999px; */
 }
 
 .main-container {
@@ -799,7 +800,7 @@ select.rounded-select {
   padding: 14px 20px;
   font-size: 1.1rem;
   font-weight: 500;
-  border-radius: 9999px;           /* Fully rounded (pill shape) */
+  border-radius: var(--mbunder);           /* Fully rounded (pill shape) */
 
   border: 3px solid transparent;
   background: 
@@ -922,7 +923,7 @@ select.rounded-select:hover {
   padding: 10px;
   width: 100%;
   margin: 6px 0;
-  border-radius: 9999px;
+  border-radius: var(--mbunder);
   /* text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black; */
   /* text-shadow: 1px 1px 2px black, 0 0 1px black; */
   text-shadow: var(--warna_bayangan_text);
@@ -943,7 +944,7 @@ select.rounded-select:hover {
   padding: 10px;
   width: 100%;
   margin: 6px 0;
-  border-radius: 9999px;
+  border-radius: var(--mbunder);
   /* text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black; */
   /* text-shadow: 1px 1px 2px black, 0 0 1px black; */
   text-shadow: var(--warna_bayangan_text);
@@ -973,7 +974,7 @@ select.rounded-select:hover {
   padding: 10px;
   width: 100%;
   margin: 6px 0;
-  border-radius: 9999px;
+  border-radius: var(--mbunder);
   /* text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black; */
   /* text-shadow: 1px 1px 2px black, 0 0 1px black; */
   text-shadow: var(--warna_bayangan_text);
@@ -1059,22 +1060,22 @@ select.rounded-select:hover {
 }
 
 .btn, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_op_rev, .btn_op_rev2, .btn_smol, .btn_smol_ns, .btn_green, .btn_red {
-  border-radius: 9999px;   /* Fully rounded */
+  border-radius: var(--mbunder);   /* Fully rounded */
 }
 
 .option-btn-circle, .option-btn-circle.active, .option-btn-circle2, .option-btn-circle2.active, .option-btn-circle-unsupported, .option-btn-circle-unsupported.active {
-  border-radius: 9999px;   /* Fully rounded */
+  border-radius: var(--mbunder);   /* Fully rounded */
 }
 
 input[type="text"] {
-  border-radius: 9999px !important;
+  border-radius: var(--mbunder) !important;
 }
 
 input[readonly_txt] {
   pointer-events: none !important;
   user-select: none !important;
   cursor: default !important;
-  border-radius: 9999px !important;
+  border-radius: var(--mbunder) !important;
 }
 input[readonly_txt2] {
   pointer-events: none !important;
