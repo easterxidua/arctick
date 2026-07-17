@@ -863,7 +863,7 @@ const CHAIN_CONFIG = {
 
     "arc-testnet": {
       chainId: "0x4cef52",
-      rpcUrl: "https://rpc.testnet.arc.network",
+      rpcUrl: "https://arc-testnet.drpc.org",
       name: "ARC Testnet",
       explorer: "https://testnet.arcscan.app",
       usdcAddress: "0x3600000000000000000000000000000000000000"
@@ -2119,7 +2119,7 @@ app.post(
 
       const provider =
         new ethers.JsonRpcProvider(
-          "https://rpc.testnet.arc.network"
+          "https://arc-testnet.drpc.org"
         );
 
 /*

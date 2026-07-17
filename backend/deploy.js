@@ -5,7 +5,7 @@ const solc = require("solc");
 const { ethers } = require("ethers");
 
 const RPC_URL =
-  "https://rpc.testnet.arc.network";
+  "https://arc-testnet.drpc.org";
 
 const PRIVATE_KEY =
   process.env.SYSTEM_PRIVATE_KEY;
