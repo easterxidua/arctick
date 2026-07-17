@@ -1543,7 +1543,7 @@ async function connectWallet() {
 function showScreen1() {
   document.getElementById('root').innerHTML = `
     <div class="container" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0px;background:transparent;padding:0px"; padding-top:40px>
-      <img src="/logo/arc_mascot_title333XXfit.png"
+      <img src="/logo/n_mascot_fit.png"
            alt="deVault_mascot" 
            style="margin-top:40px; margin-bottom:30px; max-width:480px; width:90%; height:auto;">
       
@@ -2453,7 +2453,7 @@ function formatUSDC(value) {
   const userBalFormatted = formatUSDC(userBal);
 
   const chainLogo = {
-  "arc-testnet": "/logo/arc_logo_small2_opaq2.png",
+  "arc-testnet": "/logo/n_arc_logo_small2.png",
   "base-sepolia": "/logo/base_logo_small.png",
   "ink-sepolia": "/logo/ink_logo_small.png",
   "arbitrum-sepolia": "/logo/arb_logo_small.png",
@@ -2482,7 +2482,7 @@ function formatUSDC(value) {
     <div class="container">
       <div style="display:flex;justify-content:flex-start;gap:8px;align-items:center;margin-bottom:8px;">
         <div style="margin:0" class="readonly33">
-         <img src="/logo/logo_judul_333XX1.png"
+         <img src="/logo/n_judul_fit.png"
          style="width:${logoWidth}; height:auto; position: relative; top: 0px;"></div>
         <div onclick="showHistory()" class="btn_smol_ns">
         📖
@@ -2562,7 +2562,7 @@ function formatUSDC(value) {
         class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
         onclick="changeChainAndClose('arc-testnet')"
       >
-        <img src="/logo/arc_logo_small2_opaq2.png" width="32" style="position: relative; top: 1px;">
+        <img src="/logo/n_arc_logo_small2.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div
@@ -2641,7 +2641,7 @@ function formatUSDC(value) {
     class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
     onclick="changeChain('arc-testnet')"
   >
-    <img src="/logo/arc_logo_small2_opaq2.png"
+    <img src="/logo/n_arc_logo_small2.png"
          width="32"
          style="position: relative; top: 1px;">
   </div>
@@ -4766,7 +4766,7 @@ if (userAddress) {
       if (actualRank === 1) {
 
         rankDisplay =
-          '🌟' //`<img src="/logo/arc_logo_small2_opaq2.png" width="28">`
+          '🌟' //`<img src="/logo/n_arc_logo_small2.png" width="28">`
 
       } else if (
         actualRank === 2
