@@ -2687,19 +2687,19 @@ function formatUSDC(value) {
   <div
     class="option-btn-circle" id="depositBtn"
     onclick="showSection('deposit')">
-    Deposit</span>
+    deposit</span>
   </div>
 
   <div
     class="option-btn-circle" id="ticketBtn" 
     onclick="showSection('ticket')">
-    Ticket</span>
+    ticket</span>
   </div>
 
   <div
     class="option-btn-circle" id="withdrawBtn"
     onclick="showSection('withdraw')">
-    Withdraw</span>
+    withdraw</span>
   </div>
 
 </div>
@@ -4490,7 +4490,7 @@ document.getElementById(
       class="option-btn-circle active"
       onclick="showHistoryTab('deposit')"
     >
-      Deposit
+      deposit
     </div>
 
     <div
@@ -4498,7 +4498,7 @@ document.getElementById(
       class="option-btn-circle"
       onclick="showHistoryTab('ticket')"
     >
-      Ticket
+      ticket
     </div>
 
     <div
@@ -4506,7 +4506,7 @@ document.getElementById(
       class="option-btn-circle"
       onclick="showHistoryTab('withdraw')"
     >
-      Withdraw
+      withdraw
     </div>
 
   </div>
