@@ -5,7 +5,7 @@ const solc = require("solc");
 const { ethers } = require("ethers");
 
 const RPC_URL =
-  "https://arc-testnet.drpc.org";
+  "https://arc-testnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq";
 
 const PRIVATE_KEY =
   process.env.SYSTEM_PRIVATE_KEY;
