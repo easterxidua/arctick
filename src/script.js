@@ -2734,7 +2734,7 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btn"
+    class="btnf"
     onclick="depositUSDC()"
     style="
       width:50% !important;
@@ -2818,7 +2818,7 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btn"
+    class="btnf"
     onclick="createTicket()"
     style="
       width:50% !important;
@@ -2859,7 +2859,7 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btn"
+    class="btnf"
     onclick="withdrawUSDC()"
     style="
       width:50% !important;

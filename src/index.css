@@ -1265,11 +1265,14 @@ input[readonly_txt2] {
     flex-direction: column;
   }
 
+  .btnf {
+    width:228px !important;
+  }
   .btn_op_rev222 {
-    width:50% !important;
+    width:228px !important;
   }
   .option-btn-circle222 {
-    width:50% !important;
+    width:228px !important;
   }
 }
 
