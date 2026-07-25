@@ -2734,10 +2734,10 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btn"
+    class="btnf"
     onclick="depositUSDC()"
     style="
-      width:50% !important;
+      width:50%;
       display:inline-block;
     "
   >
@@ -2818,10 +2818,10 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btn"
+    class="btnf"
     onclick="createTicket()"
     style="
-      width:50% !important;
+      width:50%;
       display:inline-block;
     "
   >
@@ -2859,10 +2859,10 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btn"
+    class="btnf"
     onclick="withdrawUSDC()"
     style="
-      width:50% !important;
+      width:50%;
       display:inline-block;
     "
   >
@@ -3745,7 +3745,7 @@ function enableBetControls() {
 
 function disableAllControls() {
   // Disable buttons
-  const buttons = document.querySelectorAll('.btn, .option-btn, option-btn-circle, option-btn-circle2');
+  const buttons = document.querySelectorAll('.btn, .btnf, .option-btn, option-btn-circle, option-btn-circle2');
   buttons.forEach(btn => {
     btn.disabled = true;
     btn.style.pointerEvents = 'none';
