@@ -2656,7 +2656,7 @@ function formatUSDC(value) {
   </div>
 
 <button
-    class="btn_op_rev2" style="font-size:1.1rem;"
+    class="btn_op_rev222" style="font-size:1.1rem;"
     onclick="showChainlist()">
         all chains</span>
   </button>
@@ -2734,10 +2734,10 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btnf"
+    class="btn"
     onclick="depositUSDC()"
     style="
-      width:50%;
+      width:50% !important;
       display:inline-block;
     "
   >
@@ -2818,10 +2818,10 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btnf"
+    class="btn"
     onclick="createTicket()"
     style="
-      width:50%;
+      width:50% !important;
       display:inline-block;
     "
   >
@@ -2859,10 +2859,10 @@ function formatUSDC(value) {
 
 <div style="text-align:center;">
   <button
-    class="btnf"
+    class="btn"
     onclick="withdrawUSDC()"
     style="
-      width:50%;
+      width:50% !important;
       display:inline-block;
     "
   >
@@ -3550,6 +3550,14 @@ function disableBetControls() {
     btn.style.cursor = "not-allowed";
   });
 
+  const optionBtnsX3222 = document.querySelectorAll('.btn_op_rev2222');
+  optionBtnsX3222.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
   const optionBtnsX1 = document.querySelectorAll('.btn_smol_ns');
   optionBtnsX1.forEach(btn => {
     btn.disabled = true;
@@ -3652,6 +3660,14 @@ function enableBetControls() {
 
   const optionBtnsX3 = document.querySelectorAll('.btn_op_rev2');
   optionBtnsX3.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
+  const optionBtnsX3222 = document.querySelectorAll('.btn_op_rev2222');
+  optionBtnsX3222.forEach(btn => {
     btn.disabled = false;
     btn.style.pointerEvents = 'auto';
     btn.style.opacity = "1";

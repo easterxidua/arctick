@@ -374,6 +374,45 @@ background: var(--warna_tombol);
   transform: scale(1.01);
 }
 
+.btn_op_rev222 {
+background: var(--warna_tombol);
+  color: rgb(255, 255, 255);
+  /* text-shadow: 1px 1px 2px black, 0 0 1px black; */
+  text-shadow: var(--warna_bayangan_text);
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(var(--warna_tombol), var(--warna_tombol)) padding-box, /* Inner background color */
+    linear-gradient(to right, var(--warna_tombol), #ffffff) border-box; /* Border gradient */
+
+  filter: var(--warna_bayangan_drop);
+
+  padding: 15px 12px;
+  margin: 4px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 90px;
+  box-shadow: var(--warna_bayangan_kotakan);
+}
+
+.btn_op_rev222:hover {text-shadow: 1px 1px 2px var(--warna_bayangan_sorot); box-shadow: 0 8px 16px 0 var(--warna_bayangan_sorot);}
+.btn_op_rev222.disabledbtn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn_op_rev222:active {
+  transform: scale(1.01);
+}
+
 .txtxt {
   /* text-shadow: 1px 1px 2px black, 0 0 1px black; */
   text-shadow: var(--warna_bayangan_text);
@@ -1098,7 +1137,7 @@ select.rounded-select:hover {
   flex-wrap: wrap;
 }
 
-.btn, .btnf, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_op_rev, .btn_op_rev2, .btn_smol, .btn_smol_ns, .btn_green, .btn_red {
+.btn, .btnf, .btn-grad, .option-btn, .option-btn.active, .btn_rev, .btn_op_rev, .btn_op_rev2, .btn_op_rev222, .btn_smol, .btn_smol_ns, .btn_green, .btn_red {
   border-radius: var(--mbunder);   /* Fully rounded */
 }
 
@@ -1168,8 +1207,9 @@ input[readonly_txt2] {
   .flex-row2 {
     flex-direction: column;
   }
-  .btnf{
-    width: 100%;
+
+  .btn_op_rev222 {
+    width:50% !important;
   }
 }
 
