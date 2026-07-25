@@ -2737,7 +2737,7 @@ function formatUSDC(value) {
     class="btnf"
     onclick="depositUSDC()"
     style="
-      width:50% !important;
+      width:50%;
       display:inline-block;
     "
   >
@@ -2821,7 +2821,7 @@ function formatUSDC(value) {
     class="btnf"
     onclick="createTicket()"
     style="
-      width:50% !important;
+      width:50%;
       display:inline-block;
     "
   >
@@ -2862,7 +2862,7 @@ function formatUSDC(value) {
     class="btnf"
     onclick="withdrawUSDC()"
     style="
-      width:50% !important;
+      width:50%;
       display:inline-block;
     "
   >

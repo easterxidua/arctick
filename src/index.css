@@ -138,7 +138,7 @@ h2 { font-size: 1.25rem; margin: 12px 0 6px; font-weight: bold; }
   text-transform: none;
   border-radius: 8px;
   cursor: pointer;
-  width: 100%;
+  width: 50%;
   margin: 8px 0;
   box-shadow: var(--warna_bayangan_kotakan);
 }
