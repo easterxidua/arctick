@@ -667,6 +667,63 @@ background: var(--warna_tombol);
   cursor: not-allowed;
 }
 
+.option-btn-circle222 {
+  
+  background: white;
+  color: var(--warna_text);
+  /* text-shadow: 1px 1px 2px black, 0 0 1px black; */
+  text-shadow: var(--warna_bayangan_text);
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(#ffffff, #ffffff) padding-box, /* Inner background color */
+    linear-gradient(to right, var(--warna_tombol), #ffffff) border-box; /* Border gradient */
+
+  filter: var(--warna_bayangan_drop);
+
+  padding: 10px 12px;
+  margin: 4px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 90px;
+  box-shadow: var(--warna_bayangan_kotakan);
+}
+.option-btn-circle222.active {
+  background: var(--warna_tombol);
+
+  color: rgb(255, 255, 255);
+  /* text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black; */
+  /* text-shadow: 1px 1px 2px black, 0 0 1px black; */
+  text-shadow: var(--warna_bayangan_text);
+  /*
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+  border: none;
+  */
+
+  border: 3px solid transparent;
+  border-radius: 3px;
+  background: 
+    linear-gradient(var(--warna_tombol), var(--warna_tombol)) padding-box, /* Inner background color */
+    linear-gradient(to right, var(--warna_tombol), #ffffff) border-box; /* Border gradient */
+    
+  box-shadow: var(--warna_bayangan_kotakan);
+}
+.option-btn-circle222:hover {text-shadow: 1px 1px 2px var(--warna_bayangan_sorot); box-shadow: 0 8px 16px 0 var(--warna_bayangan_sorot);}
+.option-btn-circle222.disabledbtn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .option-btn-circle-unsupported {
   
   background: white;
@@ -1141,7 +1198,7 @@ select.rounded-select:hover {
   border-radius: var(--mbunder);   /* Fully rounded */
 }
 
-.option-btn-circle, .option-btn-circle.active, .option-btn-circle2, .option-btn-circle2.active, .option-btn-circle-unsupported, .option-btn-circle-unsupported.active {
+.option-btn-circle, .option-btn-circle222, .option-btn-circle.active, .option-btn-circle222.active, .option-btn-circle2, .option-btn-circle2.active, .option-btn-circle-unsupported, .option-btn-circle-unsupported.active {
   border-radius: var(--mbunder);   /* Fully rounded */
 }
 
@@ -1209,6 +1266,9 @@ input[readonly_txt2] {
   }
 
   .btn_op_rev222 {
+    width:50% !important;
+  }
+  .option-btn-circle222 {
     width:50% !important;
   }
 }

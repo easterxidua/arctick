@@ -2638,7 +2638,7 @@ function formatUSDC(value) {
 <div class="flex-row">
 
   <div
-    class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
+    class="option-btn-circle222 ${selectedChain==='arc-testnet' ? 'active' : ''}"
     onclick="changeChain('arc-testnet')"
   >
     <img src="/logo/n_arc_logo_small2.png"
@@ -2647,7 +2647,7 @@ function formatUSDC(value) {
   </div>
 
   <div
-    class="option-btn-circle ${selectedChain==='base-sepolia' ? 'active' : ''}"
+    class="option-btn-circle222 ${selectedChain==='base-sepolia' ? 'active' : ''}"
     onclick="changeChain('base-sepolia')"
   >
     <img src="/logo/base_logo_small.png"
@@ -3590,6 +3590,14 @@ function disableBetControls() {
     btn.style.cursor = "not-allowed";
   });
 
+  const optionBtns2222 = document.querySelectorAll('.option-btn-circle222');
+  optionBtns2222.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = "0.6";
+    btn.style.cursor = "not-allowed";
+  });
+
   const optionBtns3 = document.querySelectorAll('.option-btn-circle2');
   optionBtns3.forEach(btn => {
     btn.disabled = true;
@@ -3710,6 +3718,16 @@ function enableBetControls() {
     btn.style.cursor = "pointer";
   });
 
+  const optionBtns2222 =
+    document.querySelectorAll('.option-btn-circle222');
+
+  optionBtns2222.forEach(btn => {
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = "1";
+    btn.style.cursor = "pointer";
+  });
+
   const optionBtns3 =
     document.querySelectorAll('.option-btn-circle2');
 
@@ -3761,7 +3779,7 @@ function enableBetControls() {
 
 function disableAllControls() {
   // Disable buttons
-  const buttons = document.querySelectorAll('.btn, .btnf, .option-btn, option-btn-circle, option-btn-circle2');
+  const buttons = document.querySelectorAll('.btn, .btnf, .option-btn, .option-btn-circle, .option-btn-circle222, .option-btn-circle2');
   buttons.forEach(btn => {
     btn.disabled = true;
     btn.style.pointerEvents = 'none';
