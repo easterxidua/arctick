@@ -2635,7 +2635,7 @@ function formatUSDC(value) {
 
 
 
-<div class="flex-row">
+<div class="flex-row" style="align-items:center;justify-content:center;">
 
   <div
     class="option-btn-circle222 ${selectedChain==='arc-testnet' ? 'active' : ''}"
