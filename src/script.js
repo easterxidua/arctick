@@ -799,6 +799,13 @@ const VAULT_ABI = [
 ]
 ;
 
+function formatUSDC(value) {
+  return Number(value).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
 async function loadHistory() {
 
   if (!userAddress) return;
@@ -2176,13 +2183,6 @@ async function refreshWithdrawAmount() {
 
   try {
 
-function formatUSDC(value) {
-  return Number(value).toLocaleString('en-US', {
-    minimumFractionDigits: 4,
-    maximumFractionDigits: 4
-  });
-}
-
     if (!userAddress) return;
 
     const secret =
@@ -2410,7 +2410,7 @@ async function refreshLiquidityBalance() {
   const data =
     await response.json();
 
-    return parseFloat(data.balance).toFixed(4);
+    return parseFloat(data.balance).toFixed(2);
 
   } catch(e) {
     return "0.0000";
@@ -2427,7 +2427,7 @@ async function refreshVaultBalance() {
   const data =
     await response.json();
 
-    return parseFloat(data.balance).toFixed(4);
+    return parseFloat(data.balance).toFixed(2);
 
   } catch(e) {
     return "0.0000";
@@ -2440,13 +2440,6 @@ async function showScreen2() {
   //const systemBal = await getSystemBalance();
   const systemBalX = await refreshVaultBalance();
   const systemBalXX = await refreshLiquidityBalance();
-
-function formatUSDC(value) {
-  return Number(value).toLocaleString('en-US', {
-    minimumFractionDigits: 4,
-    maximumFractionDigits: 4
-  });
-}
 
   const systemBalXFormatted = formatUSDC(systemBalX);
   const systemBalXXFormatted = formatUSDC(systemBalXX);
@@ -3880,7 +3873,7 @@ async function getUserBalance() {
 
   return parseFloat(
     data.balance
-  ).toFixed(4);
+  ).toFixed(2);
 }
 
 async function getUserBalanceLama() {
@@ -3939,7 +3932,7 @@ console.log(
 
     return parseFloat(
       ethers.formatUnits(balance, 6)
-    ).toFixed(4);
+    ).toFixed(2);
 
   } catch (e) {
     console.error(e);
@@ -3962,7 +3955,7 @@ async function getSystemBalanceFront() {
 
     return parseFloat(
       ethers.formatUnits(balance, 6)
-    ).toFixed(4);
+    ).toFixed(2);
 
   } catch (e) {
     console.error(e);
@@ -3978,7 +3971,7 @@ async function getSystemBalance() {
 
     const data = await response.json();
 
-    return parseFloat(data.balance).toFixed(4);
+    return parseFloat(data.balance).toFixed(2);
 
   } catch(e) {
     return "0.0000";
@@ -4170,7 +4163,7 @@ async function updateUserBalance() {
 
   try {
     const balance = await provider.getBalance(userAddress);
-    const formattedBalance = parseFloat(ethers.formatUnits(balance, 18)).toFixed(4);
+    const formattedBalance = parseFloat(ethers.formatUnits(balance, 18)).toFixed(2);
     
     const balanceEl = document.getElementById('userBalance');
     if (balanceEl) {
