@@ -2413,7 +2413,7 @@ async function refreshLiquidityBalance() {
     return parseFloat(data.balance).toFixed(2);
 
   } catch(e) {
-    return "0.0000";
+    return "0.00";
   }
 }
 
@@ -2430,7 +2430,7 @@ async function refreshVaultBalance() {
     return parseFloat(data.balance).toFixed(2);
 
   } catch(e) {
-    return "0.0000";
+    return "0.00";
   }
 }
 
@@ -3877,7 +3877,7 @@ async function getUserBalance() {
 }
 
 async function getUserBalanceLama() {
-  if (!provider || !userAddress) return "0.0000";
+  if (!provider || !userAddress) return "0.00";
 
   try {
 
@@ -3936,12 +3936,12 @@ console.log(
 
   } catch (e) {
     console.error(e);
-    return "0.0000";
+    return "0.00";
   }
 }
 
 async function getSystemBalanceFront() {
-  if (!provider || !SYSTEM_WALLET_X) return "0.0000";
+  if (!provider || !SYSTEM_WALLET_X) return "0.00";
 
   try {
 
@@ -3959,7 +3959,7 @@ async function getSystemBalanceFront() {
 
   } catch (e) {
     console.error(e);
-    return "0.0000";
+    return "0.00";
   }
 }
 
@@ -3974,7 +3974,7 @@ async function getSystemBalance() {
     return parseFloat(data.balance).toFixed(2);
 
   } catch(e) {
-    return "0.0000";
+    return "0.00";
   }
 }
 
