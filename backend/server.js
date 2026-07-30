@@ -946,7 +946,11 @@ function jsonBigInt(obj) {
 
 function getAdapter() {
   return createEthersAdapterFromPrivateKey({
-    privateKey: process.env.SYSTEM_PRIVATE_KEY
+    privateKey: process.env.SYSTEM_PRIVATE_KEY,
+    provider:
+        new ethers.JsonRpcProvider(
+            process.env.ARC_RPC
+        )
   });
 }
 
