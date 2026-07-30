@@ -1857,14 +1857,6 @@ app.post('/api/bridge-from-arc', async (req, res) => {
 
     const adapter = getAdapter();
 
-console.log(await signer.provider.getNetwork());
-
-console.log(await provider.getNetwork());
-
-console.log(await signer.provider.getBlockNumber());
-
-console.log(await provider.getBlockNumber());
-
     console.log("calling kit.bridge()");
 
     const result = await kit.bridge({
