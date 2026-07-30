@@ -2492,7 +2492,11 @@ async function showScreen2() {
       </div>
 
       <div class="readonly3">
-        🔵 choose your prefered chain.</span>
+        🔵 choose your prefered chain.</span>●</span>  <img id="cheeeinlogo"
+    src="${chainLogo[selectedChain]}"
+    width="32"
+    height=auto
+  >●</span>
       </div>
 
 <div
@@ -2933,7 +2937,7 @@ setCheeein(selectedChain);
 function showSection(type) {
 
   tabnow = type;
-  
+
   document.getElementById("depositSection").style.display = "none";
   document.getElementById("ticketSection").style.display = "none";
   document.getElementById("withdrawSection").style.display = "none";
