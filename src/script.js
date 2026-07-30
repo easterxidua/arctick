@@ -378,6 +378,7 @@ let hargaisehjalan = 0;
 
 let selectedChain = CONFIG.defaultChain;
 let selectedChainX = CONFIG.defaultChain;
+let tabnow = "";
 //let selectedChain = "arc-testnet";   // default
 let jenengechain = "MBOH";
 
@@ -2931,6 +2932,8 @@ setCheeein(selectedChain);
 
 function showSection(type) {
 
+  tabnow = type;
+  
   document.getElementById("depositSection").style.display = "none";
   document.getElementById("ticketSection").style.display = "none";
   document.getElementById("withdrawSection").style.display = "none";
@@ -3097,7 +3100,9 @@ function setupKeyInput() {
 
 //generateTicketKey();
 
-  //showSection('deposit')
+  if (tabnow === "") {tabnow = 'deposit'}
+
+  showSection(tabnow)
   hideLoading();
   closeAllToasts();
 
