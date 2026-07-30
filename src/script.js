@@ -937,7 +937,7 @@ function renderWithdrawals(items) {
 
 async function forceRPC(chain) {
 
-const rpcuse = process.env.ARC_RPC
+let rpcuse = process.env.ARC_RPC
 
 if (chain === "arc-testnet") {
   rpcuse = process.env.ARC_RPC
