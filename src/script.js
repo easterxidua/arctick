@@ -2703,19 +2703,19 @@ async function showScreen2() {
 <div class="flex-row">
 
   <div
-    class="option-btn-circle" id="depositBtn"
+    class="option-btn-circle222" id="depositBtn"
     onclick="showSection('deposit')">
     deposit</span>
   </div>
 
   <div
-    class="option-btn-circle" id="ticketBtn" 
+    class="option-btn-circle222e" id="ticketBtn" 
     onclick="showSection('ticket')">
     ticket</span>
   </div>
 
   <div
-    class="option-btn-circle" id="withdrawBtn"
+    class="option-btn-circle222" id="withdrawBtn"
     onclick="showSection('withdraw')">
     withdraw</span>
   </div>
@@ -4454,14 +4454,17 @@ async function showHistory() {
       return;
     }
 
-    const deposits =
-      [...result.deposits].reverse();
+const deposits = [...result.deposits].sort(
+  (a, b) => b.timestamp - a.timestamp
+);
 
-    const tickets =
-      [...result.tickets].reverse();
+const tickets = [...result.tickets].sort(
+  (a, b) => b.timestamp - a.timestamp
+);
 
-    const withdrawals =
-      [...result.withdrawals].reverse();
+const withdrawals = [...result.withdrawals].sort(
+  (a, b) => b.timestamp - a.timestamp
+);
 
     const depositRows =
       deposits.map(d => `
@@ -4619,7 +4622,7 @@ document.getElementById(
 
     <div
       id="depositBtnH"
-      class="option-btn-circle active"
+      class="option-btn-circle222 active"
       onclick="showHistoryTab('deposit')"
     >
       deposit
@@ -4627,7 +4630,7 @@ document.getElementById(
 
     <div
       id="ticketBtnH"
-      class="option-btn-circle"
+      class="option-btn-circle222"
       onclick="showHistoryTab('ticket')"
     >
       ticket
@@ -4635,7 +4638,7 @@ document.getElementById(
 
     <div
       id="withdrawBtnH"
-      class="option-btn-circle"
+      class="option-btn-circle222"
       onclick="showHistoryTab('withdraw')"
     >
       withdraw
