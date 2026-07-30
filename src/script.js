@@ -4409,7 +4409,7 @@ async function showHistory() {
     "
   >
     <span>○ ${new Date(d.timestamp * 1000).toLocaleString()}</span>
-    <span>○ ${d.amount} ● USDC</span>
+    <span>○ ${formatUSDC(d.amount)} ● USDC</span>
   </div>
 
 </div>
@@ -4448,7 +4448,7 @@ async function showHistory() {
     "
   >
     <span>○ ${new Date(t.timestamp * 1000).toLocaleString()}</span>
-    <span>○ ${t.amount} ● USDC</span>
+    <span>○ ${formatUSDC(t.amount)} ● USDC</span>
   </div>
 
 </div>
@@ -4487,7 +4487,7 @@ async function showHistory() {
     "
   >
     <span>○ ${new Date(w.timestamp * 1000).toLocaleString()}</span>
-    <span>○ ${w.amount} ● USDC</span>
+    <span>○ ${formatUSDC(w.amount)} ● USDC</span>
   </div>
 
 </div>
