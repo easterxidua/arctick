@@ -959,11 +959,15 @@ function getAdapter() {
     return createEthersAdapterFromPrivateKey({
         privateKey: process.env.SYSTEM_PRIVATE_KEY,
 
-getProvider: (ctx) => {
-    console.dir(ctx, { depth: null });
+        getProvider: ({ chain }) => {
+            const rpc = RPCS[chain.chain];
 
-    throw new Error("stop");
-}
+            if (!rpc) {
+                throw new Error(`No RPC for ${chain.chain}`);
+            }
+
+            return new ethers.JsonRpcProvider(rpc);
+        }
     });
 }
 
