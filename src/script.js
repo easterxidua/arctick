@@ -935,10 +935,44 @@ function renderWithdrawals(items) {
 
 }
 
+async function forceRPC(chain) {
+
+if (chain === "arc-testnet") {
+  rpcuse = process.env.ARC_RPC
+}
+else if (chain === "base-sepolia") {
+  rpcuse = process.env.BASE_SEPOLIA_RPC
+}
+else if (chain === "eth-sepolia") {
+  rpcuse = process.env.ETH_SEPOLIA_RPC
+}
+else if (chain === "ink-sepolia") {
+  rpcuse = process.env.INK_SEPOLIA_RPC
+}
+else if (chain === "arbitrum-sepolia") {
+  rpcuse = process.env.ARBITRUM_SEPOLIA_RPC
+}
+else if (chain === "avalanche-fuji") {
+  rpcuse = process.env.AVAX_FUJI_RPC
+}
+else if (chain === "hyperevm-testnet") {
+  rpcuse = process.env.HYPE_TESTNET_RPC
+}
+else if (chain === "unichain-sepolia") {
+  rpcuse = process.env.UNI_SEPOLIA_RPC
+}
+
+return rpcuse;
+}
+
 async function getVaultContract() {
 
-  const provider =
-    new ethers.BrowserProvider(window.ethereum);
+  //const provider =
+    //new ethers.BrowserProvider(window.ethereum);
+
+    const provider = new ethers.JsonRpcProvider(
+    forceRPC(selectedChain)
+    );
 
   const signer =
     await provider.getSigner();
@@ -1521,7 +1555,12 @@ async function connectWallet() {
       params: [{ chainId: chain.chainId }]
     });
 
-    provider = new ethers.BrowserProvider(window.ethereum);
+    //provider = new ethers.BrowserProvider(window.ethereum);
+
+    const provider = new ethers.JsonRpcProvider(
+    forceRPC(selectedChain)
+    );
+
     signer = await provider.getSigner();
 
     arcAdapter = await getArcAdapter();
@@ -1640,7 +1679,12 @@ window.changeChain = async function(chainKey) {
     });
 
     // Refresh ethers provider
-    provider = new ethers.BrowserProvider(window.ethereum);
+    //provider = new ethers.BrowserProvider(window.ethereum);
+
+    const provider = new ethers.JsonRpcProvider(
+    forceRPC(selectedChain)
+    );
+
     signer = await provider.getSigner();
 
     jenengechain = chain.name;
