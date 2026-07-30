@@ -4408,7 +4408,17 @@ async function showHistory() {
       font-weight:normal;
     "
   >
-    <span>○ ${new Date(d.timestamp * 1000).toLocaleString()}</span>
+  ○ ${
+  new Date(d.timestamp * 1000).toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  })
+  }
     <span>○ ${formatUSDC(d.amount)} ● USDC</span>
   </div>
 
@@ -4447,7 +4457,17 @@ async function showHistory() {
       font-weight:normal;
     "
   >
-    <span>○ ${new Date(t.timestamp * 1000).toLocaleString()}</span>
+  ○ ${
+  new Date(t.timestamp * 1000).toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  })
+  }
     <span>○ ${formatUSDC(t.amount)} ● USDC</span>
   </div>
 
@@ -4486,7 +4506,17 @@ async function showHistory() {
       font-weight:normal;
     "
   >
-    <span>○ ${new Date(w.timestamp * 1000).toLocaleString()}</span>
+  ○ ${
+  new Date(w.timestamp * 1000).toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  })
+  }
     <span>○ ${formatUSDC(w.amount)} ● USDC</span>
   </div>
 
