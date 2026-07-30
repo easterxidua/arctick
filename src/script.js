@@ -2497,17 +2497,14 @@ async function showScreen2() {
 
       <div class="readonly3" style="display:flex; justify-content:space-between; align-items:center;">
         ○ on chain • <span> 
-        ●</span>
+        ● 
   <img id="cheeeinlogo"
     src="${chainLogo[selectedChain]}"
     width="32"
     height=auto
   >
-        ●</span>
+        ● 
 </div>
-
-        </span>
-      </div>
 
 <div
   style="
