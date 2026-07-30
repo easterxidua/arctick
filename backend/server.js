@@ -3038,10 +3038,14 @@ app.get("/version", (req, res) => {
 app.get('/api/test-bridge-base-to-arc', async (req, res) => {
   try {
 
-    const adapter = createEthersAdapterFromPrivateKey({
-      privateKey: process.env.SYSTEM_PRIVATE_KEY,
-      provider
-    });
+const adapter =
+createEthersAdapterFromPrivateKey({
+    privateKey,
+    provider:
+        new ethers.JsonRpcProvider(
+            process.env.ARC_RPC
+        )
+});
 
     const result = await kit.bridge({
 
