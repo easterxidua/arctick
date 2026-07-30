@@ -959,15 +959,11 @@ function getAdapter() {
     return createEthersAdapterFromPrivateKey({
         privateKey: process.env.SYSTEM_PRIVATE_KEY,
 
-        getProvider: ({ chain }) => {
-            const rpc = RPCS[chain];
+getProvider: (ctx) => {
+    console.dir(ctx, { depth: null });
 
-            if (!rpc) {
-                throw new Error(`No RPC for ${chain}`);
-            }
-
-            return new ethers.JsonRpcProvider(rpc);
-        }
+    throw new Error("stop");
+}
     });
 }
 
@@ -1755,14 +1751,6 @@ app.post('/api/bridge-to-arc', async (req, res) => {
     }
 
     const adapter = getAdapter();
-
-console.log(await signer.provider.getNetwork());
-
-console.log(await provider.getNetwork());
-
-console.log(await signer.provider.getBlockNumber());
-
-console.log(await provider.getBlockNumber());
 
     console.log("calling kit.bridge()");
 
