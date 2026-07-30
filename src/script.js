@@ -2506,7 +2506,7 @@ async function showScreen2() {
       <div class="readonly2X" style="font-size:1.8rem;">
         ●</span>
       </div>
-  <img
+  <img id="cheeeinlogo"
     src="${chainLogo[selectedChain]}"
     width="48"
     height=auto
@@ -2886,8 +2886,9 @@ async function showScreen2() {
 function setCheeein(category) {
     //alert(selectedChain)
     selectedChain = category;
-    document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
-
+    //document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
+    document.getElementById("cheeeinlogo").src= `${chainLogo[selectedChain]}`
+  
     document.getElementById('arc-testnetchainbutton').classList.remove("active");
     document.getElementById('arc-testnetchainbutton2').classList.remove("active");
     document.getElementById('base-sepoliachainbutton').classList.remove("active");
