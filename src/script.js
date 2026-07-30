@@ -2656,7 +2656,7 @@ async function showScreen2() {
 <div class="flex-row" style="align-items:center;justify-content:center;">
 
   <div id="arc-testnetchainbutton2" 
-    class="option-btn-circle cheeeinbutton}"
+    class="option-btn-circle"
     onclick="changeChain('arc-testnet')"
   >
     <img src="/logo/n_arc_logo_small2.png"
@@ -2665,7 +2665,7 @@ async function showScreen2() {
   </div>
 
   <div  id="base-sepoliachainbutton2" 
-    class="option-btn-circle cheeeinbutton}"
+    class="option-btn-circle"
     onclick="changeChain('base-sepolia')"
   >
     <img src="/logo/base_logo_small.png"
