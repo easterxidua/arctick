@@ -2506,7 +2506,7 @@ async function showScreen2() {
         <img
             id="cheeeinlogo"
             src="${chainLogo[selectedChain]}"
-            style="width:32px; height:32px; object-fit:contain; display:block;"
+            style="width="48" height=auto object-fit:contain; display:block;"
         >
 
         <span>●</span>
@@ -2514,6 +2514,7 @@ async function showScreen2() {
 
 </div>
 
+<!--
 <div
   style="
     width:100%;
@@ -2537,7 +2538,7 @@ async function showScreen2() {
 </div>
 
 <div style="height:20px;"></div>
-
+-->
 
 
 
