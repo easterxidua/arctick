@@ -2883,6 +2883,11 @@ async function showScreen2() {
 
   `;
 
+function clearing(category) {
+}
+
+window.clearing = clearing;
+
 function setCheeein(category) {
     //alert(selectedChain)
     selectedChain = category;
@@ -3092,7 +3097,7 @@ function setupKeyInput() {
 
 //generateTicketKey();
 
-  showSection('deposit')
+  //showSection('deposit')
   hideLoading();
   closeAllToasts();
 
