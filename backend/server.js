@@ -3043,10 +3043,9 @@ app.get("/version", (req, res) => {
 app.get('/api/test-bridge-base-to-arc', async (req, res) => {
   try {
 
-const adapter =
-createEthersAdapterFromPrivateKey({
-    privateKey
-});
+    const adapter = createEthersAdapterFromPrivateKey({
+      privateKey: process.env.SYSTEM_PRIVATE_KEY
+    });
 
     const result = await kit.bridge({
 
