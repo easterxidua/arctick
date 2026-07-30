@@ -2504,7 +2504,7 @@ async function showScreen2() {
       </div>
   <img
     src="${chainLogo[selectedChain]}"
-    width="32"
+    width="48"
     height=auto
   >
       <div class="readonly2" style="font-size:1.8rem;">
