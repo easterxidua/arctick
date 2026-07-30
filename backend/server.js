@@ -944,14 +944,31 @@ function jsonBigInt(obj) {
   );
 }
 
+const RPCS = {
+    Arc_Testnet: process.env.ARC_RPC,
+    Base_Sepolia: process.env.BASE_SEPOLIA_RPC,
+    Ethereum_Sepolia: process.env.ETH_SEPOLIA_RPC,
+    Arbitrum_Sepolia: process.env.ARBITRUM_SEPOLIA_RPC,
+    Ink_Sepolia: process.env.INK_SEPOLIA_RPC,
+    Avalanche_Fuji: process.env.AVAX_FUJI_RPC,
+    HyperEVM_Testnet: process.env.HYPE_TESTNET_RPC,
+    Unichain_Sepolia: process.env.UNI_SEPOLIA_RPC
+};
+
 function getAdapter() {
-  return createEthersAdapterFromPrivateKey({
-    privateKey: process.env.SYSTEM_PRIVATE_KEY,
-    provider:
-        new ethers.JsonRpcProvider(
-            process.env.ARC_RPC
-        )
-  });
+    return createEthersAdapterFromPrivateKey({
+        privateKey: process.env.SYSTEM_PRIVATE_KEY,
+
+        getProvider: ({ chain }) => {
+            const rpc = RPCS[chain];
+
+            if (!rpc) {
+                throw new Error(`No RPC for ${chain}`);
+            }
+
+            return new ethers.JsonRpcProvider(rpc);
+        }
+    });
 }
 
 // Always use Arc Testnet as Treasury
