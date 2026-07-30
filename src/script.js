@@ -377,6 +377,7 @@ let hargawisfixtenanan = 0;
 let hargaisehjalan = 0;
 
 let selectedChain = CONFIG.defaultChain;
+let selectedChainX = CONFIG.defaultChain;
 //let selectedChain = "arc-testnet";   // default
 let jenengechain = "MBOH";
 
@@ -1612,6 +1613,7 @@ window.selectAsset = (asset) => {
 window.changeChain = async function(chainKey) {
 
   selectedChain = chainKey;
+  selectedChainX  = chainKey;
 
   const chain = CONFIG.chains[chainKey];
 
@@ -1646,7 +1648,9 @@ window.changeChain = async function(chainKey) {
     jenengechain = chain.name;
     //alert(`✅ Switched to ${chain.name}.`);
 
-    showScreen2();
+    //showScreen2();
+
+    setCheeein(selectedChain);
 
   } catch (err) {
     console.error(err);
@@ -2551,57 +2555,57 @@ async function showScreen2() {
 
     <div class="flex-row" style="flex-direction: column;">
 
-      <div
-        class="option-btn-circle ${selectedChain==='arc-testnet' ? 'active' : ''}"
+      <div id="arc-testnetchainbutton" 
+        class="option-btn-circle cheeeinbutton}"
         onclick="changeChainAndClose('arc-testnet')"
       >
         <img src="/logo/n_arc_logo_small2.png" width="32" style="position: relative; top: 1px;">
       </div>
 
-      <div
-        class="option-btn-circle ${selectedChain==='base-sepolia' ? 'active' : ''}"
+      <div id="base-sepoliachainbutton" 
+        class="option-btn-circle cheeeinbutton}"
         onclick="changeChainAndClose('base-sepolia')"
       >
         <img src="/logo/base_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
-      <div
-        class="option-btn-circle-unsupported ${selectedChain==='eth-sepolia' ? 'active' : ''}"
+      <div id="eth-sepoliachainbutton" 
+        class="option-btn-circle-unsupported cheeeinbutton}"
         onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/eth_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
-      <div
-        class="option-btn-circle ${selectedChain==='arbitrum-sepolia' ? 'active' : ''}"
+      <div id="arbitrum-sepoliachainbutton" 
+        class="option-btn-circle cheeeinbutton}"
         onclick="changeChainAndClose('arbitrum-sepolia')"
       >
         <img src="/logo/arb_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
-      <div
-        class="option-btn-circle ${selectedChain==='unichain-sepolia' ? 'active' : ''}"
+      <div id="unichain-sepoliachainbutton" 
+        class="option-btn-circle cheeeinbutton}"
         onclick="changeChainAndClose('unichain-sepolia')"
       >
         <img src="/logo/uni_logo_small_testnet.png" width="32" style="position: relative; top: 1px;">
       </div>
 
-      <div
-        class="option-btn-circle ${selectedChain==='avalanche-fuji' ? 'active' : ''}"
+      <div id="avalanche-fujichainbutton" 
+        class="option-btn-circle cheeeinbutton}"
         onclick="changeChainAndClose('avalanche-fuji')"
       >
         <img src="/logo/avax_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
-      <div
-        class="option-btn-circle ${selectedChain==='hyperevm-testnet' ? 'active' : ''}"
+      <div id="hyperevm-testnetchainbutton" 
+        class="option-btn-circle cheeeinbutton}"
         onclick="changeChainAndClose('hyperevm-testnet')"
       >
         <img src="/logo/hype_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
-      <div
-        class="option-btn-circle ${selectedChain==='ink-sepolia' ? 'active' : ''}"
+      <div id="ink-sepoliachainbutton" 
+        class="option-btn-circle cheeeinbutton}"
         onclick="changeChainAndClose('ink-sepolia')"
       >
         <img src="/logo/ink_logo_small.png" width="32" style="position: relative; top: 1px;">
@@ -2630,8 +2634,8 @@ async function showScreen2() {
 
 <div class="flex-row" style="align-items:center;justify-content:center;">
 
-  <div
-    class="option-btn-circle222 ${selectedChain==='arc-testnet' ? 'active' : ''}"
+  <div id="arc-testnetchainbutton2" 
+    class="option-btn-circle cheeeinbutton}"
     onclick="changeChain('arc-testnet')"
   >
     <img src="/logo/n_arc_logo_small2.png"
@@ -2639,8 +2643,8 @@ async function showScreen2() {
          style="position: relative; top: 1px;">
   </div>
 
-  <div
-    class="option-btn-circle222 ${selectedChain==='base-sepolia' ? 'active' : ''}"
+  <div  id="base-sepoliachainbutton2" 
+    class="option-btn-circle cheeeinbutton}"
     onclick="changeChain('base-sepolia')"
   >
     <img src="/logo/base_logo_small.png"
@@ -2878,6 +2882,46 @@ async function showScreen2() {
 
 
   `;
+
+function setCheeein(category) {
+    //alert(selectedChain)
+    selectedChain = category;
+    document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
+
+    document.getElementById('arc-testnetchainbutton').classList.remove("active");
+    document.getElementById('arc-testnetchainbutton2').classList.remove("active");
+    document.getElementById('base-sepoliachainbutton').classList.remove("active");
+    document.getElementById('base-sepoliachainbutton2').classList.remove("active");
+    document.getElementById('eth-sepoliachainbutton').classList.remove("active");
+    document.getElementById('arbitrum-sepoliachainbutton').classList.remove("active");
+    document.getElementById('unichain-sepoliachainbutton').classList.remove("active");
+    document.getElementById('avalanche-fujichainbutton').classList.remove("active");
+    document.getElementById('hyperevm-testnetchainbutton').classList.remove("active");
+    document.getElementById('ink-sepoliachainbutton').classList.remove("active");
+
+    if (selectedChain === "arc-testnet") {
+    document.getElementById('arc-testnetchainbutton').classList.add("active");
+    document.getElementById('arc-testnetchainbutton2').classList.add("active");}
+    else if (selectedChain === "base-sepolia") {
+    document.getElementById('base-sepoliachainbutton').classList.add("active");
+    document.getElementById('base-sepoliachainbutton2').classList.add("active");}
+    else if (selectedChain === "eth-sepolia") {
+    document.getElementById('eth-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "arbitrum-sepolia") {
+    document.getElementById('arbitrum-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "unichain-sepolia") {
+    document.getElementById('unichain-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "avalanche-fuji") {
+    document.getElementById('avalanche-fujichainbutton').classList.add("active");}
+    else if (selectedChain === "hyperevm-testnetc") {
+    document.getElementById('hyperevm-testnetchainbutton').classList.add("active");}
+    else if (selectedChain === "ink-sepolia") {
+    document.getElementById('ink-sepoliachainbutton').classList.add("active");}
+}
+
+window.setCheeein = setCheeein;
+
+setCheeein(selectedChain);
 
 function showSection(type) {
 
