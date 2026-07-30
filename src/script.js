@@ -2486,7 +2486,7 @@ async function showScreen2() {
         </div>
       </div>
 
-      <div class="readonly2">
+      <div class="readonly3">
         🔵 choose your prefered chain.</span>
       </div>
 
