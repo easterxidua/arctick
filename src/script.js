@@ -1936,26 +1936,26 @@ window.depositUSDC = depositUSDC;
 
 async function createTicket() {
 
-    const amount =
+    const amount = Number(
         document.getElementById(
             "livePriceXXX"
-        ).value;
-    const amount1 =
+        ).value) || 0;
+    const amount1 = Number(
         document.getElementById(
             "livePriceXXX1"
-        ).value;
-    const amount2 =
+        ).value) || 0;
+    const amount2 = Number(
         document.getElementById(
             "livePriceXXX2"
-        ).value;
-    const amount3 =
+        ).value) || 0;
+    const amount3 = Number(
         document.getElementById(
             "livePriceXXX3"
-        ).value;
-    const amount4 =
+        ).value) || 0;
+    const amount4 = Number(
         document.getElementById(
             "livePriceXXX4"
-        ).value;
+        ).value) || 0;
 
     if ((amount+amount1+amount2+amount3+amount4) <= 0 || amount == null && amount1 == null && amount2 == null && amount3 == null && amount4 == null) {
 
