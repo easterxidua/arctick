@@ -1652,6 +1652,7 @@ window.changeChain = async function(chainKey) {
     //showScreen2();
 
     setCheeein(selectedChain);
+    updateBalances();
 
   } catch (err) {
     console.error(err);
@@ -1906,6 +1907,8 @@ async function depositUSDC() {
       }
     }
 
+    updateBalances();
+
     hideLoading();
 showScreen2()
 
@@ -1916,6 +1919,8 @@ showScreen2()
     );
 
   } catch (err) {
+
+    updateBalances();
 
     hideLoading();
 showScreen2()
@@ -2174,6 +2179,8 @@ if (amount4 <= 0 || amount4 == null) {} else {
       1
     );
 
+    updateBalances();
+    
     showScreen2()
     //alert(
         //data.success
@@ -2377,6 +2384,8 @@ async function withdrawUSDC() {
 
     }
 
+    updateBalances();
+
     hideLoading();
 showScreen2()
 
@@ -2389,6 +2398,8 @@ showScreen2()
   } catch(err) {
 
     console.error(err);
+
+    updateBalances();
 
     hideLoading();
 showScreen2()
@@ -3138,15 +3149,15 @@ function setupKeyInput() {
   //startLivePriceUpdates();
   updateBalances();
 
-if (balanceInterval) {
-  clearInterval(balanceInterval);
-}
+//if (balanceInterval) {
+  //clearInterval(balanceInterval);
+//}
 
-balanceInterval =
-  setInterval(
-    updateBalances,
-    1000
-  );
+//balanceInterval =
+  //setInterval(
+    //updateBalances,
+    //1000
+  //);
 
   updatePriceTitle();
 }
