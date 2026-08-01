@@ -23,7 +23,7 @@ const CONFIG = {
 
     "base-sepolia": {
       chainId: "0x14a34",
-      rpcUrl: "https://sepolia.base.org",
+      rpcUrl: "https://base-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
       name: "Base Sepolia",
       explorer: "https://sepolia.basescan.org",
       usdcAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
@@ -39,7 +39,7 @@ const CONFIG = {
 
     "eth-sepolia": {
       chainId: "0xaa36a7",
-      rpcUrl: "https://ethereum-sepolia-rpc.publicnode.com",
+      rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
       name: "Ethereum Sepolia",
       explorer: "https://sepolia.etherscan.io",
       usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
@@ -47,7 +47,7 @@ const CONFIG = {
 
 "ink-sepolia": {
   chainId: "763373", //"0xba5ed", // 763373 decimal
-  rpcUrl: "https://rpc-gel-sepolia.inkonchain.com",
+  rpcUrl: "https://ink-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
   name: "Ink Sepolia",
   explorer: "https://explorer-sepolia.inkonchain.com",
   usdcAddress: "0xFabab97dCE620294D2B0b0e46C68964e326300Ac"
@@ -55,7 +55,7 @@ const CONFIG = {
 
     "arbitrum-sepolia": {
       chainId: "0x66eee",
-      rpcUrl: "https://sepolia-rollup.arbitrum.io/rpc",
+      rpcUrl: "https://arb-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
       name: "Arbitrum Sepolia",
       explorer: "https://sepolia.arbiscan.io",
       usdcAddress: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d"
@@ -63,21 +63,21 @@ const CONFIG = {
 
 "avalanche-fuji": {
   chainId: "43113",
-  rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
+  rpcUrl: "https://avax-fuji.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
   name: "Avalanche Fuji",
   explorer: "https://testnet.snowtrace.io",
   usdcAddress: "0x5425890298aed601595a70AB815c96711a31Bc65"
 },
 "hyperevm-testnet": {
   chainId: "998",
-  rpcUrl: "https://rpc.hyperliquid-testnet.xyz/evm",
+  rpcUrl: "https://hyperliquid-testnet.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
   name: "HyperEVM Testnet",
   explorer: "https://app.hyperliquid-testnet.xyz/explorer",
   usdcAddress: "0x2B3370eE501B4a559b57D449569354196457D8Ab"
 },
 "unichain-sepolia": {
   chainId: "1301",
-  rpcUrl: "https://sepolia.unichain.org",
+  rpcUrl: "https://unichain-sepolia.g.alchemy.com/v2/alch_zi9KNxI-lf_brQVJMD-Dq",
   name: "Unichain Sepolia",
   explorer: "https://sepolia.uniscan.xyz",
   usdcAddress: "0x31d0220469e10c4E71834a79b1f276d740d3768F"
