@@ -4594,7 +4594,7 @@ const tickets = [...result.tickets].sort(
 
 const withdrawals = [...result.withdrawals].sort(
   (a, b) => b.timestamp - a.timestamp
-);
+).slice(0, 15);
 
     const depositRows =
       deposits.map(d => `
@@ -4870,7 +4870,7 @@ document.getElementById(
       <div class="readonly3smaller" style="flex: 50%; text-align:center; font-weight:bold;">
         *shows only the last 15 tickets
       </div>
-      
+
     ${
       withdrawRows ||
       `
