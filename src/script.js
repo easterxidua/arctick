@@ -2159,7 +2159,7 @@ if (amount <= 0 || amount == null) {} else {
                 },
                 body: JSON.stringify({
                     secret,
-                    amounts,
+                    amount: amounts,
                     address: userAddress
                 })
             }
