@@ -4585,11 +4585,12 @@ async function showHistory() {
 
 const deposits = [...result.deposits].sort(
   (a, b) => b.timestamp - a.timestamp
-);
+  
+).slice(0, 15);
 
 const tickets = [...result.tickets].sort(
   (a, b) => b.timestamp - a.timestamp
-);
+).slice(0, 15);
 
 const withdrawals = [...result.withdrawals].sort(
   (a, b) => b.timestamp - a.timestamp
@@ -4784,6 +4785,9 @@ document.getElementById(
     <div class="readonly33">
       🔵 your deposit/s.
     </div>
+      <div class="readonly3smaller" style="flex: 50%; text-align:center; font-weight:bold;">
+        *shows only the last 15 deposits
+      </div>
 
     ${
       depositRows ||
@@ -4822,6 +4826,9 @@ document.getElementById(
     <div class="readonly33">
       🔵 ticket/s you create.
     </div>
+      <div class="readonly3smaller" style="flex: 50%; text-align:center; font-weight:bold;">
+        *shows only the last 15 tickets
+      </div>
 
     ${
       ticketRows ||
@@ -4860,7 +4867,10 @@ document.getElementById(
     <div class="readonly33">
       🔵 your withdrawal.
     </div>
-
+      <div class="readonly3smaller" style="flex: 50%; text-align:center; font-weight:bold;">
+        *shows only the last 15 tickets
+      </div>
+      
     ${
       withdrawRows ||
       `
