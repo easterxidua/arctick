@@ -4250,7 +4250,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             arcAdapter = await getArcAdapter();
 
-            showScreen2();
+    console.log("Arc Adapter:", arcAdapter);
+
+    //alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
+    showToast(
+    `✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
+    3000,
+    0
+    );
+    showScreen2();
             
             return;
         }
