@@ -1657,11 +1657,11 @@ window.changeChain = async function(chainKey) {
   } catch (err) {
     console.error(err);
     //alert("❌ Chain switch failed.");
-    showToast(
-    "❌ Chain switch failed.",
-    3000,
-    0
-    );
+    //showToast(
+    //"❌ Chain switch failed.",
+    //3000,
+    //0
+    //);
   }
 };
 
