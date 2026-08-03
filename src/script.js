@@ -1999,6 +1999,27 @@ window.depositUSDC = depositUSDC;
 
 async function createTicket() {
 
+    const amounts = 
+        document.getElementById(
+            "livePriceXXX"
+        ).value;
+    const amounts1 = 
+        document.getElementById(
+            "livePriceXXX1"
+        ).value;
+    const amounts2 = 
+        document.getElementById(
+            "livePriceXXX2"
+        ).value;
+    const amounts3 = 
+        document.getElementById(
+            "livePriceXXX3"
+        ).value;
+    const amounts4 = 
+        document.getElementById(
+            "livePriceXXX4"
+        ).value;
+
     const amount = Number(
         document.getElementById(
             "livePriceXXX"
@@ -2138,7 +2159,7 @@ if (amount <= 0 || amount == null) {} else {
                 },
                 body: JSON.stringify({
                     secret,
-                    amount,
+                    amounts,
                     address: userAddress
                 })
             }
@@ -2159,7 +2180,7 @@ if (amount1 <= 0 || amount1 == null) {} else {
                 },
                 body: JSON.stringify({
                     secret: secret1,
-                    amount: amount1,
+                    amount: amounts1,
                     address: userAddress
                 })
             }
@@ -2180,7 +2201,7 @@ if (amount2 <= 0 || amount2 == null) {} else {
                 },
                 body: JSON.stringify({
                     secret: secret2,
-                    amount: amount2,
+                    amount: amounts2,
                     address: userAddress
                 })
             }
@@ -2201,7 +2222,7 @@ if (amount3 <= 0 || amount3 == null) {} else {
                 },
                 body: JSON.stringify({
                     secret: secret3,
-                    amount: amount3,
+                    amount: amounts3,
                     address: userAddress
                 })
             }
@@ -2222,7 +2243,7 @@ if (amount4 <= 0 || amount4 == null) {} else {
                 },
                 body: JSON.stringify({
                     secret: secret4,
-                    amount: amount4,
+                    amount: amounts4,
                     address: userAddress
                 })
             }

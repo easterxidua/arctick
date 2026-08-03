@@ -1079,11 +1079,11 @@ async (req,res) => {
                 ethers.toUtf8Bytes(secret)
             );
 
-        const amount6 = amount;
-            //ethers.parseUnits(
-                //amount,
-                //6
-            //);
+        const amount6 =
+            ethers.parseUnits(
+                amount,
+                6
+            );
 
         const tx =
 await vault.createTicket(
