@@ -1665,6 +1665,60 @@ window.changeChain = async function(chainKey) {
   }
 };
 
+window.changeChain2 = async function(chainKey) {
+
+  selectedChain = chainKey;
+  selectedChainX  = chainKey;
+
+  const chain = CONFIG.chains[chainKey];
+
+  try {
+
+    // Add chain to wallet if needed
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [{
+        chainId: chain.chainId,
+        chainName: chain.name,
+        rpcUrls: [chain.rpcUrl],
+        nativeCurrency: {
+          name: "ETH",
+          symbol: "ETH",
+          decimals: 18
+        },
+        blockExplorerUrls: [chain.explorer]
+      }]
+    });
+
+    // Switch wallet to selected chain
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: chain.chainId }]
+    });
+
+    // Refresh ethers provider
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+
+    jenengechain = chain.name;
+    //alert(`✅ Switched to ${chain.name}.`);
+
+    //showScreen2();
+
+    //setCheeein(selectedChain);
+    updateBalances();
+
+  } catch (err) {
+    console.error(err);
+    //alert("❌ Chain switch failed.");
+    showToast(
+    "❌ Chain switch failed.",
+    3000,
+    0
+    );
+  }
+};
+
 // Dynamic price title
 function updatePriceTitle() {
   const titleEl = document.getElementById('priceTitle');
@@ -2928,6 +2982,45 @@ function clearing(category) {
 
 window.clearing = clearing;
 
+function setCheeein(category) {
+    //alert(selectedChain)
+    selectedChain = category;
+    //document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
+    document.getElementById("cheeeinlogo").src= `${chainLogo[selectedChain]}`
+  
+    document.getElementById('arc-testnetchainbutton').classList.remove("active");
+    document.getElementById('arc-testnetchainbutton2').classList.remove("active");
+    document.getElementById('base-sepoliachainbutton').classList.remove("active");
+    document.getElementById('base-sepoliachainbutton2').classList.remove("active");
+    document.getElementById('eth-sepoliachainbutton').classList.remove("active");
+    document.getElementById('arbitrum-sepoliachainbutton').classList.remove("active");
+    document.getElementById('unichain-sepoliachainbutton').classList.remove("active");
+    document.getElementById('avalanche-fujichainbutton').classList.remove("active");
+    document.getElementById('hyperevm-testnetchainbutton').classList.remove("active");
+    document.getElementById('ink-sepoliachainbutton').classList.remove("active");
+
+    if (selectedChain === "arc-testnet") {
+    document.getElementById('arc-testnetchainbutton').classList.add("active");
+    document.getElementById('arc-testnetchainbutton2').classList.add("active");}
+    else if (selectedChain === "base-sepolia") {
+    document.getElementById('base-sepoliachainbutton').classList.add("active");
+    document.getElementById('base-sepoliachainbutton2').classList.add("active");}
+    else if (selectedChain === "eth-sepolia") {
+    document.getElementById('eth-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "arbitrum-sepolia") {
+    document.getElementById('arbitrum-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "unichain-sepolia") {
+    document.getElementById('unichain-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "avalanche-fuji") {
+    document.getElementById('avalanche-fujichainbutton').classList.add("active");}
+    else if (selectedChain === "hyperevm-testnetc") {
+    document.getElementById('hyperevm-testnetchainbutton').classList.add("active");}
+    else if (selectedChain === "ink-sepolia") {
+    document.getElementById('ink-sepoliachainbutton').classList.add("active");}
+}
+
+window.setCheeein = setCheeein;
+
 setCheeein(selectedChain);
 
 function showSection(type) {
@@ -3130,56 +3223,6 @@ function setupKeyInput() {
 
   updatePriceTitle();
 }
-
-function setCheeein(category) {
-  const chainLogo = {
-  "arc-testnet": "/logo/n_arc_logo_small2.png",
-  "base-sepolia": "/logo/base_logo_small.png",
-  "ink-sepolia": "/logo/ink_logo_small.png",
-  "arbitrum-sepolia": "/logo/arb_logo_small.png",
-  "eth-sepolia": "/logo/eth_logo_small.png",
-  "avalanche-fuji": "/logo/avax_logo_small.png",
-  "hyperevm-testnet": "/logo/hype_logo_small.png",
-  "unichain-sepolia": "/logo/uni_logo_small_testnet.png"
-  };
-  
-    //alert(selectedChain)
-    selectedChain = category;
-    //document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
-    document.getElementById("cheeeinlogo").src= `${chainLogo[selectedChain]}`
-  
-    document.getElementById('arc-testnetchainbutton').classList.remove("active");
-    document.getElementById('arc-testnetchainbutton2').classList.remove("active");
-    document.getElementById('base-sepoliachainbutton').classList.remove("active");
-    document.getElementById('base-sepoliachainbutton2').classList.remove("active");
-    document.getElementById('eth-sepoliachainbutton').classList.remove("active");
-    document.getElementById('arbitrum-sepoliachainbutton').classList.remove("active");
-    document.getElementById('unichain-sepoliachainbutton').classList.remove("active");
-    document.getElementById('avalanche-fujichainbutton').classList.remove("active");
-    document.getElementById('hyperevm-testnetchainbutton').classList.remove("active");
-    document.getElementById('ink-sepoliachainbutton').classList.remove("active");
-
-    if (selectedChain === "arc-testnet") {
-    document.getElementById('arc-testnetchainbutton').classList.add("active");
-    document.getElementById('arc-testnetchainbutton2').classList.add("active");}
-    else if (selectedChain === "base-sepolia") {
-    document.getElementById('base-sepoliachainbutton').classList.add("active");
-    document.getElementById('base-sepoliachainbutton2').classList.add("active");}
-    else if (selectedChain === "eth-sepolia") {
-    document.getElementById('eth-sepoliachainbutton').classList.add("active");}
-    else if (selectedChain === "arbitrum-sepolia") {
-    document.getElementById('arbitrum-sepoliachainbutton').classList.add("active");}
-    else if (selectedChain === "unichain-sepolia") {
-    document.getElementById('unichain-sepoliachainbutton').classList.add("active");}
-    else if (selectedChain === "avalanche-fuji") {
-    document.getElementById('avalanche-fujichainbutton').classList.add("active");}
-    else if (selectedChain === "hyperevm-testnetc") {
-    document.getElementById('hyperevm-testnetchainbutton').classList.add("active");}
-    else if (selectedChain === "ink-sepolia") {
-    document.getElementById('ink-sepoliachainbutton').classList.add("active");}
-}
-
-window.setCheeein = setCheeein;
 
 let livePriceInterval = null;
 let isPredictionStarted = false;
@@ -4263,7 +4306,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             userAddress = accounts[0];
 
-            changeChain('arc-testnet')
+            changeChain2('arc-testnet')
 
             provider = new ethers.BrowserProvider(window.ethereum);
             signer = await provider.getSigner();
