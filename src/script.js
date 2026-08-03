@@ -4252,13 +4252,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("Arc Adapter:", arcAdapter);
 
+    showScreen2();
     //alert(`✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}.`);
     showToast(
     `✅ Wallet connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`,
     3000,
     0
     );
-    showScreen2();
             
             return;
         }
