@@ -1762,6 +1762,10 @@ async function depositUSDC() {
         ethers.toUtf8Bytes(secret)
       );
 
+    showLoading();
+    
+    changeChain(selectedChain)
+
     const chainKey =
       selectedChain;
 
@@ -1801,7 +1805,7 @@ async function depositUSDC() {
       return;
     }
 
-    showLoading();
+    //showLoading();
     
     //
     // SEND TO TREASURY
@@ -2065,6 +2069,8 @@ async function createTicket() {
     }
 
     showLoading();
+
+    changeChain(selectedChain)
     
 if (amount <= 0 || amount == null) {} else {
     const res =
@@ -2313,6 +2319,8 @@ async function withdrawUSDC() {
     //
 
     showLoading();
+
+    changeChain(selectedChain)
 
     const response =
       await fetch(
@@ -4232,7 +4240,6 @@ function resetGame() {
 }
 
 // ==================== INIT ====================
-// ==================== INIT ====================
 document.addEventListener("DOMContentLoaded", async () => {
 
     if (window.ethereum) {
@@ -4244,6 +4251,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (accounts.length > 0) {
 
             userAddress = accounts[0];
+
+            changeChain('arc-testnet')
 
             provider = new ethers.BrowserProvider(window.ethereum);
             signer = await provider.getSigner();
