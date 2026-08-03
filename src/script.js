@@ -1657,11 +1657,11 @@ window.changeChain = async function(chainKey) {
   } catch (err) {
     console.error(err);
     //alert("❌ Chain switch failed.");
-    //showToast(
-    //"❌ Chain switch failed.",
-    //3000,
-    //0
-    //);
+    showToast(
+    "❌ Chain switch failed.",
+    3000,
+    0
+    );
   }
 };
 
@@ -2928,45 +2928,6 @@ function clearing(category) {
 
 window.clearing = clearing;
 
-function setCheeein(category) {
-    //alert(selectedChain)
-    selectedChain = category;
-    //document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
-    document.getElementById("cheeeinlogo").src= `${chainLogo[selectedChain]}`
-  
-    document.getElementById('arc-testnetchainbutton').classList.remove("active");
-    document.getElementById('arc-testnetchainbutton2').classList.remove("active");
-    document.getElementById('base-sepoliachainbutton').classList.remove("active");
-    document.getElementById('base-sepoliachainbutton2').classList.remove("active");
-    document.getElementById('eth-sepoliachainbutton').classList.remove("active");
-    document.getElementById('arbitrum-sepoliachainbutton').classList.remove("active");
-    document.getElementById('unichain-sepoliachainbutton').classList.remove("active");
-    document.getElementById('avalanche-fujichainbutton').classList.remove("active");
-    document.getElementById('hyperevm-testnetchainbutton').classList.remove("active");
-    document.getElementById('ink-sepoliachainbutton').classList.remove("active");
-
-    if (selectedChain === "arc-testnet") {
-    document.getElementById('arc-testnetchainbutton').classList.add("active");
-    document.getElementById('arc-testnetchainbutton2').classList.add("active");}
-    else if (selectedChain === "base-sepolia") {
-    document.getElementById('base-sepoliachainbutton').classList.add("active");
-    document.getElementById('base-sepoliachainbutton2').classList.add("active");}
-    else if (selectedChain === "eth-sepolia") {
-    document.getElementById('eth-sepoliachainbutton').classList.add("active");}
-    else if (selectedChain === "arbitrum-sepolia") {
-    document.getElementById('arbitrum-sepoliachainbutton').classList.add("active");}
-    else if (selectedChain === "unichain-sepolia") {
-    document.getElementById('unichain-sepoliachainbutton').classList.add("active");}
-    else if (selectedChain === "avalanche-fuji") {
-    document.getElementById('avalanche-fujichainbutton').classList.add("active");}
-    else if (selectedChain === "hyperevm-testnetc") {
-    document.getElementById('hyperevm-testnetchainbutton').classList.add("active");}
-    else if (selectedChain === "ink-sepolia") {
-    document.getElementById('ink-sepoliachainbutton').classList.add("active");}
-}
-
-window.setCheeein = setCheeein;
-
 setCheeein(selectedChain);
 
 function showSection(type) {
@@ -3169,6 +3130,45 @@ function setupKeyInput() {
 
   updatePriceTitle();
 }
+
+function setCheeein(category) {
+    //alert(selectedChain)
+    selectedChain = category;
+    //document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
+    document.getElementById("cheeeinlogo").src= `${chainLogo[selectedChain]}`
+  
+    document.getElementById('arc-testnetchainbutton').classList.remove("active");
+    document.getElementById('arc-testnetchainbutton2').classList.remove("active");
+    document.getElementById('base-sepoliachainbutton').classList.remove("active");
+    document.getElementById('base-sepoliachainbutton2').classList.remove("active");
+    document.getElementById('eth-sepoliachainbutton').classList.remove("active");
+    document.getElementById('arbitrum-sepoliachainbutton').classList.remove("active");
+    document.getElementById('unichain-sepoliachainbutton').classList.remove("active");
+    document.getElementById('avalanche-fujichainbutton').classList.remove("active");
+    document.getElementById('hyperevm-testnetchainbutton').classList.remove("active");
+    document.getElementById('ink-sepoliachainbutton').classList.remove("active");
+
+    if (selectedChain === "arc-testnet") {
+    document.getElementById('arc-testnetchainbutton').classList.add("active");
+    document.getElementById('arc-testnetchainbutton2').classList.add("active");}
+    else if (selectedChain === "base-sepolia") {
+    document.getElementById('base-sepoliachainbutton').classList.add("active");
+    document.getElementById('base-sepoliachainbutton2').classList.add("active");}
+    else if (selectedChain === "eth-sepolia") {
+    document.getElementById('eth-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "arbitrum-sepolia") {
+    document.getElementById('arbitrum-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "unichain-sepolia") {
+    document.getElementById('unichain-sepoliachainbutton').classList.add("active");}
+    else if (selectedChain === "avalanche-fuji") {
+    document.getElementById('avalanche-fujichainbutton').classList.add("active");}
+    else if (selectedChain === "hyperevm-testnetc") {
+    document.getElementById('hyperevm-testnetchainbutton').classList.add("active");}
+    else if (selectedChain === "ink-sepolia") {
+    document.getElementById('ink-sepoliachainbutton').classList.add("active");}
+}
+
+window.setCheeein = setCheeein;
 
 let livePriceInterval = null;
 let isPredictionStarted = false;
