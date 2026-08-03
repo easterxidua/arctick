@@ -3132,6 +3132,17 @@ function setupKeyInput() {
 }
 
 function setCheeein(category) {
+  const chainLogo = {
+  "arc-testnet": "/logo/n_arc_logo_small2.png",
+  "base-sepolia": "/logo/base_logo_small.png",
+  "ink-sepolia": "/logo/ink_logo_small.png",
+  "arbitrum-sepolia": "/logo/arb_logo_small.png",
+  "eth-sepolia": "/logo/eth_logo_small.png",
+  "avalanche-fuji": "/logo/avax_logo_small.png",
+  "hyperevm-testnet": "/logo/hype_logo_small.png",
+  "unichain-sepolia": "/logo/uni_logo_small_testnet.png"
+  };
+  
     //alert(selectedChain)
     selectedChain = category;
     //document.getElementById("cheeeinname").textContent = `on @${displayname[selectedChain]}`;
