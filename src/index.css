@@ -421,7 +421,7 @@ background: var(--warna_tombol);
 }
 
 .btn_smol_ns {
-  background: var(--warna_tombol);
+  background: var(--warna_tombol_penting);
   color: rgb(255, 255, 255);
   /*
   text-shadow: 1px 1px 2px black, 0 0 1px black, 0 0 1px black;
@@ -434,8 +434,8 @@ background: var(--warna_tombol);
   border: 3px solid transparent;
   border-radius: 3px;
   background: 
-    linear-gradient(var(--warna_tombol), var(--warna_tombol)) padding-box, /* Inner background color */
-    linear-gradient(to right, var(--warna_tombol), #ffffff) border-box; /* Border gradient */
+    linear-gradient(var(--warna_tombol_penting), var(--warna_tombol_penting)) padding-box, /* Inner background color */
+    linear-gradient(to right, var(--warna_tombol_penting), #ffffff) border-box; /* Border gradient */
 
   padding: 6px 12px;
   font-size: 0.95rem;
@@ -483,7 +483,7 @@ background: var(--warna_tombol);
   border-radius: 8px;
   cursor: pointer;
   /* width: 100%; */
-  margin: 8px 0;
+  margin: 4px;
   box-shadow: var(--warna_bayangan_kotakan);
 }
 
