@@ -1981,10 +1981,43 @@ showScreen2()
     updateBalances();
 
     hideLoading();
+
 showScreen2()
 
     console.error(err);
 
+                 const msg =
+        err?.error?.data?.originalError?.message ||
+        err?.error?.message ||
+        err?.message ||
+        "";
+
+	    if (
+    err.code === 4001 ||
+    err.message?.toLowerCase().includes("user rejected") ||
+    err.message?.toLowerCase().includes("user denied")
+  ) {
+
+    //alert("❌ Bet cancelled.");
+
+    return;
+  }
+    if (
+            msg.message?.toLowerCase().includes("404") ||
+            msg.message?.toLowerCase().includes("eth_blockNumber") ||
+            err.code === ("CALL_EXCEPTION")
+       ) {
+
+        hideLoading();
+    showToast(
+    "❌ RPC failed.",
+    3000,
+    0
+    );
+        return;
+
+    }
+    
     showToast(
       "❌ Fail to deposit.",
       3000,
