@@ -2685,8 +2685,8 @@ async function showScreen2() {
       </div>
 
       <div id="eth-sepoliachainbutton" 
-        class="option-btn-circle-unsupported cheeeinbutton"
-        onclick="event.stopPropagation(); gekunsupported();"
+        class="option-btn-circle cheeeinbutton"
+        onclick="changeChainAndClose('eth-sepolia')"
       >
         <img src="/logo/eth_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
@@ -2713,15 +2713,15 @@ async function showScreen2() {
       </div>
 
       <div id="hyperevm-testnetchainbutton" 
-        class="option-btn-circle cheeeinbutton"
-        onclick="changeChainAndClose('hyperevm-testnet')"
+        class="option-btn-circle-unsupported cheeeinbutton"
+        onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/hype_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
 
       <div id="ink-sepoliachainbutton" 
-        class="option-btn-circle cheeeinbutton"
-        onclick="changeChainAndClose('ink-sepolia')"
+        class="option-btn-circle-unsupported cheeeinbutton"
+        onclick="event.stopPropagation(); gekunsupported();"
       >
         <img src="/logo/ink_logo_small.png" width="32" style="position: relative; top: 1px;">
       </div>
