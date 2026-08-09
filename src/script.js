@@ -3606,6 +3606,12 @@ startPrediction();
 
   enableBetControls();
 
+           const msg =
+        e?.error?.data?.originalError?.message ||
+        e?.error?.message ||
+        e?.message ||
+        "";
+
   if (
     error.code === 4001 ||
     error.message?.toLowerCase().includes("user rejected") ||
@@ -3616,7 +3622,22 @@ startPrediction();
 
     return;
   }
+    if (
+            msg.message?.toLowerCase().includes("404") ||
+            msg.message?.toLowerCase().includes("eth_blockNumber") ||
+            error.code === ("CALL_EXCEPTION")
+       ) {
 
+        hideLoading();
+    showToast(
+    "❌ RPC failed.",
+    3000,
+    0
+    );
+        return;
+
+    }
+    
     //alert(
       //"❌ Bet failed: " + error.message + "."
     //);
